@@ -13,8 +13,46 @@ return [
     |
     */
 
-    'failed' => 'These credentials do not match our records.',
-    'password' => 'The provided password is incorrect.',
-    'throttle' => 'Too many login attempts. Please try again in :seconds seconds.',
+    'failed' => 'يوجد خطا في المعلومات المدخله.',
+    'password' => 'كلمه السر غير صحيحه',
+    'throttle' => 'الكثير من المحاولات الغير صحيح من فضلكك اعد المحاوله بعد :seconds ثانية.',
+    'notActive'=> 'لا تمتلك الصلاحيات اللازمه للدخول',
+    'waitingAdminConfirmation'=> 'الحساب تحت المراجعه الان ,سنتواصل معك عند الموافقه علي حسابك',
+    'logout'=>'تم تسجيل الخروج بنجاح',
+    'logoutError'=>'برجاء تسجيل الدخول',
+
+    //login page text
+    'welcomeBack' => '! اهلا بك مجددا ',
+    'signinMessage' => '! سجل الدخول للوصول الي المنصه ',
+    'forgotPassword' => 'هل نسيت كلمه السر ؟',
+    'email' => 'البريد الالكتروني',
+    'password' => 'كلمه السر',
+    'login' => 'تسجيل الدخول',
+    'rememberme' => 'تذكرني',
+    'dontHaveAccount' => "هل ترغب ف الانضمام لنا كمعلم ؟",
+    'signUpNow' => "سجل الان",
+
+    //signup page text
+
+    'registerAccount' => "تسجيل حساب جديد",
+    'registerAccountText' => "سجل الان مجانا لتبدء رحلتك معنا",
+    'enterEmail' => "ادخل البريد الالكتروني",
+    'enterusername' => "ادخل اسم المستخدم",
+    'username' => "اسم المستخدم",
+    'enterPassword' => "ادخل كلمه السر",
+    'enterConfirmPassword' => "ادخل تاكيد كلمه السر",
+    'confirmPassword' => "تاكيد كلمه السر",
+    'iAccept' => " انا اوافق",
+    'termsAndConditions' => "علي الشروط و الاحكام",
+    'register' => "سجل الان",
+    'alreadyHaveAccount' => "لديك حساب بالفعل ؟",
+
+    //verify email page text
+    'verifyYourEmail' => "التحقق من البريد الالكتروني",
+    'verifyYourEmailText' => "قبل التقدم ,برجاء التحقق من البريد الالكتروني الخاص بك للتحقق منه",
+    'verifyYourEmailResend' => "اذا لم تتلقي اي بريد الكتروني",
+    'resetMessage' => "تم ارسال رابط تفعيل جديد",
+    'resetLink' => "اضغط هنا لارسال بريد الكتروني مره اخره",
+
 
 ];

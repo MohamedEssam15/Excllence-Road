@@ -15,13 +15,17 @@ use Illuminate\Support\Facades\Route;
 */
 
 
-Auth::routes();
+Auth::routes(['verify' => true]);
 
-Route::get('/', [App\Http\Controllers\HomeController::class, 'root']);
 
-Route::get('{any}', [App\Http\Controllers\HomeController::class, 'index']);
-//Language Translation
+Route::group(['middleware' => ['auth', 'verified']], function () {
+    Route::get('{any}', [App\Http\Controllers\HomeController::class, 'index']);
+    //Language Translation
+    Route::get('/', [App\Http\Controllers\HomeController::class, 'root']);
+    Route::get('change-lang/{locale}', [App\Http\Controllers\HomeController::class, 'lang']);
 
-Route::get('change-lang/{locale}', [App\Http\Controllers\HomeController::class, 'lang']);
+    Route::post('/formsubmit', [App\Http\Controllers\HomeController::class, 'FormSubmit'])->name('FormSubmit');
+});
 
-Route::post('/formsubmit', [App\Http\Controllers\HomeController::class, 'FormSubmit'])->name('FormSubmit');
+
+

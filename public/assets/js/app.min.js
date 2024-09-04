@@ -206,8 +206,14 @@ File: Main Js File
         }
     }
 
-    function updateRadio(radioId) {
-        document.getElementById(radioId).checked = true;
+    function updateRadio(element) {
+        element.checked = true;
+    }
+    function checkTheAtrributeIsExistAndUpdateRadio(radioId){
+       let getElement = document.getElementById(radioId);
+        if (getElement) {
+            updateRadio(getElement);
+        }
     }
 
     function layoutSetting(id) {
@@ -241,24 +247,24 @@ File: Main Js File
             return;
         });
 
-        if(body.hasAttribute("data-layout") && body.getAttribute("data-layout") == "horizontal") {
-            updateRadio('layout-horizontal');
-            $(".sidebar-setting").hide();
-        } else {
-            updateRadio('layout-vertical');
-        }
-        (body.hasAttribute("data-bs-theme") && body.getAttribute("data-bs-theme") == "dark") ? updateRadio('layout-mode-dark'): updateRadio('layout-mode-light');
-        (body.hasAttribute("data-layout-size") && body.getAttribute("data-layout-size") == "boxed") ? updateRadio('layout-width-boxed'): updateRadio('layout-width-fuild');
-        (body.hasAttribute("data-topbar") && body.getAttribute("data-topbar") == "dark") ? updateRadio('topbar-color-dark'): updateRadio('topbar-color-light');
-        (body.hasAttribute("data-sidebar-size") && body.getAttribute("data-sidebar-size") == "sm") ? updateRadio('sidebar-size-small') : (body.hasAttribute("data-sidebar-size") && body.getAttribute("data-sidebar-size") == "md") ? updateRadio('sidebar-size-compact') : updateRadio('sidebar-size-default');
-        (body.hasAttribute("data-sidebar") && body.getAttribute("data-sidebar") == "colored") ? updateRadio('sidebar-color-colored') : (body.hasAttribute("data-sidebar") && body.getAttribute("data-sidebar") == "dark") ? updateRadio('sidebar-color-dark') : updateRadio('sidebar-color-light');
-        (document.getElementsByTagName("html")[0].hasAttribute("dir") && document.getElementsByTagName("html")[0].getAttribute("dir") == "rtl") ? updateRadio('layout-direction-rtl'): updateRadio('layout-direction-ltr');
+        // if(body.hasAttribute("data-layout") && body.getAttribute("data-layout") == "horizontal") {
+        //     updateRadio('layout-horizontal');
+        //     $(".sidebar-setting").hide();
+        // } else {
+        //     updateRadio('layout-vertical');
+        // }
+        // (body.hasAttribute("data-bs-theme") && body.getAttribute("data-bs-theme") == "dark") ? updateRadio('layout-mode-dark'): updateRadio('layout-mode-light');
+        // (body.hasAttribute("data-layout-size") && body.getAttribute("data-layout-size") == "boxed") ? updateRadio('layout-width-boxed'): updateRadio('layout-width-fuild');
+        // (body.hasAttribute("data-topbar") && body.getAttribute("data-topbar") == "dark") ? updateRadio('topbar-color-dark'): updateRadio('topbar-color-light');
+        // (body.hasAttribute("data-sidebar-size") && body.getAttribute("data-sidebar-size") == "sm") ? updateRadio('sidebar-size-small') : (body.hasAttribute("data-sidebar-size") && body.getAttribute("data-sidebar-size") == "md") ? updateRadio('sidebar-size-compact') : updateRadio('sidebar-size-default');
+        // (body.hasAttribute("data-sidebar") && body.getAttribute("data-sidebar") == "colored") ? updateRadio('sidebar-color-colored') : (body.hasAttribute("data-sidebar") && body.getAttribute("data-sidebar") == "dark") ? updateRadio('sidebar-color-dark') : updateRadio('sidebar-color-light');
+        // (document.getElementsByTagName("html")[0].hasAttribute("dir") && document.getElementsByTagName("html")[0].getAttribute("dir") == "rtl") ? updateRadio('layout-direction-rtl'): updateRadio('layout-direction-ltr');
 
         // on layou change
         $("input[name='layout']").on('change', function () {
             window.location.href = ($(this).val() == "vertical") ? "index": "layouts-horizontal";
         });
-        // localStorage.clear();
+
         const $darkModeToggleSwitch = $("#darkModeToggle");
 
         // Check if the user previously selected dark mode
@@ -267,8 +273,8 @@ File: Main Js File
             document.body.setAttribute('data-topbar', 'dark');
             document.body.setAttribute('data-sidebar', 'dark');
             (body.hasAttribute("data-layout") && body.getAttribute("data-layout") == "horizontal") ? '' : document.body.setAttribute('data-sidebar', 'dark');
-            updateRadio('topbar-color-dark')
-            updateRadio('sidebar-color-dark')
+            checkTheAtrributeIsExistAndUpdateRadio('topbar-color-dark')
+            checkTheAtrributeIsExistAndUpdateRadio('sidebar-color-dark')
             $darkModeToggleSwitch.prop("checked", true); // Set toggle switch to "on" if dark mode
         }
 
@@ -278,16 +284,16 @@ File: Main Js File
                 document.body.setAttribute('data-topbar', 'dark');
                 document.body.setAttribute('data-sidebar', 'dark');
                 (body.hasAttribute("data-layout") && body.getAttribute("data-layout") == "horizontal") ? '' : document.body.setAttribute('data-sidebar', 'dark');
-                updateRadio('topbar-color-dark')
-                updateRadio('sidebar-color-dark')
+                checkTheAtrributeIsExistAndUpdateRadio('topbar-color-dark')
+                checkTheAtrributeIsExistAndUpdateRadio('sidebar-color-dark')
                 localStorage.setItem("webTheme", "dark"); // Save user preference to local storage
             } else {
                 document.body.setAttribute('data-bs-theme', 'light');
                 document.body.setAttribute('data-topbar', 'light');
                 document.body.setAttribute('data-sidebar', 'light');
                 (body.hasAttribute("data-layout") && body.getAttribute("data-layout") == "horizontal") ? '' : document.body.setAttribute('data-sidebar', 'light');
-                updateRadio('topbar-color-light')
-                updateRadio('sidebar-color-light')
+                checkTheAtrributeIsExistAndUpdateRadio('topbar-color-light')
+                checkTheAtrributeIsExistAndUpdateRadio('sidebar-color-light')
                 localStorage.setItem("webTheme", "light"); // Save user preference to local storage
             }
         });

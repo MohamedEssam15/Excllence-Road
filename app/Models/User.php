@@ -9,7 +9,7 @@ use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class User extends Authenticatable implements JWTSubject
+class User extends Authenticatable implements JWTSubject, MustVerifyEmail
 {
     use HasFactory, Notifiable ,HasRoles;
 
@@ -44,6 +44,14 @@ class User extends Authenticatable implements JWTSubject
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function getAvatarPath(){
+        return asset('users_attachments/'.$this->id.'/avatar/'.$this->avatar);
+    }
+
+    public function teacherCourses(){
+        return $this->hasMany(Course::class,'teacher_id');
+    }
 
     /**
      * Get the identifier that will be stored in the subject claim of the JWT.

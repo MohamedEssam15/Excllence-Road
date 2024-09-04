@@ -3,6 +3,7 @@
 return [
   "Menu"=> "Menu",
   "Dashboard"=> "Dashboard",
+  "verfyEmail"=> "Verify Your Email Address",
   "Layouts"=> "Layouts",
   "Horizontal"=> "Horizontal",
   "Dark_Sidebar"=> "Dark Sidebar",

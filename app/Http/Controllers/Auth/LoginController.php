@@ -7,6 +7,7 @@ use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Lang;
 
 class LoginController extends Controller
 {
@@ -45,7 +46,7 @@ class LoginController extends Controller
         // Check if the user has the 'admin' or 'teacher' role
         if (!$user->hasRole(['admin', 'teacher']) || !$user->is_active) {
             Auth::logout(); // Log the user out
-            return redirect('/login')->withErrors(['email' => 'You do not have permission to access this CRM.']);
+            return redirect('/login')->withErrors(['email' => Lang::get('auth.notActive')]);
         }
 
         return redirect()->intended($this->redirectPath());

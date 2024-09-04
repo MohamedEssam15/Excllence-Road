@@ -9,6 +9,13 @@
 @section('body')
 
     <body class="authentication-bg">
+        <div id="preloader">
+            <div id="status">
+                <div class="spinner">
+                    <i class="uil-shutter-alt spin-icon"></i>
+                </div>
+            </div>
+        </div>
     @show
     @yield('content')
     @include('layouts.vendor-scripts')

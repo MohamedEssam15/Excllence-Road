@@ -1,9 +1,9 @@
 {
     "private": true,
-    "name": "minible",
-    "version": "3.0.0",
+    "name": "",
+    "version": "",
     "description": "",
-    "author": "Themesbrand",
+    "author": "",
     "scripts": {
         "dev": "npm run development",
         "development": "mix",

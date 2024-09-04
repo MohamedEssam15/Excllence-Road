@@ -1,7 +1,7 @@
-@extends('layouts.master-without-nav')
 @section('title')
-    Verify Your Email Address
+@lang('translation.verfyEmail')
 @endsection
+@extends('layouts.master-without-nav')
 @section('content')
     <div class="account-pages my-5  pt-sm-5">
         <div class="container">
@@ -16,21 +16,21 @@
                                 class="logo logo-light">
                         </a>
                         <div class="card">
-                            <div class="card-header">{{ __('Verify Your Email Address') }}</div>
+                            <div class="card-header">{{ __('auth.verifyYourEmail') }}</div>
 
                             <div class="card-body">
                                 @if (session('resent'))
                                     <div class="alert alert-success" role="alert">
-                                        {{ __('A fresh verification link has been sent to your email address.') }}
+                                        {{ __('auth.resetMessage') }}
                                     </div>
                                 @endif
 
-                                {{ __('Before proceeding, please check your email for a verification link.') }}
-                                {{ __('If you did not receive the email') }},
+                                {{ __('auth.verifyYourEmailText') }}
+                                {{ __('auth.verifyYourEmailResend') }},
                                 <form class="d-inline" method="POST" action="{{ route('verification.resend') }}">
                                     @csrf
                                     <button type="submit"
-                                        class="btn btn-link p-0 m-0 align-baseline">{{ __('click here to request another') }}</button>.
+                                        class="btn btn-link p-0 m-0 align-baseline">{{ __('auth.resetLink') }}</button>.
                                 </form>
                             </div>
                         </div>

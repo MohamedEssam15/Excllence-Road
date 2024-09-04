@@ -3,7 +3,11 @@
 namespace App\Http\Controllers\ApiControllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ApiLoginRequest;
+use App\Http\Resources\StudentResource;
+use App\Models\User;
 use Illuminate\Http\Request;
+use stdClass;
 
 class AuthController extends Controller
 {
@@ -12,25 +16,27 @@ class AuthController extends Controller
      *
      * @return void
      */
-    public function __construct()
-    {
-        $this->middleware('auth:api', ['except' => ['login']]);
-    }
+    // public function __construct()
+    // {
+    //     $this->middleware('auth:api', ['except' => ['login']]);
+    // }
 
     /**
      * Get a JWT via given credentials.
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function login()
+    public function login(ApiLoginRequest $request)
     {
         $credentials = request(['email', 'password']);
+        $credentials['is_active']=true;
 
-        if (! $token = auth()->attempt($credentials)) {
-            return response()->json(['error' => 'Unauthorized'], 401);
+        if (! $token = auth('api')->attempt($credentials,request('rememberMe'))) {
+            return apiResponse(__('auth.notActive'),new stdClass(),[__('auth.notActive')],401);
         }
+        $user = User::where('email', request('email'))->first();
 
-        return $this->respondWithToken($token);
+        return $this->respondWithToken($token,$user);
     }
 
     /**
@@ -50,9 +56,11 @@ class AuthController extends Controller
      */
     public function logout()
     {
+        if(is_null(auth()->user())){
+            return apiResponse(__('auth.logoutError'),new stdClass(),[__('auth.logoutError')],401);
+        }
         auth()->logout();
-
-        return response()->json(['message' => 'Successfully logged out']);
+        return apiResponse(__('auth.logout'));
     }
 
     /**
@@ -72,12 +80,14 @@ class AuthController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    protected function respondWithToken($token)
+    protected function respondWithToken($token,$user= null)
     {
-        return response()->json([
+        $response =[
             'access_token' => $token,
+            'user'=>new StudentResource($user),
             'token_type' => 'bearer',
             'expires_in' => auth()->factory()->getTTL() * 60
-        ]);
+        ];
+        return apiResponse('login successfully',$response);
     }
 }
