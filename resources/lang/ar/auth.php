@@ -20,6 +20,7 @@ return [
     'waitingAdminConfirmation'=> 'الحساب تحت المراجعه الان ,سنتواصل معك عند الموافقه علي حسابك',
     'logout'=>'تم تسجيل الخروج بنجاح',
     'logoutError'=>'برجاء تسجيل الدخول',
+    'loginRoleError'=>'برجاء الدخول من لوحه التحكم الخاصه بك',
 
     //login page text
     'welcomeBack' => '! اهلا بك مجددا ',

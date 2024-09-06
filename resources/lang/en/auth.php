@@ -32,6 +32,7 @@ return [
     'signUpNow' => "Signup Now",
     'logout'=>'Signed out successfully',
     'logoutError'=>'Please sign in frist',
+    'loginRoleError'=>'Please sign in our crm portal',
 
     //signup page text
 

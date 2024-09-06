@@ -17,6 +17,10 @@ return [
     'sent' => 'We have emailed your password reset link!',
     'throttled' => 'Please wait before retrying.',
     'token' => 'This password reset token is invalid.',
+    'emailToken' => 'This email verfication token is invalid.',
+    'emailVerfied' => 'Email verified successfully.',
     'user' => "We can't find a user with that email address.",
+    'sendVerficationEmail' => "Verification code sent to your email.",
+
 
 ];

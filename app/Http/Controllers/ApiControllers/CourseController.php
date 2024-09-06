@@ -22,7 +22,7 @@ class CourseController extends Controller
         })->where('start_date', '>=', Carbon::today())->get();
 
         if (!isset($courses[0])) {
-            return apiResponse('No Courses Available', new stdClass(), ['No Courses Available'], 404);
+            return apiResponse(__('noCourses'), new stdClass(), [__('noCourses')], 404);
         }
 
         return apiResponse('Data Retrieved', PopularCourseResource::collection($courses));
@@ -33,7 +33,7 @@ class CourseController extends Controller
             $query->where('name', 'active');
         })->where('start_date', '>=', Carbon::today())->get();
         if (!isset($courses[0])) {
-            return apiResponse('No Courses Available', new stdClass(), ['No Courses Available'], 404);
+            return apiResponse(__('noCourses'), new stdClass(), [__('noCourses')], 404);
         }
 
         return apiResponse('Data Retrieved', PopularCourseResource::collection($courses));
@@ -47,7 +47,7 @@ class CourseController extends Controller
             $query->where('name', 'LIKE', $term.'%');
         })->where('start_date', '>=', Carbon::today())->take(5)->get();
         if (!isset($courses[0])) {
-            return apiResponse('No Courses Found', new stdClass(), ['No Courses Found'], 404);
+            return apiResponse(__('courseNotFound'), new stdClass(), [__('courseNotFound')], 404);
         }
 
         return apiResponse('Data Retrieved', PopularCourseResource::collection($courses));
@@ -61,7 +61,7 @@ class CourseController extends Controller
         })->where('start_date', '>=', Carbon::today());
         $courses= $coursesQuery->paginate(request()->perPage);
         if (!isset($courses[0])) {
-            return apiResponse('No Courses Found', new stdClass(), ['No Courses Found'], 404);
+            return apiResponse(__('courseNotFound'), new stdClass(), [__('courseNotFound')], 404);
         }
 
         return apiResponse('Data Retrieved', new PaginatedCollection($courses, PopularCourseResource::class));
@@ -69,7 +69,7 @@ class CourseController extends Controller
     public function getCourseLevels(){
         $courseLevels = CourseLevel::all();
         if (!isset($courseLevels[0])) {
-            return apiResponse('No Courses Found', new stdClass(), ['No Courses Found'], 404);
+            return apiResponse(__('courseNotFound'), new stdClass(), [__('courseNotFound')], 404);
         }
 
         return apiResponse('Data Retrieved', CourseLevelResource::collection($courseLevels));

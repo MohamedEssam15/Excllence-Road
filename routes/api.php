@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ApiControllers\Auth\AuthController;
 use App\Http\Controllers\ApiControllers\CategoryController;
 use App\Http\Controllers\ApiControllers\CourseController;
+use App\Http\Controllers\ApiControllers\PackageController;
 use App\Http\Controllers\ApiControllers\TeacherController;
 use Illuminate\Support\Facades\URL;
 
@@ -19,9 +20,14 @@ use Illuminate\Support\Facades\URL;
 |
 */
 
-Route::group(['middleware' => 'api','prefix' => 'auth'], function ($router) {
+Route::group(['middleware' => ['api'],'prefix' => 'auth'], function ($router) {
     Route::post('login', [AuthController::class,'login']);
     Route::post('logout', [AuthController::class,'logout']);
+    Route::post('register', [AuthController::class,'register']);
+    Route::post('password/email', [AuthController::class, 'sendResetCode']);
+    Route::post('password/reset', [AuthController::class, 'resetWithCode']);
+    Route::post('/email/send-code', [AuthController::class, 'sendVerificationCode']);
+    Route::post('/email/verify', [AuthController::class, 'verifyEmail']);
     Route::post('refresh', 'AuthController@refresh');
     Route::post('me', 'AuthController@me');
 });
@@ -34,10 +40,19 @@ Route::group(['middleware' => 'guest:api','prefix'=>'courses'], function () {
     Route::get('/levels',[CourseController::class,'getCourseLevels']);
 });
 
+//teacher routes
 Route::group(['middleware' => 'guest:api','prefix'=>'teachers'], function () {
     Route::get('/',[TeacherController::class,'getAllTeachers']);
 
 });
+
+//categories routes
 Route::group(['middleware' => 'guest:api','prefix'=>'categories'], function () {
     Route::get('/',[CategoryController::class,'getCategories']);
+});
+
+//packages Routes
+Route::group(['middleware' => 'guest:api','prefix'=>'packages'], function () {
+    Route::get('/',[PackageController::class,'getPackages']);
+    Route::get('/{id}',[PackageController::class,'show']);
 });
