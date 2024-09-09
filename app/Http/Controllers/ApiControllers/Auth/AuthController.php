@@ -37,8 +37,17 @@ class AuthController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function login(ApiLoginRequest $request)
+    public function login(Request $request)
     {
+        // Validate the email
+        $validator = Validator::make($request->all(), [
+            "email"=> ['string','email','exists:users,email'],
+            "password"=>['string'],
+        ]);
+
+        if ($validator->fails()) {
+            return apiResponse('error',new stdClass(),$validator->errors()->all(),422);
+        }
         $credentials = request(['email', 'password']);
         $credentials['is_active']=true;
 
@@ -55,7 +64,18 @@ class AuthController extends Controller
         return $this->respondWithToken($token,$user);
     }
 
-    public function register(RegisterUserRequest $request){
+    public function register(Request $request){
+        // Validate the email
+        $validator = Validator::make($request->all(), [
+            'name'=>['string','required'],
+            'email'=>['string','email','unique:users,email','required'],
+            'password'=>['string','min:8','required'],
+            'photo'=>['string','required'],
+        ]);
+
+        if ($validator->fails()) {
+            return apiResponse('error',new stdClass(),$validator->errors()->all(),422);
+        }
         $image_parts = explode(";base64,", $request->photo);
         $image_type_aux = explode("image/", $image_parts[0]);
         $image_type = $image_type_aux[1];
@@ -69,6 +89,7 @@ class AuthController extends Controller
             'avatar'=>$imageName,
             'is_active'=>true
         ]);
+        $user->assignRole('student');
         $path = 'users_attachments/'.$user->id.'/avatar/'.$imageName;
         Storage::disk('publicFolder')->put($path, $image);
         $token = auth()->login($user);
@@ -109,7 +130,7 @@ class AuthController extends Controller
         if ($validator->fails()) {
             return apiResponse('error',new stdClass(),$validator->errors()->all(),422);
         }
-        $user = User::where('email',$request->email)->role('student')->first();
+        $user = User::where('email',$request->email)->first();
         // Generate a 4-digit code
         $code = rand(1000, 9999);
 
