@@ -24,6 +24,10 @@ class Course extends Model
     {
         return $this->belongsTo(CourseStatus::class);
     }
+    public function level(): BelongsTo
+    {
+        return $this->belongsTo(CourseLevel::class);
+    }
 
     public function category(): BelongsTo
     {

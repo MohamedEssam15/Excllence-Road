@@ -1,6 +1,6 @@
 @extends('layouts.master-without-nav')
 @section('title')
-    Reset Password
+{{__('auth.resetPassword')}}
 @endsection
 @section('content')
     <div class="account-pages my-5  pt-sm-5">
@@ -20,8 +20,8 @@
                             <div class="card-body p-4">
 
                                 <div class="text-center mt-2">
-                                    <h5 class="text-primary">Reset Password</h5>
-                                    <p class="text-muted">Reset Password with Minible.</p>
+                                    <h5 class="text-primary">{{__('auth.resetPassword')}}</h5>
+                                    <p class="text-muted">{{__('auth.resetPasswordText')}}</p>
                                 </div>
                                 <div class="p-2 mt-4">
                                     @if (session('status'))
@@ -33,10 +33,10 @@
                                         @csrf
 
                                         <div class="mb-3">
-                                            <label class="form-label" for="email">Email</label>
+                                            <label class="form-label" for="email">{{__('auth.email')}}</label>
                                             <input type="email" class="form-control @error('email') is-invalid @enderror"
                                                 name="email" value="{{ old('email') }}" id="email"
-                                                placeholder="Enter email">
+                                                placeholder="{{__('auth.enterEmail')}}">
                                             @error('email')
                                                 <span class="invalid-feedback" role="alert">
                                                     <strong>{{ $message }}</strong>
@@ -46,13 +46,13 @@
 
                                         <div class="mt-3 text-end">
                                             <button class="btn btn-primary w-sm waves-effect waves-light"
-                                                type="submit">Reset</button>
+                                                type="submit">{{__('auth.reset')}}</button>
                                         </div>
 
 
                                         <div class="mt-4 text-center">
-                                            <p class="mb-0">Remember It ? <a href="{{ url('login') }}"
-                                                    class="fw-medium text-primary"> Signin </a></p>
+                                            <p class="mb-0">{{__('auth.rememberIt')}} <a href="{{ url('login') }}"
+                                                    class="fw-medium text-primary"> {{__('auth.login')}} </a></p>
                                         </div>
                                     </form>
                                 </div>

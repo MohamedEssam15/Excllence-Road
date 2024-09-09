@@ -1,8 +1,30 @@
 <?php
 
 return [
+  "appName"=>"Excellence Road",
   "Menu"=> "Menu",
   "Dashboard"=> "Dashboard",
+
+  //courses
+  "Courses"=> "Courses",
+  "allCourses"=> "All Courses",
+  "addCourses"=> "Add Course",
+  "allCoursesTeacher"=> "All courses thats belong to you",
+  "allCoursesAdmin"=> "All courses in the system",
+  "id"=>'ID',
+  "name"=>'Name',
+  "image"=>'Image',
+  "description"=>'Description',
+  "price"=>'Price',
+  "teacherCommistion"=>'Teacher Commistion',
+  "category"=>'Category',
+  "level"=>'Level',
+  "specificTo"=>'Specific To',
+  "status"=>'Status',
+  "actions"=>'Actions',
+  "notSpecific"=>'Not Specific',
+
+
   "verfyEmail"=> "Verify Your Email Address",
   "Layouts"=> "Layouts",
   "Horizontal"=> "Horizontal",

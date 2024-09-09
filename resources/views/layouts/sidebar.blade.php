@@ -35,12 +35,33 @@
                 <li class="menu-title">@lang('translation.Menu')</li>
 
                 <li>
-                    <a href="{{url('index')}}">
-                        <i class="uil-home-alt"></i><span class="badge rounded-pill bg-primary float-end">01</span>
+                    <a href="{{url('/')}}">
+                        <i class="uil-home-alt"></i>
+                        {{-- badge <span class="badge rounded-pill bg-primary float-end">01</span> --}}
                         <span>@lang('translation.Dashboard')</span>
                     </a>
                 </li>
+                @hasanyrole(['teacher','admin'])
+                <li class="menu-title">@lang('translation.Courses')</li>
 
+                <li>
+                    <a href="{{route('courses.all')}}">
+                        <i class="fas fa-book-open"></i>
+                        {{-- badge <span class="badge rounded-pill bg-primary float-end">01</span> --}}
+                        <span>@lang('translation.allCourses')</span>
+                    </a>
+                </li>
+                @endhasanyrole
+
+                @role('teacher')
+                <li>
+                    <a href="{{route('courses.add')}}">
+                        <i class="far fa-plus-square"></i>
+                        {{-- badge <span class="badge rounded-pill bg-primary float-end">01</span> --}}
+                        <span>@lang('translation.addCourses')</span>
+                    </a>
+                </li>
+                @endrole
                 <li>
                     <a href="javascript: void(0);" class="has-arrow waves-effect">
                         <i class="uil-window-section"></i>

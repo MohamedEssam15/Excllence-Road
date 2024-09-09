@@ -3,6 +3,9 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Support\Facades\Validator;
+use stdClass;
 
 class RegisterUserRequest extends FormRequest
 {
@@ -28,4 +31,9 @@ class RegisterUserRequest extends FormRequest
             'photo'=>['string','required'],
         ];
     }
+    // public function failedValidation(Validator $validator)
+    // {
+    //     $errors = $validator->errors()->all();
+    //     throw new HttpResponseException(apiResponse('Validation Error', new stdClass(), $errors, 422));
+    // }
 }

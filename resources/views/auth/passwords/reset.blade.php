@@ -1,6 +1,6 @@
 @extends('layouts.master-without-nav')
 @section('title')
-    Reset Password
+    {{__('auth.resetPassword')}}
 @endsection
 @section('content')
     <div class="account-pages my-5  pt-sm-5">
@@ -20,8 +20,8 @@
                             <div class="card-body p-4">
 
                                 <div class="text-center mt-2">
-                                    <h5 class="text-primary">Reset Password</h5>
-                                    <p class="text-muted">Reset Password with Minible.</p>
+                                    <h5 class="text-primary">{{__('auth.resetPassword')}}</h5>
+                                    <p class="text-muted">{{__('auth.resetPasswordText')}}</p>
                                 </div>
                                 <div class="p-2 mt-4">
                                     <form method="POST" action="{{ route('password.update') }}">
@@ -30,7 +30,7 @@
                                         <input type="hidden" name="token" value="{{ $token }}">
 
                                         <div class="mb-3">
-                                            <label for="email">{{ __('E-Mail Address') }}</label>
+                                            <label for="email">{{ __('auth.email') }}</label>
                                             <input id="email" type="email"
                                                 class="form-control @error('email') is-invalid @enderror" name="email"
                                                 value="{{ $email ?? old('email') }}" required autocomplete="email"
@@ -44,7 +44,7 @@
                                         </div>
 
                                         <div class="mb-3">
-                                            <label for="password">{{ __('Password') }}</label>
+                                            <label for="password">{{ __('auth.password') }}</label>
                                             <input id="password" type="password"
                                                 class="form-control @error('password') is-invalid @enderror" name="password"
                                                 required autocomplete="new-password">
@@ -57,14 +57,14 @@
                                         </div>
 
                                         <div class="mb-3">
-                                            <label for="password-confirm">{{ __('Confirm Password') }}</label>
+                                            <label for="password-confirm">{{ __('auth.confirmPassword') }}</label>
                                             <input id="password-confirm" type="password" class="form-control"
                                                 name="password_confirmation" required autocomplete="new-password">
                                         </div>
 
                                         <div class="mt-3 text-end">
                                             <button class="btn btn-primary w-sm waves-effect waves-light"
-                                                type="submit">{{ __('Reset Password') }}</button>
+                                                type="submit">{{__('auth.reset')}}</button>
                                         </div>
 
                                     </form>

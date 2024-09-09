@@ -1,9 +1,32 @@
 <?php
 
 return [
+  "appName"=>"طريق التميز",
   "Menu"=> "القائمه",
   "Dashboard"=> "القائمه الرئيسيه",
   "verfyEmail"=> "التحقق من البريد الالكتروني",
+  //courses
+  "Courses"=> "الدورات",
+  "allCourses"=> "كل الدورات",
+  "addCourses"=> "اضافة دوره",
+  "allCoursesTeacher"=> "جميع الدورات الخاصة بك",
+  "allCoursesAdmin"=> "جميع الدورات المضافة الي النظام",
+  "id"=>'معرف',
+  "name"=>'الاسم',
+  "image"=>'الصورة',
+  "description"=>'الوصف',
+  "price"=>'السعر',
+  "teacherCommistion"=>'نسبه المعلم',
+  "category"=>'الفئه',
+  "level"=>'المستوي',
+  "specificTo"=>'محدد الي',
+  "status"=>'الحالة',
+  "actions"=>'خيارات',
+  "notSpecific"=>'غير محدد',
+
+
+
+
   "Layouts"=> "Layouts",
   "Horizontal"=> "Horizontal",
   "Dark_Sidebar"=> "Dark Sidebar",
@@ -107,7 +130,7 @@ return [
   "Level_1.2"=> "Level 1.2",
   "Level_2.1"=> "Level 2.1",
   "Level_2.2"=> "Level 2.2",
-  "Search"=> "Search",
+  "Search"=> "بحث",
   "Notifications"=> "Notifications",
   "Mark_read"=> "Mark all as read",
   "order_placed"=> "Your order is placed",

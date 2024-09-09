@@ -27,7 +27,7 @@ File: Main Js File
 
             if (window.innerWidth >= 1024 && window.innerWidth <= 1366) {
                 document.body.setAttribute('data-sidebar-size', 'sm');
-                updateRadio('sidebar-size-small')
+                checkTheAtrributeIsExistAndUpdateRadio('sidebar-size-small')
             }
         });
 
@@ -320,12 +320,12 @@ File: Main Js File
         function switchLayoutDirection(direction) {
             if (direction === 'ltr') {
                 document.documentElement.removeAttribute('dir');
-                document.getElementById('bootstrap-style').setAttribute('href', 'assets/css/bootstrap.min.css');
-                document.getElementById('app-style').setAttribute('href', 'assets/css/app.min.css');
+                document.getElementById('bootstrap-style').setAttribute('href', baseUrl + '/assets/css/bootstrap.min.css');
+                document.getElementById('app-style').setAttribute('href', baseUrl + '/assets/css/app.min.css');
             } else {
                 document.documentElement.setAttribute('dir', 'rtl');
-                document.getElementById('bootstrap-style').setAttribute('href', 'assets/css/bootstrap.rtl.css');
-                document.getElementById('app-style').setAttribute('href', 'assets/css/app.rtl.css');
+                document.getElementById('bootstrap-style').setAttribute('href', baseUrl + '/assets/css/bootstrap.rtl.css');
+                document.getElementById('app-style').setAttribute('href', baseUrl + '/assets/css/app.rtl.css');
             }
         }
         if (currentLang === 'ar') {

@@ -8,7 +8,9 @@
  <script src="{{ URL::asset('/assets/libs/jquery-counterup/jquery-counterup.min.js')}}"></script>
 
  @yield('script')
-
+ <script>
+    var baseUrl = "{{ url('/') }}";
+</script>
  <!-- App js -->
  <script src="{{ URL::asset('/assets/js/app.min.js')}}"></script>
 
