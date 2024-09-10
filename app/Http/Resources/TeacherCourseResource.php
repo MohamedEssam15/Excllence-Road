@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\App;
 
-class PopularCourseResource extends JsonResource
+class TeacherCourseResource extends JsonResource
 {
     private $locale;
     private $course;
@@ -22,6 +22,7 @@ class PopularCourseResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        ds($this->course->status,$this->course->level);
         return [
             'id'=>$this->course->id,
             'name'=>$this->course->translate($this->locale)->name,
@@ -29,12 +30,13 @@ class PopularCourseResource extends JsonResource
             'coverPhoto'=>$this->course->getCoverPhotoPath(),
             'teacher'=> new TeacherInfoResource($this->course->teacher),
             'category'=> new CategoryInfoResource($this->course->category),
-            'level'=> new CourseLevelResource($this->course->level),
             'price'=>$this->course->price,
             'startDate'=>$this->course->start_date,
             'endDate'=>$this->course->end_date,
             'isSpecific'=>$this->course->is_specific,
             'specificTo'=>$this->course->translate($this->locale)->specific_to,
+            'status'=>new CourseStatusResource($this->course->status),
+            'level'=>new CourseLevelResource($this->course->level),
         ];
     }
 }

@@ -17,23 +17,33 @@ class CourseController extends Controller
 {
     public function getPopularCourses()
     {
-        $courses = Course::where('is_populer', true)->whereHas('status', function ($query) {
+        $courses = Course::where('is_populer', true)
+        ->whereHas('status', function ($query) {
             $query->where('name', 'active');
-        })->where('start_date', '>=', Carbon::today())->get();
+        })
+        ->whereHas('teacher', function ($query) {
+            $query->whereNull('deleted_at');
+        })
+        ->where('start_date', '>=', Carbon::today())->get();
 
         if (!isset($courses[0])) {
-            return apiResponse(__('noCourses'), new stdClass(), [__('noCourses')], 404);
+            return apiResponse(__('response.noCourses'), new stdClass(), [__('response.noCourses')], 404);
         }
 
         return apiResponse('Data Retrieved', PopularCourseResource::collection($courses));
     }
 
     public function getTeacherCourses($id){
-        $courses = Course::where('teacher_id', $id)->whereHas('status', function ($query) {
+
+        $courses = Course::where('teacher_id', $id)
+        ->whereHas('teacher', function ($query) {
+            $query->whereNull('deleted_at');
+        })
+        ->whereHas('status', function ($query) {
             $query->where('name', 'active');
         })->where('start_date', '>=', Carbon::today())->get();
         if (!isset($courses[0])) {
-            return apiResponse(__('noCourses'), new stdClass(), [__('noCourses')], 404);
+            return apiResponse(__('response.noCourses'), new stdClass(), [__('response.noCourses')], 404);
         }
 
         return apiResponse('Data Retrieved', PopularCourseResource::collection($courses));
@@ -43,11 +53,15 @@ class CourseController extends Controller
         $term = $request->term;
         $courses = Course::whereHas('status', function ($query) {
             $query->where('name', 'active');
-        })->whereHas('translations', function ($query) use ($term) {
+        })
+        ->whereHas('teacher', function ($query) {
+            $query->whereNull('deleted_at');
+        })
+        ->whereHas('translations', function ($query) use ($term) {
             $query->where('name', 'LIKE', $term.'%');
         })->where('start_date', '>=', Carbon::today())->take(5)->get();
         if (!isset($courses[0])) {
-            return apiResponse(__('courseNotFound'), new stdClass(), [__('courseNotFound')], 404);
+            return apiResponse(__('response.courseNotFound'), new stdClass(), [__('response.courseNotFound')], 404);
         }
 
         return apiResponse('Data Retrieved', PopularCourseResource::collection($courses));
@@ -58,10 +72,14 @@ class CourseController extends Controller
 
         $coursesQuery->whereHas('status', function ($query) {
             $query->where('name', 'active');
-        })->where('start_date', '>=', Carbon::today());
+        })
+        ->whereHas('teacher', function ($query) {
+            $query->whereNull('deleted_at');
+        })
+        ->where('start_date', '>=', Carbon::today());
         $courses= $coursesQuery->paginate(request()->perPage);
         if (!isset($courses[0])) {
-            return apiResponse(__('courseNotFound'), new stdClass(), [__('courseNotFound')], 404);
+            return apiResponse(__('response.courseNotFound'), new stdClass(), [__('response.courseNotFound')], 404);
         }
 
         return apiResponse('Data Retrieved', new PaginatedCollection($courses, PopularCourseResource::class));
@@ -69,7 +87,7 @@ class CourseController extends Controller
     public function getCourseLevels(){
         $courseLevels = CourseLevel::all();
         if (!isset($courseLevels[0])) {
-            return apiResponse(__('courseNotFound'), new stdClass(), [__('courseNotFound')], 404);
+            return apiResponse(__('response.courseNotFound'), new stdClass(), [__('response.courseNotFound')], 404);
         }
 
         return apiResponse('Data Retrieved', CourseLevelResource::collection($courseLevels));

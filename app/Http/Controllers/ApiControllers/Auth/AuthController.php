@@ -29,7 +29,7 @@ class AuthController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['login','register','sendResetCode','resetWithCode']]);
+        $this->middleware('auth:api', ['except' => ['login', 'register', 'sendResetCode', 'resetWithCode']]);
     }
 
     /**
@@ -37,63 +37,51 @@ class AuthController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function login(Request $request)
+    public function login(ApiLoginRequest $request)
     {
-        // Validate the email
-        $validator = Validator::make($request->all(), [
-            "email"=> ['string','email','exists:users,email'],
-            "password"=>['string'],
-        ]);
-
-        if ($validator->fails()) {
-            return apiResponse('error',new stdClass(),$validator->errors()->all(),422);
-        }
         $credentials = request(['email', 'password']);
-        $credentials['is_active']=true;
 
-        if (! $token = auth('api')->attempt($credentials,request('rememberMe'))) {
-            return apiResponse(__('auth.notActive'),new stdClass(),[__('auth.notActive')],401);
+        if (! $token = auth('api')->attempt($credentials, request('rememberMe'))) {
+            return apiResponse(__('auth.failed'), new stdClass(), [__('auth.failed')], 401);
         }
-        $user = User::where('email', request('email'))->first();
+        $user = auth()->user();
+        if (! $user->is_active) {
+            return apiResponse(__('auth.notActive'), new stdClass(), [__('auth.notActive')], 401);
+        }
 
-        if(! $user->hasRole('student')){
+        if (! $user->hasAnyRole('student', 'teacher')) {
             Auth::logout();
-            return apiResponse(__('auth.loginRoleError'),new stdClass(),[__('auth.loginRoleError')],401);
+            return apiResponse(__('auth.loginRoleError'), new stdClass(), [__('auth.loginRoleError')], 401);
         }
 
-        return $this->respondWithToken($token,$user);
+        return $this->respondWithToken($token, $user);
     }
 
-    public function register(Request $request){
-        // Validate the email
-        $validator = Validator::make($request->all(), [
-            'name'=>['string','required'],
-            'email'=>['string','email','unique:users,email','required'],
-            'password'=>['string','min:8','required'],
-            'photo'=>['string','required'],
-        ]);
+    public function register(RegisterUserRequest $request)
+    {
 
-        if ($validator->fails()) {
-            return apiResponse('error',new stdClass(),$validator->errors()->all(),422);
-        }
         $image_parts = explode(";base64,", $request->photo);
         $image_type_aux = explode("image/", $image_parts[0]);
         $image_type = $image_type_aux[1];
         $image = base64_decode($image_parts[1]);
-        $imageName = Str::random(10) . '.'.$image_type;
-        $user=User::create([
-            'name'=>$request->name,
-            'email'=>$request->email,
-            'password'=>Hash::make($request->password),
-            'avatar'=>$imageName,
-            'avatar'=>$imageName,
-            'is_active'=>true
+        $imageName = Str::random(10) . '.' . $image_type;
+        $isActive = true;
+        if ($request->role == 'teacher') {
+            $isActive = false;
+        }
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'avatar' => $imageName,
+            'avatar' => $imageName,
+            'is_active' => $isActive
         ]);
-        $user->assignRole('student');
-        $path = 'users_attachments/'.$user->id.'/avatar/'.$imageName;
+        $user->assignRole($request->role);
+        $path = 'users_attachments/' . $user->id . '/avatar/' . $imageName;
         Storage::disk('publicFolder')->put($path, $image);
-        $token = auth()->login($user);
-        return $this->respondWithToken($token,$user);
+        $token = auth()->login($user, true);
+        return $this->respondWithToken($token, $user);
     }
 
     /**
@@ -113,8 +101,8 @@ class AuthController extends Controller
      */
     public function logout()
     {
-        if(is_null(auth()->user())){
-            return apiResponse(__('auth.logoutError'),new stdClass(),[__('auth.logoutError')],401);
+        if (is_null(auth()->user())) {
+            return apiResponse(__('auth.logoutError'), new stdClass(), [__('auth.logoutError')], 401);
         }
         auth()->logout();
         return apiResponse(__('auth.logout'));
@@ -128,9 +116,9 @@ class AuthController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return apiResponse('error',new stdClass(),$validator->errors()->all(),422);
+            return apiResponse('error', new stdClass(), $validator->errors()->all(), 422);
         }
-        $user = User::where('email',$request->email)->first();
+        $user = User::where('email', $request->email)->first();
         // Generate a 4-digit code
         $code = rand(1000, 9999);
 
@@ -139,7 +127,7 @@ class AuthController extends Controller
             ['email' => $request->email],
             ['code' => $code, 'created_at' => Carbon::now()]
         );
-        if(! is_null($user)){
+        if (! is_null($user)) {
             Mail::to($request->email)->send(new ResetPasswordEmail($code));
         }
 
@@ -157,7 +145,7 @@ class AuthController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return apiResponse('error',new stdClass(),$validator->errors()->all(),422);
+            return apiResponse('error', new stdClass(), $validator->errors()->all(), 422);
         }
 
         // Check if the code is valid and not expired (e.g., 10 minutes expiry)
@@ -168,7 +156,7 @@ class AuthController extends Controller
             ->first();
 
         if (!$resetEntry) {
-            return apiResponse(__('passwords.token'),new stdClass(),[__('passwords.token')],422);
+            return apiResponse(__('passwords.token'), new stdClass(), [__('passwords.token')], 422);
         }
 
         // Reset the user's password
@@ -185,6 +173,10 @@ class AuthController extends Controller
     public function sendVerificationCode(Request $request)
     {
         $user = auth('api')->user();
+        if($user->email_verified_at != null){
+            return apiResponse(__('response.emailVerfiedAlready'), new stdClass(), [__('response.emailVerfiedAlready')], 422);
+        }
+
         $code = rand(1000, 9999);
         DB::table('password_resets_jwt')->updateOrInsert(
             ['email' => $user->email],
@@ -204,28 +196,38 @@ class AuthController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return apiResponse('error',new stdClass(),$validator->errors()->all(),422);
+            return apiResponse('error', new stdClass(), $validator->errors()->all(), 422);
         }
 
         // Find user
         $user = auth()->user();
         $resetEntry = DB::table('password_resets_jwt')
-        ->where('email', $user->email)
-        ->where('code', $request->code)
-        ->where('created_at', '>=', Carbon::now()->subMinutes(10))
-        ->first();
+            ->where('email', $user->email)
+            ->where('code', $request->code)
+            ->where('created_at', '>=', Carbon::now()->subMinutes(10))
+            ->first();
 
         if (!$resetEntry) {
-            return apiResponse(__('passwords.emailToken'),new stdClass(),[__('passwords.emailToken')],422);
+            return apiResponse(__('passwords.emailToken'), new stdClass(), [__('passwords.emailToken')], 422);
         }
 
-
-        // $user = User::where('email', $request->email)->first();
         $user->email_verified_at = now();
         $user->save();
 
         DB::table('password_resets_jwt')->where('email', $request->email)->delete();
         return apiResponse(__('passwords.emailVerfied'));
+    }
+
+    public function delete()
+    {
+        $user = auth()->user();
+        auth()->logout();
+        if($user->hasRole('teacher')){
+            $user->delete();
+        }else{
+            $user->forceDelete();
+        }
+        return apiResponse(__('response.deleteUser'), new stdClass());
     }
 
     /**
@@ -235,14 +237,14 @@ class AuthController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    protected function respondWithToken($token,$user= null)
+    protected function respondWithToken($token, $user = null)
     {
-        $response =[
+        $response = [
             'access_token' => $token,
-            'user'=>new StudentResource($user),
+            'user' => new StudentResource($user),
             'token_type' => 'bearer',
             'expires_in' => auth()->factory()->getTTL() * 60
         ];
-        return apiResponse('login successfully',$response);
+        return apiResponse('login successfully', $response);
     }
 }

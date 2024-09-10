@@ -55,4 +55,10 @@ return [
     'verifyYourEmailResend' => "If you did not receive the email",
     'resetMessage' => "A fresh verification link has been sent to your email address.",
     'resetLink' => "click here to request another",
+
+    //validation errors
+    'rolesIn'=> 'the selected role is invalid',
+    'loginFirst'=>'You must login first',
+    'activateFirst'=>'Please waiting the approval from Admin',
+
 ];

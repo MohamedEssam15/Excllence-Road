@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 class Package extends Model
 {
     use HasFactory;
-    protected $fillable = ['name','description','price','cover_photo','start_date','end_date'];
+    protected $fillable = ['name','description','price','cover_photo','start_date','end_date','is_popular'];
 
     public function courses(): BelongsToMany
     {

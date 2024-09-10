@@ -4,11 +4,10 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\App;
 use stdClass;
 use Symfony\Component\HttpFoundation\Response;
 
-class SetApplicationLanguage
+class CheckUserActive
 {
     /**
      * Handle an incoming request.
@@ -17,12 +16,15 @@ class SetApplicationLanguage
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $locale = $request->header('Language','ar');
-        if($locale == 'ar' || $locale == 'en'){
-            App::setLocale($locale);
-            return $next($request);
+        if(! is_null(auth()->user())){
+            if(auth()->user()->is_active){
+                return $next($request);
+            }else{
+                return apiResponse(__('auth.activateFirst'),new stdClass(),[__('auth.activateFirst')],401);
+            }
+        }else{
+            return apiResponse(__('auth.loginFirst'),new stdClass(),[__('auth.loginFirst')],401);
         }
-        return apiResponse('language not exist yet',new stdClass(),['language not exist yet'],422);
 
     }
 }

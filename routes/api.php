@@ -1,13 +1,11 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ApiControllers\Auth\AuthController;
 use App\Http\Controllers\ApiControllers\CategoryController;
 use App\Http\Controllers\ApiControllers\CourseController;
 use App\Http\Controllers\ApiControllers\PackageController;
 use App\Http\Controllers\ApiControllers\TeacherController;
-use Illuminate\Support\Facades\URL;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,8 +26,7 @@ Route::group(['middleware' => ['api'],'prefix' => 'auth'], function ($router) {
     Route::post('password/reset', [AuthController::class, 'resetWithCode']);
     Route::post('/email/send-code', [AuthController::class, 'sendVerificationCode']);
     Route::post('/email/verify', [AuthController::class, 'verifyEmail']);
-    Route::post('refresh', 'AuthController@refresh');
-    Route::post('me', 'AuthController@me');
+    Route::delete('/delete', [AuthController::class,'delete']);
 });
 
 Route::group(['middleware' => 'guest:api','prefix'=>'courses'], function () {
@@ -39,11 +36,13 @@ Route::group(['middleware' => 'guest:api','prefix'=>'courses'], function () {
     Route::get('/',[CourseController::class,'coursesFilters']);
     Route::get('/levels',[CourseController::class,'getCourseLevels']);
 });
-
+// Route::get('teachers/courses',[TeacherController::class,'getAllTeacherCourses']);
 //teacher routes
-Route::group(['middleware' => 'guest:api','prefix'=>'teachers'], function () {
+Route::group(['prefix'=>'teachers'], function () {
     Route::get('/',[TeacherController::class,'getAllTeachers']);
-
+    Route::group(['middleware'=>['auth:api','checkUserActivation']], function () {
+        Route::get('courses',[TeacherController::class,'getAllTeacherCourses']);
+    });
 });
 
 //categories routes
@@ -54,5 +53,6 @@ Route::group(['middleware' => 'guest:api','prefix'=>'categories'], function () {
 //packages Routes
 Route::group(['middleware' => 'guest:api','prefix'=>'packages'], function () {
     Route::get('/',[PackageController::class,'getPackages']);
+    Route::get('/popular',[PackageController::class,'getPopularPackages']);
     Route::get('/{id}',[PackageController::class,'show']);
 });
