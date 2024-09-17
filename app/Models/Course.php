@@ -14,6 +14,8 @@ class Course extends Model
     use HasFactory;
 
     protected $fillable = ['description','name','teacher_commision','teacher_id','category_id','start_date','end_date','is_specific','specific_to','status_id','price','level_id'];
+    protected $with=['translations'];
+
 
     public function units(): HasMany
     {
@@ -61,5 +63,10 @@ class Course extends Model
         $filter = new FilterBuilder($query, $filters, $namespace);
 
         return $filter->apply();
+    }
+
+    public function enrollments()
+    {
+        return $this->morphMany(Enrollment::class, 'enrollable');
     }
 }

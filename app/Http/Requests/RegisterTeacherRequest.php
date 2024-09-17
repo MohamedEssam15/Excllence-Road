@@ -6,14 +6,14 @@ use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class RegisterUserRequest extends FormRequest
+class RegisterTeacherRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return $this->isJson();
+        return true;
     }
 
     /**
@@ -27,14 +27,14 @@ class RegisterUserRequest extends FormRequest
             'name'=>['string','required'],
             'email'=>['string','email','unique:users,email','required'],
             'password'=>['string','min:8','required'],
-            'photo'=>['string','nullable'],
-            'phone'=>['nullable']
+            'photo'=>'required|file|mimes:jpg,jpeg,png|max:10240',
+            'phone'=>['required'],
+            'Certificates'=>['nullable','array'],
+            'certificates.*' => 'required|file|mimes:pdf,jpg,jpeg,png|max:10240',
         ];
     }
 
-
-
-    protected function failedValidation(Validator $validator) 
+    protected function failedValidation(Validator $validator)
     {
         throw new HttpResponseException(
             apiResponse('error', new \stdClass(), $validator->errors()->all(), 422)

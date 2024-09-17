@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\ApiControllers;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\CourseInfoResource;
 use App\Http\Resources\CourseLevelResource;
 use App\Http\Resources\PaginatedCollection;
 use App\Http\Resources\PopularCourseResource;
@@ -91,5 +92,16 @@ class CourseController extends Controller
         }
 
         return apiResponse('Data Retrieved', CourseLevelResource::collection($courseLevels));
+    }
+
+    public function guestCourseInfo($id){
+        $course = Course::where('id',$id)->whereHas('status', function ($query) {
+            $query->where('name', 'active');
+        })->first();
+        if (is_null($course)) {
+            return apiResponse(__('response.courseNotFound'), new stdClass(), [__('response.courseNotFound')], 404);
+        }
+
+        return apiResponse('Data Retrieved', new CourseInfoResource($course));
     }
 }

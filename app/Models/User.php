@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -47,12 +48,20 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
         'email_verified_at' => 'datetime',
     ];
 
+    public function attachments(){
+        return $this->hasMany(UserAttchment::class,'user_id');
+    }
+
     public function getAvatarPath(){
         return asset('users_attachments/'.$this->id.'/avatar/'.$this->avatar);
     }
 
     public function teacherCourses(){
         return $this->hasMany(Course::class,'teacher_id');
+    }
+
+    public function enrollments(){
+        $this->hasMany(Enrollment::class,'user_id');
     }
 
     /**

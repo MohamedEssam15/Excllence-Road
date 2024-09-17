@@ -6,6 +6,7 @@ use App\Http\Controllers\ApiControllers\CategoryController;
 use App\Http\Controllers\ApiControllers\CourseController;
 use App\Http\Controllers\ApiControllers\PackageController;
 use App\Http\Controllers\ApiControllers\TeacherController;
+use App\Http\Controllers\PaymentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,11 +18,13 @@ use App\Http\Controllers\ApiControllers\TeacherController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+// Route::post('auth/teacher-register', [AuthController::class,'teacherRegister']);
 
 Route::group(['middleware' => ['api'],'prefix' => 'auth'], function ($router) {
     Route::post('login', [AuthController::class,'login']);
     Route::post('logout', [AuthController::class,'logout']);
     Route::post('register', [AuthController::class,'register']);
+    Route::post('teacher-register', [AuthController::class,'teacherRegister']);
     Route::post('password/email', [AuthController::class, 'sendResetCode']);
     Route::post('password/reset', [AuthController::class, 'resetWithCode']);
     Route::post('/email/send-code', [AuthController::class, 'sendVerificationCode']);
@@ -35,6 +38,7 @@ Route::group(['middleware' => 'guest:api','prefix'=>'courses'], function () {
     Route::get('search',[CourseController::class,'courseSearch']);
     Route::get('/',[CourseController::class,'coursesFilters']);
     Route::get('/levels',[CourseController::class,'getCourseLevels']);
+    Route::get('/course-info/{id}',[CourseController::class,'guestCourseInfo']);
 });
 // Route::get('teachers/courses',[TeacherController::class,'getAllTeacherCourses']);
 //teacher routes
@@ -53,6 +57,13 @@ Route::group(['middleware' => 'guest:api','prefix'=>'categories'], function () {
 //packages Routes
 Route::group(['middleware' => 'guest:api','prefix'=>'packages'], function () {
     Route::get('/',[PackageController::class,'getPackages']);
+    Route::get('/popular',[PackageController::class,'getPopularPackages']);
+    Route::get('/{id}',[PackageController::class,'show']);
+});
+
+//paymnets
+Route::group(['middleware' => 'auth:api','prefix'=>'paymnets'], function () {
+    Route::post('/',[PaymentController::class,'pay']);
     Route::get('/popular',[PackageController::class,'getPopularPackages']);
     Route::get('/{id}',[PackageController::class,'show']);
 });

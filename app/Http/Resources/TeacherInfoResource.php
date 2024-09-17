@@ -7,6 +7,11 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class TeacherInfoResource extends JsonResource
 {
+
+    public function __construct($teacher)
+    {
+        parent::__construct($teacher);
+    }
     /**
      * Transform the resource into an array.
      *
@@ -17,7 +22,14 @@ class TeacherInfoResource extends JsonResource
         return [
             'id'=>$this->id,
             'name'=>$this->name,
+            'phone'=>$this->phone,
+            'role' => $this->userRole(),
             'avatar'=>$this->getAvatarPath(),
         ];
+    }
+
+    protected function userRole()
+    {
+        return is_null($this->roles()) ? null : $this->roles->implode('name', ',');
     }
 }

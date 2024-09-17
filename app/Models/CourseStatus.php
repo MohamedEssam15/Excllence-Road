@@ -11,6 +11,7 @@ class CourseStatus extends Model
 
     protected $table = 'courses_statuses';
     protected $fillable = ['name'];
+    protected $with=['translations'];
 
     public function translations()
     {

@@ -29,7 +29,7 @@ class ApiLoginRequest extends FormRequest
         ];
     }
 
-    protected function failedValidation(Validator $validator) // Use the correct Validator interface
+    protected function failedValidation(Validator $validator) 
     {
         throw new HttpResponseException(
             apiResponse('error', new \stdClass(), $validator->errors()->all(), 422)

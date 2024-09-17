@@ -10,6 +10,7 @@ class CourseLevel extends Model
     use HasFactory;
     protected $table = 'course_levels';
     protected $fillable = ['name'];
+    protected $with=['translations'];
 
     public function translations()
     {

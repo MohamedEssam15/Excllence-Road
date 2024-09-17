@@ -12,6 +12,7 @@ class Lesson extends Model
     use HasFactory;
 
     protected $fillable = ['description','name','type','video_link','unit_id'];
+    protected $with=['translations'];
 
     public function unit(): BelongsTo
     {
@@ -26,7 +27,7 @@ class Lesson extends Model
     public function translate($locale = null)
     {
         $locale = $locale ?: app()->getLocale();
-        return $this->translations()->where('locale', $locale)->first()->name ?? $this->name;
+        return $this->translations()->where('locale', $locale)->first() ?? $this;
     }
 
     public function translations()

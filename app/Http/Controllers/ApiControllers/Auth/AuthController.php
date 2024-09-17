@@ -4,11 +4,14 @@ namespace App\Http\Controllers\ApiControllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ApiLoginRequest;
+use App\Http\Requests\RegisterTeacherRequest;
 use App\Http\Requests\RegisterUserRequest;
 use App\Http\Resources\StudentResource;
+use App\Http\Resources\TeacherResource;
 use App\Mail\ResetPasswordEmail;
 use App\Mail\VerifyEmailCodeMail;
 use App\Models\User;
+use App\Models\UserAttchment;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -29,7 +32,7 @@ class AuthController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['login', 'register', 'sendResetCode', 'resetWithCode']]);
+        $this->middleware('auth:api', ['except' => ['login', 'register', 'sendResetCode', 'resetWithCode', 'teacherRegister']]);
     }
 
     /**
@@ -65,19 +68,14 @@ class AuthController extends Controller
         $image_type = $image_type_aux[1];
         $image = base64_decode($image_parts[1]);
         $imageName = Str::random(10) . '.' . $image_type;
-        $isActive = true;
-        if ($request->role == 'teacher') {
-            $isActive = false;
-        }
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'avatar' => $imageName,
-            'avatar' => $imageName,
-            'is_active' => $isActive
+            'is_active' => true
         ]);
-        $user->assignRole($request->role);
+        $user->assignRole('student');
         $path = 'users_attachments/' . $user->id . '/avatar/' . $imageName;
         Storage::disk('publicFolder')->put($path, $image);
         $token = auth()->login($user, true);
@@ -173,7 +171,7 @@ class AuthController extends Controller
     public function sendVerificationCode(Request $request)
     {
         $user = auth('api')->user();
-        if($user->email_verified_at != null){
+        if ($user->email_verified_at != null) {
             return apiResponse(__('response.emailVerfiedAlready'), new stdClass(), [__('response.emailVerfiedAlready')], 422);
         }
 
@@ -222,14 +220,47 @@ class AuthController extends Controller
     {
         $user = auth()->user();
         auth()->logout();
-        if($user->hasRole('teacher')){
+        if ($user->hasRole('teacher')) {
             $user->delete();
-        }else{
+        } else {
             $user->forceDelete();
         }
         return apiResponse(__('response.deleteUser'), new stdClass());
     }
 
+    public function teacherRegister(RegisterTeacherRequest $request)
+    {
+        if ($request->file('photo')->isValid()) {
+            $file = $request->file('photo');
+            $fileExtension=$file->getClientOriginalExtension();
+            $fileName = Str::random(10) . '.' . $fileExtension;
+
+        }else{
+            return apiResponse(__('response.fileDamaged'),new stdClass(),[__('response.fileDamaged')]);
+        }
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'avatar' => $fileName,
+            'is_active' => false
+        ]);
+        $user->assignRole('teacher');
+        $path = 'users_attachments/' . $user->id . '/avatar/';
+        $file->storeAs($path, $fileName, 'publicFolder');
+        //saving certificates
+        if (isset($request->certificates)) {
+            foreach ($request->certificates as $certificate) {
+                $file = $certificate;
+                $fileExtension=$file->getClientOriginalExtension();
+                $fileName = Str::random(10) . '.' . $fileExtension;
+
+                $this->saveTeacherAttachment($user->id, $fileName, $file);
+            }
+        }
+
+        return apiResponse(__('response.teacherSignedUp'), new stdClass());
+    }
     /**
      * Get the token array structure.
      *
@@ -239,12 +270,28 @@ class AuthController extends Controller
      */
     protected function respondWithToken($token, $user = null)
     {
+        $resource = null;
+        if ($user->hasRole('teacher')) {
+            $resource = new TeacherResource($user);
+        } else {
+            $resource = new StudentResource($user);
+        }
         $response = [
             'access_token' => $token,
-            'user' => new StudentResource($user),
+            'user' => $resource,
             'token_type' => 'bearer',
             'expires_in' => auth()->factory()->getTTL() * 60
         ];
         return apiResponse('login successfully', $response);
+    }
+
+    protected function saveTeacherAttachment($userId, $attachName, $file)
+    {
+        $path = 'users_attachments/' . $userId . '/attachments/';
+        $userAttachment = UserAttchment::create([
+            'name' => $attachName,
+            'user_id' => $userId,
+        ]);
+        $file->storeAs($path, $attachName, 'publicFolder');
     }
 }
