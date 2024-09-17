@@ -31,6 +31,6 @@ class Unit extends Model
 
     public function translations()
     {
-        return $this->hasMany(unitTranslation::class,'unit_id');
+        return $this->hasMany(UnitTranslation::class,'unit_id');
     }
 }
