@@ -62,8 +62,6 @@ Route::group(['middleware' => 'guest:api','prefix'=>'packages'], function () {
 });
 
 //paymnets
-Route::group(['middleware' => 'auth:api','prefix'=>'paymnets'], function () {
+Route::group(['middleware' => 'auth:api','prefix'=>'payments'], function () {
     Route::post('/',[PaymentController::class,'pay']);
-    Route::get('/popular',[PackageController::class,'getPopularPackages']);
-    Route::get('/{id}',[PackageController::class,'show']);
 });
