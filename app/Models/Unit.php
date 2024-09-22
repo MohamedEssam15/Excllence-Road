@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Unit extends Model
 {
     use HasFactory;
-    protected $fillable = ['course_id','name'];
+    protected $fillable = ['course_id','name','order'];
     protected $with=['translations'];
 
     public function course(): BelongsTo
@@ -20,7 +20,7 @@ class Unit extends Model
 
     public function lessons(): HasMany
     {
-        return $this->hasMany(Lesson::class);
+        return $this->hasMany(Lesson::class)->orderBy('order', 'asc');
     }
 
     public function translate($locale = null)

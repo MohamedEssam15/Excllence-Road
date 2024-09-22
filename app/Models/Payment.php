@@ -24,6 +24,6 @@ class Payment extends Model
 
     public function enrollment()
     {
-        return $this->hasOne(Enrollment::class);
+        return $this->hasManyThrough(Course::class, 'courses_users', 'payment_id', 'id', 'id', 'course_id');
     }
 }

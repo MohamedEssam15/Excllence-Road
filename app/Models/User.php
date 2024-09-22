@@ -61,8 +61,11 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
     }
 
     public function enrollments(){
-        $this->hasMany(Enrollment::class,'user_id');
+       return $this->belongsToMany(Course::class,'courses_users','user_id','course_id','id','id')->withPivot('payment_id', 'start_date', 'end_date','from_package','package_id')
+        ->withTimestamps();
     }
+
+
 
     /**
      * Get the identifier that will be stored in the subject claim of the JWT.

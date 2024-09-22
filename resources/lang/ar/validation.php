@@ -171,5 +171,8 @@ return [
         'time'                  => 'الوقت',
         'available'             => 'مُتاح',
         'size'                  => 'الحجم',
+        'enSpecificTo'                  => 'اسم الصف بالانجليزيه',
+        'arSpecificTo'                  => 'اسم الصف بالعربية',
+
     ],
 ];

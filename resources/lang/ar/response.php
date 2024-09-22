@@ -14,4 +14,12 @@ return [
     "cvvError"=>"الرقم السري للبطاقة غير صحيح",
     "packageNotFound"=>"لم يتم العثور علي المجموعه المختارة",
     "alreadyBuyTheCourse"=>"الطالب بالفعل مسجل",
+    "noTeachers"=>"لا يوجد معلمين",
+    "notAuthorized"=>"غير مصرح لك بالوصول لهذا المحتوي.",
+    "Unauthenticated"=>"يجب تسجيل الدخول اولا لتستطيع الوصول الي هذا المحتوي",
+    "notFound"=>"لم يتم العثور علي البيانات المطلوبة",
+    "deletedSuccessfully"=>"تم الحذف بنجاح",
+    'addedSuccessfully'=>'تمت الاضافة بنجاح',
+    'updatedSuccessfully'=>'تم تحديث البيانات بنجاح',
+    'invalidTypeSelected'=>'النوع المختار غير صالح',
 ];

@@ -14,4 +14,13 @@ return [
     "cvvError"=>"The CVV is invalid for the card type.",
     "packageNotFound"=>"The selected package does not exist.",
     "AlreadyBuyTheCourse"=>"Student is already enrolled.",
+    "noTeacher"=>"No teachers found.",
+    "notAuthorized"=>"you don't have the permission to view this page",
+    "Unauthenticated"=>"You need to log in to access this page.",
+    "notFound"=>"your request date not found",
+    "deletedSuccessfully"=>"deleted successfully",
+    "addedSuccessfully"=>"added successfully",
+    "updatedSuccessfully"=>"updated successfully",
+    "invalidTypeSelected"=>"invalid type selected",
+
 ];

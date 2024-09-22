@@ -11,8 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('enrollments', function (Blueprint $table) {
-            $table->unique(['user_id', 'enrollable_id', 'enrollable_type'], 'user_enrollment_unique');
+        Schema::table('units', function (Blueprint $table) {
+            $table->integer('order')->nullable();
         });
     }
 
@@ -21,8 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('enrollments', function (Blueprint $table) {
-            $table->dropUnique(['user_id', 'enrollable_id', 'enrollable_type']);
+        Schema::table('units', function (Blueprint $table) {
+            $table->dropColumn('order');
         });
     }
 };
