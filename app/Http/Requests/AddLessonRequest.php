@@ -35,9 +35,9 @@ class AddLessonRequest extends FormRequest
             })],
             'type' => ['required', 'string', 'in:video,meeting'],
             'meetingLink' => ['required_if:type,meeting', 'url'],
-            'video' => ['required_if:type,video', 'file', 'max:10240'],
+            'video' => ['required_if:type,video', 'file', 'max:419304'],
             'attachments' => ['nullable', 'array'],
-            'attachments.*' => 'required|file|max:10240',
+            'attachments.*' => 'required|file|max:1048576',
         ];
     }
     protected function failedValidation(Validator $validator)

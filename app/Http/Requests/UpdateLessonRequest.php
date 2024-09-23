@@ -36,7 +36,7 @@ class UpdateLessonRequest extends FormRequest
             })->ignore($this->route('lesson')->id)],
             'type' => ['nullable', 'string', 'in:video,meeting'],
             'meetingLink' => ['required_if:type,meeting', 'url'],
-            'video' => ['required_if:type,video', 'file', 'max:10240'],
+            'video' => ['required_if:type,video', 'file', 'max:4194304'],
         ];
     }
 }
