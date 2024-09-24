@@ -8,9 +8,11 @@ use Illuminate\Support\Facades\App;
 
 class TeacherLessonInfoResource extends JsonResource
 {
+    protected $locale;
     public function __construct($lesson)
     {
         parent::__construct($lesson);
+        $this->locale = App::getLocale();
     }
     /**
      * Transform the resource into an array.
@@ -21,8 +23,10 @@ class TeacherLessonInfoResource extends JsonResource
     {
         return [
             'id' => $this->id,
+            'name' => $this->translate($this->locale)->name,
             'enName' => $this->name,
             'arName' => $this->translate('ar')->name,
+            'description' => $this->translate($this->locale)->description,
             'enDescription' => $this->description,
             'arDescription' => $this->translate('ar')->description,
             'type' => $this->type,
