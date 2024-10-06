@@ -41,10 +41,15 @@ class LoginController extends Controller
         $this->middleware('guest')->except('logout');
     }
 
+    protected function guard()
+    {
+        return Auth::guard('web');
+    }
+
     protected function authenticated(Request $request, $user)
     {
         // Check if the user has the 'admin' or 'teacher' role
-        if (!$user->hasRole(['admin', 'teacher']) || !$user->is_active) {
+        if (!$user->hasRole(['admin']) || !$user->is_active) {
             Auth::logout(); // Log the user out
             return redirect('/login')->withErrors(['email' => Lang::get('auth.notActive')]);
         }

@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Route;
 Auth::routes(['verify' => true]);
 
 
-Route::group(['middleware' => ['auth', 'verified']], function () {
+Route::group(['middleware' => ['auth:web', 'verified']], function () {
     Route::get('{any}', [App\Http\Controllers\HomeController::class, 'index']);
     //Language Translation
     Route::get('/', [App\Http\Controllers\HomeController::class, 'root']);
@@ -26,6 +26,3 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
 
     Route::post('/formsubmit', [App\Http\Controllers\HomeController::class, 'FormSubmit'])->name('FormSubmit');
 });
-
-
-

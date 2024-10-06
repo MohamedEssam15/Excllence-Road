@@ -7,6 +7,7 @@ use App\Http\Controllers\ApiControllers\CourseController;
 use App\Http\Controllers\ApiControllers\PackageController;
 use App\Http\Controllers\ApiControllers\TeacherController;
 use App\Http\Controllers\ApiControllers\PaymentController;
+use App\Http\Controllers\ApiControllers\TeacherPanalControllers\ExamController;
 use App\Http\Controllers\ApiControllers\TeacherPanalControllers\LessonsController;
 use App\Http\Controllers\ApiControllers\TeacherPanalControllers\UnitController;
 
@@ -47,7 +48,7 @@ Route::group(['middleware' => 'guest:api', 'prefix' => 'courses'], function () {
 Route::group(['prefix' => 'teachers'], function () {
     Route::get('/', [TeacherController::class, 'getAllTeachers']);
     Route::group(['middleware' => ['auth:api', 'checkUserActivation', 'role:teacher,api']], function () {
-        Route::group(['prefix'=>'lessons'], function () {
+        Route::group(['prefix' => 'lessons'], function () {
             Route::delete('attachments/{id}', [LessonsController::class, 'deleteLessonAttachment']);
             Route::post('{lesson}/attachments/add', [LessonsController::class, 'addLessonAttachment']);
             Route::put('{lesson}/update', [LessonsController::class, 'updateLesson']);
@@ -63,8 +64,16 @@ Route::group(['prefix' => 'teachers'], function () {
         Route::post('courses/{course}/units/add', [UnitController::class, 'addUnits']);
         Route::put('courses/{course}/units/{unit}/update', [UnitController::class, 'updateUnit']);
         Route::delete('courses/{course}/units/{unit}/delete', [UnitController::class, 'deleteUnit']);
-
-
+        //exams routes
+        Route::post('courses/{course}/add-exam', [ExamController::class, 'addExam']);
+        Route::post('exams/{exam}/add-questions', [ExamController::class, 'addQuestions']);
+        Route::put('exams/{exam}/edit', [ExamController::class, 'updateExam']);
+        Route::delete('exams/{exam}/delete', [ExamController::class, 'deleteExam']);
+        Route::post('exams/{exam}/remove-questions', [ExamController::class, 'removeQuestions']);
+        Route::get('exams/{exam}', [ExamController::class, 'getExam']);
+        //questions
+        Route::get('questions/teacher-bank', [ExamController::class, 'teacherQuestionsBank']);
+        Route::get('questions/public-bank', [ExamController::class, 'publicQuestionsBank']);
     });
 });
 

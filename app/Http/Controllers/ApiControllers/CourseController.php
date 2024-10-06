@@ -28,7 +28,7 @@ class CourseController extends Controller
         ->where('start_date', '>=', Carbon::today())->get();
 
         if (!isset($courses[0])) {
-            return apiResponse(__('response.noCourses'), new stdClass(), [__('response.noCourses')], 404);
+            return apiResponse(__('response.noCourses'), new stdClass(), [__('response.noCourses')]);
         }
 
         return apiResponse('Data Retrieved', PopularCourseResource::collection($courses));
@@ -44,7 +44,7 @@ class CourseController extends Controller
             $query->where('name', 'active');
         })->where('start_date', '>=', Carbon::today())->get();
         if (!isset($courses[0])) {
-            return apiResponse(__('response.noCourses'), new stdClass(), [__('response.noCourses')], 404);
+            return apiResponse(__('response.noCourses'), new stdClass(), [__('response.noCourses')]);
         }
 
         return apiResponse('Data Retrieved', PopularCourseResource::collection($courses));
@@ -62,7 +62,7 @@ class CourseController extends Controller
             $query->where('name', 'LIKE', $term.'%');
         })->where('start_date', '>=', Carbon::today())->take(5)->get();
         if (!isset($courses[0])) {
-            return apiResponse(__('response.courseNotFound'), new stdClass(), [__('response.courseNotFound')], 404);
+            return apiResponse(__('response.courseNotFound'), new stdClass(), [__('response.courseNotFound')]);
         }
 
         return apiResponse('Data Retrieved', PopularCourseResource::collection($courses));
@@ -80,7 +80,7 @@ class CourseController extends Controller
         ->where('start_date', '>=', Carbon::today());
         $courses= $coursesQuery->paginate(request()->perPage);
         if (!isset($courses[0])) {
-            return apiResponse(__('response.courseNotFound'), new stdClass(), [__('response.courseNotFound')], 404);
+            return apiResponse(__('response.courseNotFound'), new stdClass(), [__('response.courseNotFound')]);
         }
 
         return apiResponse('Data Retrieved', new PaginatedCollection($courses, PopularCourseResource::class));
@@ -88,7 +88,7 @@ class CourseController extends Controller
     public function getCourseLevels(){
         $courseLevels = CourseLevel::all();
         if (!isset($courseLevels[0])) {
-            return apiResponse(__('response.courseNotFound'), new stdClass(), [__('response.courseNotFound')], 404);
+            return apiResponse(__('response.courseNotFound'), new stdClass(), [__('response.courseNotFound')]);
         }
 
         return apiResponse('Data Retrieved', CourseLevelResource::collection($courseLevels));
@@ -99,7 +99,7 @@ class CourseController extends Controller
             $query->where('name', 'active');
         })->first();
         if (is_null($course)) {
-            return apiResponse(__('response.courseNotFound'), new stdClass(), [__('response.courseNotFound')], 404);
+            return apiResponse(__('response.courseNotFound'), new stdClass(), [__('response.courseNotFound')]);
         }
 
         return apiResponse('Data Retrieved', new CourseInfoResource($course));

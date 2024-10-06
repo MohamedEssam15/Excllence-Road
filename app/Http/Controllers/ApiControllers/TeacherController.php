@@ -39,7 +39,7 @@ class TeacherController extends Controller
             }])->paginate(request()->perPage);
 
         if (! isset($teachers[0])) {
-            return apiResponse(__('response.noTeachers'), new stdClass(), [__('response.noTeachers')], 404);
+            return apiResponse(__('response.noTeachers'), new stdClass(), [__('response.noTeachers')]);
         }
         return apiResponse('Data Retrieved', new PaginatedCollection($teachers, TeacherResource::class));
     }
@@ -48,7 +48,7 @@ class TeacherController extends Controller
     {
         $courses = Course::where('teacher_id', auth()->user()->id)->paginate(request()->perPage);
         if (!isset($courses[0])) {
-            return apiResponse(__('response.courseNotFound'), new stdClass(), [__('response.courseNotFound')], 404);
+            return apiResponse(__('response.courseNotFound'), new stdClass(), [__('response.courseNotFound')]);
         }
         return apiResponse('Data Retrieved', new PaginatedCollection($courses, TeacherCourseResource::class));
     }
