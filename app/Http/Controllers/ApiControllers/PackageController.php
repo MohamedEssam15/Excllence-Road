@@ -12,22 +12,32 @@ use stdClass;
 
 class PackageController extends Controller
 {
-    public function getPackages(){
+    public function getPackages()
+    {
         $packages = Package::where('start_date', '>=', Carbon::today())->get();
-        // ds($packages)->die();
         if (!isset($packages[0])) {
-            return apiResponse(__('noPackages'), new stdClass(), [__('noPackages')], 404);
+            return apiResponse(__('response.noPackages'), new stdClass(), [__('response.noPackages')]);
         }
 
         return apiResponse('Data Retrieved', PackageResource::collection($packages));
     }
-    public function show($id){
-        $package = Package::where('start_date', '>=', Carbon::today())->where('id',$id)->first();
-        // ds($packages)->die();
+    public function show($id)
+    {
+        $package = Package::where('start_date', '>=', Carbon::today())->where('id', $id)->first();
         if (is_null($package)) {
-            return apiResponse(__('noPackages'), new stdClass(), [__('noPackages')], 404);
+            return apiResponse(__('response.noPackages'), new stdClass(), [__('response.noPackages')]);
         }
 
         return apiResponse('Data Retrieved', new PackageCoursesResource($package));
+    }
+
+    public function getPopularPackages()
+    {
+        $packages = Package::where('start_date', '>=', Carbon::today())->where('is_popular', true)->get();
+        if (!isset($packages[0])) {
+            return apiResponse(__('response.noPackages'), new stdClass(), [__('response.noPackages')]);
+        }
+
+        return apiResponse('Data Retrieved', PackageResource::collection($packages));
     }
 }

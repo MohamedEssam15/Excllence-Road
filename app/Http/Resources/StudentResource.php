@@ -19,7 +19,12 @@ class StudentResource extends JsonResource
             "name"=>$this->name,
             "email"=>$this->email,
             "avatar"=>$this->getAvatarPath(),
+            "role"=>$this->userRole(),
             "verfiedAt"=>$this->email_verified_at?->format('Y-m-d'),
         ];
+    }
+    protected function userRole()
+    {
+        return is_null($this->roles()) ? null : $this->roles->implode('name', ',');
     }
 }

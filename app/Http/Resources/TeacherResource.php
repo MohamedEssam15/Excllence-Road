@@ -16,10 +16,16 @@ class TeacherResource extends JsonResource
     {
 
         return [
-            'id'=>$this->id,
-            'name'=>$this->name,
-            'avatar'=>$this->getAvatarPath(),
-            'coursesCount'=>$this->teacher_courses_count,
+            'id' => $this->id,
+            'name' => $this->name,
+            'avatar' => $this->getAvatarPath(),
+            'phone' => $this->phone,
+            'role' => $this->userRole(),
+            'coursesCount' => $this->teacher_courses_count,
         ];
+    }
+    protected function userRole()
+    {
+        return is_null($this->roles()) ? null : $this->roles->implode('name', ',');
     }
 }

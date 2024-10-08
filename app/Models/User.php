@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
@@ -11,7 +13,7 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
 
 class User extends Authenticatable implements JWTSubject, MustVerifyEmail
 {
-    use HasFactory, Notifiable ,HasRoles;
+    use HasFactory, Notifiable, HasRoles, SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -46,13 +48,31 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
         'email_verified_at' => 'datetime',
     ];
 
-    public function getAvatarPath(){
-        return asset('users_attachments/'.$this->id.'/avatar/'.$this->avatar);
+    public function attachments()
+    {
+        return $this->hasMany(UserAttchment::class, 'user_id');
     }
 
-    public function teacherCourses(){
-        return $this->hasMany(Course::class,'teacher_id');
+    public function getAvatarPath()
+    {
+        return asset('users_attachments/' . $this->id . '/avatar/' . $this->avatar);
     }
+
+    public function teacherCourses()
+    {
+        return $this->hasMany(Course::class, 'teacher_id');
+    }
+
+    public function enrollments()
+    {
+        return $this->belongsToMany(Course::class, 'courses_users', 'user_id', 'course_id', 'id', 'id')->withPivot('payment_id', 'start_date', 'end_date', 'from_package', 'package_id')
+            ->withTimestamps();
+    }
+    public function teacherQuestionsBank()
+    {
+        return $this->belongsToMany(Question::class, 'teacher_questions_bank', 'teacher_id', 'question_id')->withTimestamps();
+    }
+
 
     /**
      * Get the identifier that will be stored in the subject claim of the JWT.

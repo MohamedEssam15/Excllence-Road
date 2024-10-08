@@ -10,11 +10,10 @@ class CourseLevelResource extends JsonResource
 {
 
     private $locale;
-    private $level;
     public function __construct($level)
     {
+        parent::__construct($level);
         $this->locale =App::getLocale();
-        $this->level =$level;
     }
     /**
      * Transform the resource into an array.
@@ -24,8 +23,8 @@ class CourseLevelResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            "id"=>$this->level->id,
-            "name"=>$this->level->translate()
+            "id"=>$this->id,
+            "name"=>$this->translate($this->locale)
         ];
     }
 }

@@ -62,4 +62,10 @@ return [
     'resetPasswordText'=>'Enter your email to send reset link.',
     'rememberIt'=>"Remember it ?",
     'reset'=>"Reset",
+
+    //validation errors
+    'rolesIn'=> 'the selected role is invalid',
+    'loginFirst'=>'You must login first',
+    'activateFirst'=>'Please waiting the approval from Admin',
+
 ];

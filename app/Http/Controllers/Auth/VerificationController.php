@@ -42,6 +42,10 @@ class VerificationController extends Controller
         $this->middleware('signed')->only('verify');
         $this->middleware('throttle:6,1')->only('verify', 'resend');
     }
+    protected function guard()
+    {
+        return Auth::guard('web');
+    }
     protected function verified(Request $request)
     {
         if(! auth('web')->user()->is_active){

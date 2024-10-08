@@ -2,10 +2,9 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
-use Illuminate\Support\Facades\Validator;
-use stdClass;
 
 class RegisterUserRequest extends FormRequest
 {
@@ -28,8 +27,18 @@ class RegisterUserRequest extends FormRequest
             'name'=>['string','required'],
             'email'=>['string','email','unique:users,email','required'],
             'password'=>['string','min:8','required'],
-            'photo'=>['string','required'],
+            'photo'=>['string','nullable'],
+            'phone'=>['nullable']
         ];
+    }
+
+
+
+    protected function failedValidation(Validator $validator)
+    {
+        throw new HttpResponseException(
+            apiResponse('error', new \stdClass(), $validator->errors()->all(), 422)
+        );
     }
     // public function failedValidation(Validator $validator)
     // {

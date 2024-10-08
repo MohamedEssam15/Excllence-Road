@@ -13,8 +13,9 @@ class CategoryResource extends JsonResource
     private $category;
     public function __construct($category)
     {
-        $this->locale =App::getLocale();
-        $this->category =$category;
+        parent::__construct($category);
+        $this->locale = App::getLocale();
+        $this->category = $category;
     }
     /**
      * Transform the resource into an array.
@@ -24,10 +25,10 @@ class CategoryResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            "id"=>$this->category->id,
-            "name"=>$this->category->translate($this->locale)->name,
-            "description"=>$this->category->translate($this->locale)->description,
-            "coursesCount"=>$this->category->courses_count,
+            "id" => $this->category->id,
+            "name" => $this->category->translate($this->locale)->name,
+            "description" => $this->category->translate($this->locale)->description,
+            "coursesCount" => $this->category->courses_count,
         ];
     }
 }

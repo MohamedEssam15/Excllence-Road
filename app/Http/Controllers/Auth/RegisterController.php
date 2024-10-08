@@ -6,12 +6,12 @@ use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use App\Models\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+
 class RegisterController extends Controller
 {
     /*
@@ -32,7 +32,7 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/verify';
+    protected $redirectTo = '/home';
 
     /**
      * Create a new controller instance.
@@ -64,7 +64,7 @@ class RegisterController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:6', 'confirmed'],
-            'profile_image' => ['required','image','mimes:jpeg,png,jpg,gif', 'max:8192'],
+            'profile_image' => ['required', 'image', 'mimes:jpeg,png,jpg,gif', 'max:8192'],
         ]);
     }
 
@@ -76,35 +76,19 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        $imageType = explode('/',$data['profile_image']->getMimeType())[1];
-        $imageName = Str::random(10) . '.'.$imageType;
+        $imageType = explode('/', $data['profile_image']->getMimeType())[1];
+        $imageName = Str::random(10) . '.' . $imageType;
         $user = User::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
-            'avatar'=>$imageName
+            'avatar' => $imageName
         ]);
 
         if (request()->hasFile('profile_image')) {
-           $imgPath = request()->file('profile_image')->storeAs('users_attachments/'.$user->id.'/avatar',$imageName, 'publicFolder'); // Store the image in the 'public/profile_images' directory
+            $imgPath = request()->file('profile_image')->storeAs('users_attachments/' . $user->id . '/avatar', $imageName, 'publicFolder'); // Store the image in the 'public/profile_images' directory
         }
         $user->assignRole('teacher');
         return $user;
     }
-
-    /**
-     * The user has been registered.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  mixed  $user
-     * @return mixed
-     */
-    // protected function registered(Request $request, $user)
-    // {
-    //     ds(auth('web')->user())->die();
-    //     if(){
-
-    //     }
-    //     Auth::guard('web')->login($user,true);
-    // }
 }

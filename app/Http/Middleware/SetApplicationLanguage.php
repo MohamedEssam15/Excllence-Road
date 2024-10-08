@@ -18,7 +18,6 @@ class SetApplicationLanguage
     public function handle(Request $request, Closure $next): Response
     {
         $locale = $request->header('Language','ar');
-        // ds($locale != 'ar')->die();
         if($locale == 'ar' || $locale == 'en'){
             App::setLocale($locale);
             return $next($request);

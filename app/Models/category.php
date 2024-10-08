@@ -11,6 +11,7 @@ class category extends Model
     use HasFactory;
 
     protected $fillable = ['name','description'];
+    protected $with=['translations'];
 
     public function courses(): HasMany
     {
