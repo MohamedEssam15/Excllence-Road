@@ -27,6 +27,7 @@ Route::group(['middleware' => ['api'], 'prefix' => 'auth'], function ($router) {
     Route::post('login', [AuthController::class, 'login']);
     Route::post('logout', [AuthController::class, 'logout']);
     Route::post('register', [AuthController::class, 'register']);
+    Route::get('user-info', [AuthController::class, 'me']);
     Route::post('teacher-register', [AuthController::class, 'teacherRegister']);
     Route::post('password/email', [AuthController::class, 'sendResetCode']);
     Route::post('password/reset', [AuthController::class, 'resetWithCode']);

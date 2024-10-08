@@ -89,7 +89,13 @@ class AuthController extends Controller
      */
     public function me()
     {
-        return response()->json(auth()->user());
+        $user = auth()->user();
+        if ($user->hasRole('teacher')) {
+            $resource = new TeacherResource($user);
+        } else {
+            $resource = new StudentResource($user);
+        }
+        return apiResponse('Data Retrieved', $resource);
     }
 
     /**
@@ -232,11 +238,10 @@ class AuthController extends Controller
     {
         if ($request->file('photo')->isValid()) {
             $file = $request->file('photo');
-            $fileExtension=$file->getClientOriginalExtension();
+            $fileExtension = $file->getClientOriginalExtension();
             $fileName = Str::random(10) . '.' . $fileExtension;
-
-        }else{
-            return apiResponse(__('response.fileDamaged'),new stdClass(),[__('response.fileDamaged')]);
+        } else {
+            return apiResponse(__('response.fileDamaged'), new stdClass(), [__('response.fileDamaged')]);
         }
         $user = User::create([
             'name' => $request->name,
@@ -252,7 +257,7 @@ class AuthController extends Controller
         if (isset($request->certificates)) {
             foreach ($request->certificates as $certificate) {
                 $file = $certificate;
-                $fileExtension=$file->getClientOriginalExtension();
+                $fileExtension = $file->getClientOriginalExtension();
                 $fileName = Str::random(10) . '.' . $fileExtension;
 
                 $this->saveTeacherAttachment($user->id, $fileName, $file);
