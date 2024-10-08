@@ -14,15 +14,22 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+require __DIR__ . '/auth.php';
 
-Auth::routes(['verify' => true]);
 
+Route::get('/', function () {
+    if (Auth::guard('web')->check()) {
+        return redirect('/home'); // Redirect authenticated users to home
+    }
+    return redirect('/login'); // Redirect unauthenticated users to login
+});
 
-Route::group(['middleware' => ['auth:web', 'verified']], function () {
-    Route::get('{any}', [App\Http\Controllers\HomeController::class, 'index']);
+Route::middleware('auth:web')->group(function () {
+
     //Language Translation
-    Route::get('/', [App\Http\Controllers\HomeController::class, 'root']);
+    Route::get('/home', [App\Http\Controllers\HomeController::class, 'root']);
     Route::get('change-lang/{locale}', [App\Http\Controllers\HomeController::class, 'lang']);
 
     Route::post('/formsubmit', [App\Http\Controllers\HomeController::class, 'FormSubmit'])->name('FormSubmit');
+    // Route::get('/{any}', [App\Http\Controllers\HomeController::class, 'index']);
 });
