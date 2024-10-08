@@ -62,7 +62,7 @@
                     </a>
                 </li>
                 @endrole
-                <li>
+                {{-- <li>
                     <a href="javascript: void(0);" class="has-arrow waves-effect">
                         <i class="uil-window-section"></i>
                         <span>@lang('translation.Layouts')</span>
@@ -89,11 +89,11 @@
                             </ul>
                         </li>
                     </ul>
-                </li>
+                </li> --}}
 
                 <li class="menu-title">@lang('translation.Apps')</li>
 
-                <li>
+                {{-- <li>
                     <a href="calendar" class="waves-effect">
                         <i class="uil-calender"></i>
                         <span>@lang('translation.Calendar')</span>
@@ -163,11 +163,11 @@
                         <li><a href="contacts-list">@lang('translation.User_List')</a></li>
                         <li><a href="contacts-profile">@lang('translation.Profile')</a></li>
                     </ul>
-                </li>
+                </li> --}}
 
                 <li class="menu-title">@lang('translation.Pages')</li>
 
-                <li>
+                {{-- <li>
                     <a href="javascript: void(0);" class="has-arrow waves-effect">
                         <i class="uil-user-circle"></i>
                         <span>@lang('translation.Authentication')</span>
@@ -230,9 +230,9 @@
                         <li><a href="ui-rating">@lang('translation.Rating')</a></li>
                         <li><a href="ui-notifications">@lang('translation.Notifications')</a></li>
                     </ul>
-                </li>
+                </li> --}}
 
-                <li>
+                {{-- <li>
                     <a href="javascript: void(0);" class="waves-effect">
                         <i class="uil-shutter-alt"></i>
                         <span class="badge rounded-pill bg-info float-end">9</span>
@@ -249,9 +249,9 @@
                         <li><a href="form-wizard">@lang('translation.Wizard')</a></li>
                         <li><a href="form-mask">@lang('translation.Mask')</a></li>
                     </ul>
-                </li>
+                </li> --}}
 
-                <li>
+                {{-- <li>
                     <a href="javascript: void(0);" class="has-arrow waves-effect">
                         <i class="uil-list-ul"></i>
                         <span>@lang('translation.Tables')</span>
@@ -318,7 +318,7 @@
                             </ul>
                         </li>
                     </ul>
-                </li>
+                </li> --}}
 
             </ul>
         </div>

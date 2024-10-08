@@ -13,8 +13,8 @@ class Course extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['description','name','teacher_commision','teacher_id','category_id','start_date','end_date','is_specific','specific_to','status_id','price','level_id','cover_photo_name'];
-    protected $with=['translations','level','status','category','teacher'];
+    protected $fillable = ['description', 'name', 'teacher_commision', 'teacher_id', 'category_id', 'start_date', 'end_date', 'is_specific', 'specific_to', 'status_id', 'price', 'level_id', 'cover_photo_name'];
+    protected $with = ['translations', 'level', 'status', 'category', 'teacher'];
 
 
     public function units(): HasMany
@@ -31,10 +31,7 @@ class Course extends Model
         return $this->belongsTo(CourseLevel::class);
     }
 
-    public function level(): BelongsTo
-    {
-        return $this->belongsTo(CourseLevel::class,'level_id');
-    }
+
 
     public function category(): BelongsTo
     {
@@ -54,11 +51,12 @@ class Course extends Model
 
     public function translations()
     {
-        return $this->hasMany(CourseTranslation::class,'course_id');
+        return $this->hasMany(CourseTranslation::class, 'course_id');
     }
 
-    public function getCoverPhotoPath(){
-        return asset('course_attachments/'.$this->id.'/cover_photo/'.$this->cover_photo_name);
+    public function getCoverPhotoPath()
+    {
+        return asset('course_attachments/' . $this->id . '/cover_photo/' . $this->cover_photo_name);
     }
 
     public function scopeFilterBy($query, $filters)
@@ -69,8 +67,9 @@ class Course extends Model
         return $filter->apply();
     }
 
-    public function enrollments(){
-        $this->belongsToMany(User::class,'courses_users')->withPivot('payment_id', 'start_date', 'end_date','from_package','package_id')
-        ->withTimestamps();
+    public function enrollments()
+    {
+        $this->belongsToMany(User::class, 'courses_users')->withPivot('payment_id', 'start_date', 'end_date', 'from_package', 'package_id')
+            ->withTimestamps();
     }
 }

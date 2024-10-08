@@ -14,17 +14,14 @@ class CoursesController extends Controller
     public function index()
     {
 
-        $AuthUser= auth('web')->user();
+
         $coursesQuery = Course::query();
-        if($AuthUser->hasRole('teacher')){
-            $coursesQuery->where('teacher_id',$AuthUser->id);
-        }
-        $courses= $coursesQuery->paginate(1);
-        if(! isset($courses[0])){
+        $courses = $coursesQuery->paginate(1);
+        if (! isset($courses[0])) {
             return view('courses.all-courses')->withErrors([__('response.noCourses')]);
         }
         ds($courses);
-        return view('courses.all-courses',compact('courses'));
+        return view('courses.all-courses', compact('courses'));
     }
 
     /**

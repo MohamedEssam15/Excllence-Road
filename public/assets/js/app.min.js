@@ -340,6 +340,7 @@ File: Main Js File
     }
 
     function init() {
+        initPreloader();
         initMetisMenu();
         initLeftMenuCollapse();
         initActiveMenu();
@@ -350,7 +351,6 @@ File: Main Js File
         initDropdownMenu();
         initComponents();
         initSettings();
-        initPreloader();
         layoutSetting();
         Waves.init();
     }
