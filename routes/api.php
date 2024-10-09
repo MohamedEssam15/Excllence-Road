@@ -44,6 +44,9 @@ Route::group(['middleware' => 'guest:api', 'prefix' => 'courses'], function () {
     Route::get('/levels', [CourseController::class, 'getCourseLevels']);
     Route::get('/course-info/{id}', [CourseController::class, 'guestCourseInfo']);
 });
+Route::group(["middleware" => "auth:api"], function () {
+    Route::get('lessons/{lesson}', [CourseController::class, 'lessonInfo']);
+});
 
 //teacher routes
 Route::group(['prefix' => 'teachers'], function () {

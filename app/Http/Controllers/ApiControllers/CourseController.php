@@ -7,8 +7,11 @@ use App\Http\Resources\CourseInfoResource;
 use App\Http\Resources\CourseLevelResource;
 use App\Http\Resources\PaginatedCollection;
 use App\Http\Resources\PopularCourseResource;
+use App\Http\Resources\StudentLessonResource;
+use App\Http\Resources\TeacherLessonInfoResource;
 use App\Models\Course;
 use App\Models\CourseLevel;
+use App\Models\Lesson;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
@@ -19,13 +22,13 @@ class CourseController extends Controller
     public function getPopularCourses()
     {
         $courses = Course::where('is_populer', true)
-        ->whereHas('status', function ($query) {
-            $query->where('name', 'active');
-        })
-        ->whereHas('teacher', function ($query) {
-            $query->whereNull('deleted_at');
-        })
-        ->where('start_date', '>=', Carbon::today())->get();
+            ->whereHas('status', function ($query) {
+                $query->where('name', 'active');
+            })
+            ->whereHas('teacher', function ($query) {
+                $query->whereNull('deleted_at');
+            })
+            ->where('start_date', '>=', Carbon::today())->get();
 
         if (!isset($courses[0])) {
             return apiResponse(__('response.noCourses'), new stdClass(), [__('response.noCourses')]);
@@ -34,15 +37,16 @@ class CourseController extends Controller
         return apiResponse('Data Retrieved', PopularCourseResource::collection($courses));
     }
 
-    public function getTeacherCourses($id){
+    public function getTeacherCourses($id)
+    {
 
         $courses = Course::where('teacher_id', $id)
-        ->whereHas('teacher', function ($query) {
-            $query->whereNull('deleted_at');
-        })
-        ->whereHas('status', function ($query) {
-            $query->where('name', 'active');
-        })->where('start_date', '>=', Carbon::today())->get();
+            ->whereHas('teacher', function ($query) {
+                $query->whereNull('deleted_at');
+            })
+            ->whereHas('status', function ($query) {
+                $query->where('name', 'active');
+            })->where('start_date', '>=', Carbon::today())->get();
         if (!isset($courses[0])) {
             return apiResponse(__('response.noCourses'), new stdClass(), [__('response.noCourses')]);
         }
@@ -50,17 +54,18 @@ class CourseController extends Controller
         return apiResponse('Data Retrieved', PopularCourseResource::collection($courses));
     }
 
-    public function courseSearch(Request $request){
+    public function courseSearch(Request $request)
+    {
         $term = $request->term;
         $courses = Course::whereHas('status', function ($query) {
             $query->where('name', 'active');
         })
-        ->whereHas('teacher', function ($query) {
-            $query->whereNull('deleted_at');
-        })
-        ->whereHas('translations', function ($query) use ($term) {
-            $query->where('name', 'LIKE', $term.'%');
-        })->where('start_date', '>=', Carbon::today())->take(5)->get();
+            ->whereHas('teacher', function ($query) {
+                $query->whereNull('deleted_at');
+            })
+            ->whereHas('translations', function ($query) use ($term) {
+                $query->where('name', 'LIKE', $term . '%');
+            })->where('start_date', '>=', Carbon::today())->take(5)->get();
         if (!isset($courses[0])) {
             return apiResponse(__('response.courseNotFound'), new stdClass(), [__('response.courseNotFound')]);
         }
@@ -68,24 +73,26 @@ class CourseController extends Controller
         return apiResponse('Data Retrieved', PopularCourseResource::collection($courses));
     }
 
-    public function coursesFilters(Request $request){
+    public function coursesFilters(Request $request)
+    {
         $coursesQuery = Course::filterBy(request()->all());
 
         $coursesQuery->whereHas('status', function ($query) {
             $query->where('name', 'active');
         })
-        ->whereHas('teacher', function ($query) {
-            $query->whereNull('deleted_at');
-        })
-        ->where('start_date', '>=', Carbon::today());
-        $courses= $coursesQuery->paginate(request()->perPage);
+            ->whereHas('teacher', function ($query) {
+                $query->whereNull('deleted_at');
+            })
+            ->where('start_date', '>=', Carbon::today());
+        $courses = $coursesQuery->paginate(request()->perPage);
         if (!isset($courses[0])) {
             return apiResponse(__('response.courseNotFound'), new stdClass(), [__('response.courseNotFound')]);
         }
 
         return apiResponse('Data Retrieved', new PaginatedCollection($courses, PopularCourseResource::class));
     }
-    public function getCourseLevels(){
+    public function getCourseLevels()
+    {
         $courseLevels = CourseLevel::all();
         if (!isset($courseLevels[0])) {
             return apiResponse(__('response.courseNotFound'), new stdClass(), [__('response.courseNotFound')]);
@@ -94,8 +101,9 @@ class CourseController extends Controller
         return apiResponse('Data Retrieved', CourseLevelResource::collection($courseLevels));
     }
 
-    public function guestCourseInfo($id){
-        $course = Course::where('id',$id)->whereHas('status', function ($query) {
+    public function guestCourseInfo($id)
+    {
+        $course = Course::where('id', $id)->whereHas('status', function ($query) {
             $query->where('name', 'active');
         })->first();
         if (is_null($course)) {
@@ -103,5 +111,14 @@ class CourseController extends Controller
         }
 
         return apiResponse('Data Retrieved', new CourseInfoResource($course));
+    }
+
+    public function lessonInfo(Lesson $lesson)
+    {
+        $user = auth()->user();
+        if (! $user->enrollments()->where('course_id', $lesson->unit->course->id)->exists()) {
+            return apiResponse(__('response.notAuthorized'), new stdClass(), [__('response.notAuthorized')], 401);
+        }
+        return apiResponse('Data Retrieved', new StudentLessonResource($lesson));
     }
 }
