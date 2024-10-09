@@ -3,22 +3,36 @@
 
     <!-- LOGO -->
     <div class="navbar-brand-box">
-        <a href="{{url('/')}}" class="logo logo-dark">
+        <a href="{{ url('/') }}" class="logo logo-dark">
             <span class="logo-sm">
-                <img src="{{ URL::asset('/assets/images/logo-sm.png') }}" alt="" height="22">
+                <img src="{{ URL::asset('/assets/images/logo-sm.png') }}" alt="" height="30">
             </span>
-            <span class="logo-lg">
-                <img src="{{ URL::asset('/assets/images/logo-dark.png') }}" alt="" height="20">
-            </span>
+            @if (config('app.locale') == 'ar')
+                <span class="logo-lg">
+                    <img src="{{ URL::asset('/assets/images/logo-dark-ar.png') }}" alt="" height="33">
+                </span>
+            @else
+                <span class="logo-lg">
+                    <img src="{{ URL::asset('/assets/images/logo-dark.png') }}" alt="" height="33">
+                </span>
+            @endif
+
+
         </a>
 
-        <a href="{{url('/')}}" class="logo logo-light">
+        <a href="{{ url('/') }}" class="logo logo-light">
             <span class="logo-sm">
-                <img src="{{ URL::asset('/assets/images/logo-sm.png') }}" alt="" height="22">
+                <img src="{{ URL::asset('/assets/images/logo-sm.png') }}" alt="" height="30">
             </span>
-            <span class="logo-lg">
-                <img src="{{ URL::asset('/assets/images/logo-light.png') }}" alt="" height="20">
-            </span>
+            @if (config('app.locale') == 'ar')
+                <span class="logo-lg">
+                    <img src="{{ URL::asset('/assets/images/logo-light-ar.png') }}" alt="" height="33">
+                </span>
+            @else
+                <span class="logo-lg">
+                    <img src="{{ URL::asset('/assets/images/logo-light.png') }}" alt="" height="33">
+                </span>
+            @endif
         </a>
     </div>
 
@@ -35,33 +49,76 @@
                 <li class="menu-title">@lang('translation.Menu')</li>
 
                 <li>
-                    <a href="{{url('/')}}">
+                    <a href="{{ url('/') }}">
                         <i class="uil-home-alt"></i>
                         {{-- badge <span class="badge rounded-pill bg-primary float-end">01</span> --}}
                         <span>@lang('translation.Dashboard')</span>
                     </a>
                 </li>
-                @hasanyrole(['teacher','admin'])
+                {{-- courses sidebar --}}
                 <li class="menu-title">@lang('translation.Courses')</li>
-
                 <li>
-                    <a href="{{route('courses.all')}}">
+                    <a href="javascript: void(0);" class="has-arrow waves-effect">
                         <i class="fas fa-book-open"></i>
-                        {{-- badge <span class="badge rounded-pill bg-primary float-end">01</span> --}}
-                        <span>@lang('translation.allCourses')</span>
+                        <span>@lang('translation.Courses')</span>
                     </a>
+                    <ul class="sub-menu" aria-expanded="true">
+                        <li><a href="{{ route('courses.all') }}">@lang('translation.activeCourses')</a></li>
+                        <li><a href="#">@lang('translation.pendingCourses')</a></li>
+                        <li><a href="#">@lang('translation.expiredCourses')</a></li>
+                    </ul>
                 </li>
-                @endhasanyrole
-
-                @role('teacher')
+                {{-- Packages sidebar --}}
+                <li class="menu-title">@lang('translation.packages')</li>
                 <li>
-                    <a href="{{route('courses.add')}}">
-                        <i class="far fa-plus-square"></i>
-                        {{-- badge <span class="badge rounded-pill bg-primary float-end">01</span> --}}
-                        <span>@lang('translation.addCourses')</span>
+                    <a href="javascript: void(0);" class="has-arrow waves-effect">
+                        <i class="fas fa-box-open"></i>
+                        <span>@lang('translation.packages')</span>
                     </a>
+                    <ul class="sub-menu" aria-expanded="true">
+                        <li><a href="#">@lang('translation.activePackages')</a></li>
+                        <li><a href="#">@lang('translation.expiredPackages')</a></li>
+                        <li><a href="#">@lang('translation.addPackages')</a></li>
+                    </ul>
                 </li>
-                @endrole
+
+                {{-- Users sidebar --}}
+                <li class="menu-title">@lang('translation.users')</li>
+                <li>
+                    <a href="javascript: void(0);" class="has-arrow waves-effect">
+                        <i class="fas fa-users"></i>
+                        <span>@lang('translation.users')</span>
+                    </a>
+                    <ul class="sub-menu" aria-expanded="true">
+                        <li>
+                            <a href="javascript: void(0);" class="has-arrow"><i
+                                    class="fas fa-chalkboard-teacher"></i><span>@lang('translation.teachers')</span></a>
+                            <ul class="sub-menu" aria-expanded="true">
+                                <li><a href="layouts-dark-sidebar">@lang('translation.activeTeachers')</a></li>
+                                <li><a href="layouts-compact-sidebar">@lang('translation.pendingTeachers')</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="javascript: void(0);" class="has-arrow"><i
+                                    class="fas fa-user-graduate"></i><span>@lang('translation.students')</span></a>
+                            <ul class="sub-menu" aria-expanded="true">
+                                <li><a href="layouts-dark-sidebar">@lang('translation.activeStudents')</a></li>
+                                <li><a href="layouts-compact-sidebar">@lang('translation.blockedStudents')</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="javascript: void(0);" class="has-arrow"><i
+                                    class="fas fa-user-cog"></i><span>@lang('translation.admins')</span></a>
+                            <ul class="sub-menu" aria-expanded="true">
+                                <li><a href="layouts-dark-sidebar">@lang('translation.allAdmins')</a></li>
+                                <li><a href="layouts-compact-sidebar">@lang('translation.addAdmin')</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+
+
+
                 {{-- <li>
                     <a href="javascript: void(0);" class="has-arrow waves-effect">
                         <i class="uil-window-section"></i>
@@ -91,7 +148,7 @@
                     </ul>
                 </li> --}}
 
-                <li class="menu-title">@lang('translation.Apps')</li>
+                {{-- <li class="menu-title">@lang('translation.Apps')</li> --}}
 
                 {{-- <li>
                     <a href="calendar" class="waves-effect">
@@ -165,7 +222,7 @@
                     </ul>
                 </li> --}}
 
-                <li class="menu-title">@lang('translation.Pages')</li>
+                {{-- <li class="menu-title">@lang('translation.Pages')</li> --}}
 
                 {{-- <li>
                     <a href="javascript: void(0);" class="has-arrow waves-effect">
