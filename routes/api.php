@@ -62,6 +62,7 @@ Route::group(['prefix' => 'teachers'], function () {
 
         Route::get('courses', [TeacherController::class, 'getAllTeacherCourses']);
         Route::get('courses/{id}', [TeacherController::class, 'getCourseInfo']);
+        Route::get('courses/{id}/units', [TeacherController::class, 'courseUnits']);
         Route::post('courses/add', [TeacherController::class, 'addCourse']);
         Route::put('courses/{course}/update', [TeacherController::class, 'updateCourse']);
         //units routes

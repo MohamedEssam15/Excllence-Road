@@ -53,11 +53,12 @@ class TeacherController extends Controller
         return apiResponse('Data Retrieved', new PaginatedCollection($courses, TeacherCourseResource::class));
     }
 
-    public function getCourseInfo($id){
+    public function getCourseInfo($id)
+    {
         $course = Course::findOrFail($id);
-        $user= auth()->user();
-        if($course->teacher_id != $user->id){
-           return apiResponse(__('response.notAuthorized'), new stdClass(), [__('response.notAuthorized')], 401);
+        $user = auth()->user();
+        if ($course->teacher_id != $user->id) {
+            return apiResponse(__('response.notAuthorized'), new stdClass(), [__('response.notAuthorized')], 401);
         }
         return apiResponse("Data Retrieved", new TeacherCourseInfoResource($course));
     }
@@ -70,13 +71,24 @@ class TeacherController extends Controller
         return apiResponse("created successfully", new TeacherCourseInfoResource($course));
     }
 
-    public function updateCourse(UpdateCourseRequest $request,Course $course)
+    public function updateCourse(UpdateCourseRequest $request, Course $course)
     {
         $courseServices = new CourseServices();
-        $course = $courseServices->updateCourse($request->all(),$course);
+        $course = $courseServices->updateCourse($request->all(), $course);
 
         return apiResponse("updated successfully", new TeacherCourseInfoResource($course));
     }
 
-
+    public function courseUnits($id)
+    {
+        $unitsQuery = Unit::where('course_id', $id)->get();
+        $units = [];
+        foreach ($unitsQuery as $unit) {
+            $units[] = [
+                'id' => $unit->id,
+                'name' => $unit->translate()
+            ];
+        }
+        return apiResponse('date Retrieved', $units);
+    }
 }
