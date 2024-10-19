@@ -128,7 +128,7 @@ class ExamController extends Controller
         $teacherId = auth()->user()->id;
         $exams = Exam::whereHas('course', function ($query) use ($teacherId) {
             $query->where('teacher_id', $teacherId);
-        })->get();
-        return apiResponse('Data Retrieved', ['exams' => TeacherExamResource::collection($exams)]);
+        })->paginate(request()->perPage ?? 10);
+        return apiResponse('Data Retrieved', new PaginatedCollection($exams, TeacherExamResource::class));
     }
 }
