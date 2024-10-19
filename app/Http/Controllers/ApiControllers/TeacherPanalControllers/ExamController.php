@@ -56,7 +56,7 @@ class ExamController extends Controller
         }
 
         $exam->questions()->sync($questions);
-        return apiResponse(__('response.addedSuccessfully'), new TeacherExamResource($exam));
+        return apiResponse(__('response.addedSuccessfully'), ['questions' => TeacherQuestionsResource::collection($exam->questions)]);
     }
 
     public function updateExam(UpdateExamRequest $request, Exam $exam)
