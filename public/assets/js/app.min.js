@@ -316,7 +316,7 @@ File: Main Js File
         //     }
         // });
 
-        const currentLang = document.documentElement.lang || 'en';
+        const currentLang = document.documentElement.lang || 'ar';
         function switchLayoutDirection(direction) {
             if (direction === 'ltr') {
                 document.documentElement.removeAttribute('dir');

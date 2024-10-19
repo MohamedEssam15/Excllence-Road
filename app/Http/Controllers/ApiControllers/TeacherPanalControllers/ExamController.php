@@ -7,6 +7,7 @@ use App\Http\Requests\AddExamRequest;
 use App\Http\Requests\AddQuestionsRequest;
 use App\Http\Requests\UpdateExamRequest;
 use App\Http\Resources\PaginatedCollection;
+use App\Http\Resources\TeacherCourseExamResource;
 use App\Http\Resources\TeacherExamResource;
 use App\Http\Resources\TeacherQuestionsResource;
 use App\Models\Course;
@@ -112,5 +113,22 @@ class ExamController extends Controller
             return apiResponse(__('response.notFound'), new stdClass(), [__('response.notFound')]);
         }
         return apiResponse('Data Retrieved', new PaginatedCollection($questions, TeacherQuestionsResource::class));
+    }
+
+    public function couresExams(Course $course)
+    {
+        if ($course->teacher_id != auth()->id()) {
+            return apiResponse(__('response.notAuthorized'), new stdClass(), [__('response.notAuthorized')], 401);
+        }
+
+        return apiResponse('Data Retrieved', ['exams' => TeacherCourseExamResource::collection($course->exams)]);
+    }
+    public function teacherExams()
+    {
+        $teacherId = auth()->user()->id;
+        $exams = Exam::whereHas('course', function ($query) use ($teacherId) {
+            $query->where('teacher_id', $teacherId);
+        })->get();
+        return apiResponse('Data Retrieved', ['exams' => TeacherExamResource::collection($exams)]);
     }
 }

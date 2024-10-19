@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Relations\MorphToMany;
 class Package extends Model
 {
     use HasFactory;
-    protected $fillable = ['name','description','price','cover_photo','start_date','end_date','is_popular'];
+    protected $fillable = ['name','description','price','cover_photo','start_date','end_date','is_popular' ];
     protected $with=['translations'];
 
     public function courses(): BelongsToMany
@@ -18,10 +18,10 @@ class Package extends Model
         return $this->belongsToMany(Course::class,'courses_packages','package_id','course_id');
     }
 
-    public function enrollments()
-    {
-        return $this->morphMany(Enrollment::class, 'enrollable');
-    }
+    // public function enrollments()
+    // {
+    //     return $this->morphMany(Enrollment::class, 'enrollable');
+    // }
 
     public function translate($locale = null)
     {

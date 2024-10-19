@@ -9,11 +9,17 @@
                 <div class="col-lg-12">
                     <div class="text-center">
                         <a href="{{ url('index') }}" class="mb-5 d-block auth-logo">
-
-                            <img src="{{ URL::asset('/assets/images/logo-dark.png') }}" alt="" height="80"
-                                class="logo logo-dark">
-                            <img src="{{ URL::asset('/assets/images/logo-light.png') }}" alt="" height="200"
-                                class="logo logo-light">
+                            @if (config('app.locale') == 'ar')
+                                <img src="{{ URL::asset('/assets/images/logo-dark-ar.png') }}" alt="" height="80"
+                                    class="logo logo-dark">
+                                <img src="{{ URL::asset('/assets/images/logo-light-ar.png') }}" alt=""
+                                    height="200" class="logo logo-light">
+                            @else
+                                <img src="{{ URL::asset('/assets/images/logo-dark.png') }}" alt="" height="80"
+                                    class="logo logo-dark">
+                                <img src="{{ URL::asset('/assets/images/logo-light.png') }}" alt="" height="200"
+                                    class="logo logo-light">
+                            @endif
                         </a>
                     </div>
                 </div>
@@ -80,10 +86,10 @@
 
 
 
-                                    <div class="mt-4 text-center">
+                                    {{-- <div class="mt-4 text-center">
                                         <p class="mb-0">@lang('auth.dontHaveAccount') <a href="{{ url('register') }}"
                                                 class="fw-medium text-primary"> @lang('auth.signUpNow') </a> </p>
-                                    </div>
+                                    </div> --}}
                                 </form>
                             </div>
 

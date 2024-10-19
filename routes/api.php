@@ -70,11 +70,13 @@ Route::group(['prefix' => 'teachers'], function () {
         Route::delete('courses/{course}/units/{unit}/delete', [UnitController::class, 'deleteUnit']);
         //exams routes
         Route::post('courses/{course}/add-exam', [ExamController::class, 'addExam']);
+        Route::get('courses/{course}/exams', [ExamController::class, 'couresExams']);
         Route::post('exams/{exam}/add-questions', [ExamController::class, 'addQuestions']);
         Route::put('exams/{exam}/edit', [ExamController::class, 'updateExam']);
         Route::delete('exams/{exam}/delete', [ExamController::class, 'deleteExam']);
         Route::post('exams/{exam}/remove-questions', [ExamController::class, 'removeQuestions']);
         Route::get('exams/{exam}', [ExamController::class, 'getExam']);
+        Route::get('exams', [ExamController::class, 'teacherExams']);
         //questions
         Route::get('questions/teacher-bank', [ExamController::class, 'teacherQuestionsBank']);
         Route::get('questions/public-bank', [ExamController::class, 'publicQuestionsBank']);

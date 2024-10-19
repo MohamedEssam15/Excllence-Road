@@ -53,6 +53,11 @@ class Course extends Model
     {
         return $this->hasMany(CourseTranslation::class, 'course_id');
     }
+    
+    public function exams()
+    {
+        return $this->hasMany(Exam::class, 'course_id');
+    }
 
     public function getCoverPhotoPath()
     {

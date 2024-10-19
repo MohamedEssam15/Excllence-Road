@@ -63,9 +63,10 @@
                         <span>@lang('translation.Courses')</span>
                     </a>
                     <ul class="sub-menu" aria-expanded="true">
-                        <li><a href="{{ route('courses.all') }}">@lang('translation.activeCourses')</a></li>
-                        <li><a href="#">@lang('translation.pendingCourses')</a></li>
-                        <li><a href="#">@lang('translation.expiredCourses')</a></li>
+                        <li><a href="{{ route('courses.active') }}">@lang('translation.activeCourses')</a></li>
+                        <li><a href="{{ route('courses.pending') }}">@lang('translation.pendingCourses')</a></li>
+                        <li><a href="{{ route('courses.expired') }}">@lang('translation.expiredCourses')</a></li>
+                        <li><a href="{{ route('courses.cancelled') }}">@lang('translation.cancelledCourses')</a></li>
                     </ul>
                 </li>
                 {{-- Packages sidebar --}}
@@ -76,9 +77,9 @@
                         <span>@lang('translation.packages')</span>
                     </a>
                     <ul class="sub-menu" aria-expanded="true">
-                        <li><a href="#">@lang('translation.activePackages')</a></li>
-                        <li><a href="#">@lang('translation.expiredPackages')</a></li>
-                        <li><a href="#">@lang('translation.addPackages')</a></li>
+                        <li><a href="{{ route('packages.active') }}">@lang('translation.activePackages')</a></li>
+                        <li><a href="{{ route('packages.expired') }}">@lang('translation.expiredPackages')</a></li>
+                        <li><a href="{{ route('packages.create') }}">@lang('translation.addPackages')</a></li>
                     </ul>
                 </li>
 
@@ -146,11 +147,11 @@
                             </ul>
                         </li>
                     </ul>
-                </li> --}}
+                </li>
 
-                {{-- <li class="menu-title">@lang('translation.Apps')</li> --}}
+                <li class="menu-title">@lang('translation.Apps')</li>
 
-                {{-- <li>
+                <li>
                     <a href="calendar" class="waves-effect">
                         <i class="uil-calender"></i>
                         <span>@lang('translation.Calendar')</span>
@@ -220,11 +221,11 @@
                         <li><a href="contacts-list">@lang('translation.User_List')</a></li>
                         <li><a href="contacts-profile">@lang('translation.Profile')</a></li>
                     </ul>
-                </li> --}}
+                </li>
 
-                {{-- <li class="menu-title">@lang('translation.Pages')</li> --}}
+                <li class="menu-title">@lang('translation.Pages')</li>
 
-                {{-- <li>
+                <li>
                     <a href="javascript: void(0);" class="has-arrow waves-effect">
                         <i class="uil-user-circle"></i>
                         <span>@lang('translation.Authentication')</span>
@@ -279,7 +280,8 @@
                         <li><a href="ui-sweet-alert">@lang('translation.Sweet_Alert')</a></li>
                         <li><a href="ui-tabs-accordions">@lang('translation.Tabs_Accordions')</a></li>
                         <li><a href="ui-typography">@lang('translation.Typography')</a></li>
-                        <li><a href="ui-utilities.html">@lang('translation.Utilities')<span class="badge rounded-pill bg-success float-end">@lang('translation.New')</span></a></li>
+                        <li><a href="ui-utilities.html">@lang('translation.Utilities')<span
+                                    class="badge rounded-pill bg-success float-end">@lang('translation.New')</span></a></li>
                         <li><a href="ui-toasts">@lang('translation.Toasts')</a></li>
                         <li><a href="ui-video">@lang('translation.Video')</a></li>
                         <li><a href="ui-general">@lang('translation.General')</a></li>
@@ -287,9 +289,9 @@
                         <li><a href="ui-rating">@lang('translation.Rating')</a></li>
                         <li><a href="ui-notifications">@lang('translation.Notifications')</a></li>
                     </ul>
-                </li> --}}
+                </li>
 
-                {{-- <li>
+                <li>
                     <a href="javascript: void(0);" class="waves-effect">
                         <i class="uil-shutter-alt"></i>
                         <span class="badge rounded-pill bg-info float-end">9</span>
@@ -306,9 +308,9 @@
                         <li><a href="form-wizard">@lang('translation.Wizard')</a></li>
                         <li><a href="form-mask">@lang('translation.Mask')</a></li>
                     </ul>
-                </li> --}}
+                </li>
 
-                {{-- <li>
+                <li>
                     <a href="javascript: void(0);" class="has-arrow waves-effect">
                         <i class="uil-list-ul"></i>
                         <span>@lang('translation.Tables')</span>
