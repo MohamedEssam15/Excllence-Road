@@ -1,6 +1,6 @@
 @extends('layouts.master-without-nav')
 @section('title')
-    Reset Password
+{{__('auth.resetPassword')}}
 @endsection
 @section('content')
     <div class="account-pages my-5  pt-sm-5">
@@ -10,18 +10,25 @@
                 <div class="col-md-8 col-lg-6 col-xl-5">
                     <div>
                         <a href="{{ url('index') }}" class="mb-5 d-block auth-logo">
-                            <img src="{{ URL::asset('/assets/images/logo-dark.png') }}" alt="" height="22"
-                                class="logo logo-dark">
-                            <img src="{{ URL::asset('/assets/images/logo-light.png') }}" alt="" height="22"
-                                class="logo logo-light">
+                            @if (config('app.locale') == 'ar')
+                                <img src="{{ URL::asset('/assets/images/logo-dark-ar.png') }}" alt="" height="80"
+                                    class="logo logo-dark">
+                                <img src="{{ URL::asset('/assets/images/logo-light-ar.png') }}" alt=""
+                                    height="200" class="logo logo-light">
+                            @else
+                                <img src="{{ URL::asset('/assets/images/logo-dark.png') }}" alt="" height="80"
+                                    class="logo logo-dark">
+                                <img src="{{ URL::asset('/assets/images/logo-light.png') }}" alt="" height="200"
+                                    class="logo logo-light">
+                            @endif
                         </a>
                         <div class="card">
 
                             <div class="card-body p-4">
 
                                 <div class="text-center mt-2">
-                                    <h5 class="text-primary">Reset Password</h5>
-                                    <p class="text-muted">Reset Password with Minible.</p>
+                                    <h5 class="text-primary">{{__('auth.resetPassword')}}</h5>
+                                    <p class="text-muted">{{__('auth.resetPasswordText')}}</p>
                                 </div>
                                 <div class="p-2 mt-4">
                                     @if (session('status'))
@@ -33,10 +40,10 @@
                                         @csrf
 
                                         <div class="mb-3">
-                                            <label class="form-label" for="email">Email</label>
+                                            <label class="form-label" for="email">{{__('auth.email')}}</label>
                                             <input type="email" class="form-control @error('email') is-invalid @enderror"
                                                 name="email" value="{{ old('email') }}" id="email"
-                                                placeholder="Enter email">
+                                                placeholder="{{__('auth.enterEmail')}}">
                                             @error('email')
                                                 <span class="invalid-feedback" role="alert">
                                                     <strong>{{ $message }}</strong>
@@ -46,25 +53,20 @@
 
                                         <div class="mt-3 text-end">
                                             <button class="btn btn-primary w-sm waves-effect waves-light"
-                                                type="submit">Reset</button>
+                                                type="submit">{{__('auth.reset')}}</button>
                                         </div>
 
 
                                         <div class="mt-4 text-center">
-                                            <p class="mb-0">Remember It ? <a href="{{ url('login') }}"
-                                                    class="fw-medium text-primary"> Signin </a></p>
+                                            <p class="mb-0">{{__('auth.rememberIt')}} <a href="{{ url('login') }}"
+                                                    class="fw-medium text-primary"> {{__('auth.login')}} </a></p>
                                         </div>
                                     </form>
                                 </div>
 
                             </div>
                         </div>
-                        <div class="mt-5 text-center">
-                            <p>© <script>
-                                    document.write(new Date().getFullYear())
 
-                                </script> Minible. Crafted with <i class="mdi mdi-heart text-danger"></i> by Themesbrand</p>
-                        </div>
                     </div>
                 </div>
             </div>

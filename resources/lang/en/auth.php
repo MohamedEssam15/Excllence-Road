@@ -56,6 +56,13 @@ return [
     'resetMessage' => "A fresh verification link has been sent to your email address.",
     'resetLink' => "click here to request another",
 
+
+    //reset password page
+    'resetPassword'=>'Reset Password.',
+    'resetPasswordText'=>'Enter your email to send reset link.',
+    'rememberIt'=>"Remember it ?",
+    'reset'=>"Reset",
+
     //validation errors
     'rolesIn'=> 'the selected role is invalid',
     'loginFirst'=>'You must login first',

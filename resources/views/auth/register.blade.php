@@ -28,7 +28,7 @@
                                 <p class="text-muted">@lang('auth.registerAccountText').</p>
                             </div>
                             <div class="p-2 mt-4">
-                                <form method="POST" action="{{ route('register') }}">
+                                <form method="POST" action="{{ route('register') }}" enctype="multipart/form-data">
                                     @csrf
 
                                     <div class="mb-3">
@@ -78,6 +78,18 @@
                                         @enderror
                                     </div>
 
+                                    <div class="mb-3">
+                                        <label class="form-label" for="profile_image">@lang('auth.profileImage')</label>
+                                        <input type="file"
+                                            class="form-control @error('profile_image') is-invalid @enderror"
+                                            name="profile_image" id="profile_image"
+                                            placeholder="@lang('auth.uploadImage')">
+                                        @error('profile_image')
+                                            <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                        @enderror
+                                    </div>
 
                                     <div class="form-check">
                                         <input type="checkbox" class="form-check-input" id="auth-terms-condition-check">

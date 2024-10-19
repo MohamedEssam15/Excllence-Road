@@ -316,7 +316,7 @@ File: Main Js File
         //     }
         // });
 
-        const currentLang = document.documentElement.lang || 'en';
+        const currentLang = document.documentElement.lang || 'ar';
         function switchLayoutDirection(direction) {
             if (direction === 'ltr') {
                 document.documentElement.removeAttribute('dir');
@@ -340,6 +340,7 @@ File: Main Js File
     }
 
     function init() {
+        initPreloader();
         initMetisMenu();
         initLeftMenuCollapse();
         initActiveMenu();
@@ -350,7 +351,6 @@ File: Main Js File
         initDropdownMenu();
         initComponents();
         initSettings();
-        initPreloader();
         layoutSetting();
         Waves.init();
     }

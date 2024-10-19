@@ -47,6 +47,7 @@ return [
     'termsAndConditions' => "علي الشروط و الاحكام",
     'register' => "سجل الان",
     'alreadyHaveAccount' => "لديك حساب بالفعل ؟",
+    'profileImage' => "الصوره الشخصية",
 
     //verify email page text
     'verifyYourEmail' => "التحقق من البريد الالكتروني",
@@ -54,6 +55,12 @@ return [
     'verifyYourEmailResend' => "اذا لم تتلقي اي بريد الكتروني",
     'resetMessage' => "تم ارسال رابط تفعيل جديد",
     'resetLink' => "اضغط هنا لارسال بريد الكتروني مره اخره",
+
+    //reset password page
+    'resetPassword'=>'اعادة تعيين كلمة السر.',
+    'resetPasswordText'=>'ادخل البريد الالكتروني لاعادة تعيين كلمة السر.',
+    'rememberIt'=>"تذاكرته ؟",
+    'reset'=>'اعادة تعيين',
 
     //validation errors
     'rolesIn'=> 'يجب اختيار دور صالح',

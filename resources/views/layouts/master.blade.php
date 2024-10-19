@@ -9,15 +9,16 @@
 @section('body')
 
     <body>
-    @show
-    <!-- Loader -->
-    <div id="preloader">
-        <div id="status">
-            <div class="spinner">
-                <i class="uil-shutter-alt spin-icon"></i>
+        <!-- Loader -->
+        <div id="preloader">
+            <div id="status">
+                <div class="spinner">
+                    <i class="uil-shutter-alt spin-icon"></i>
+                </div>
             </div>
         </div>
-    </div>
+    @show
+
     <!-- Begin page -->
     <div id="layout-wrapper">
         @include('layouts.topbar')
@@ -33,7 +34,7 @@
                 <!-- container-fluid -->
             </div>
             <!-- End Page-content -->
-            @include('layouts.footer')
+            {{-- @include('layouts.footer') --}}
         </div>
         <!-- end main content-->
     </div>

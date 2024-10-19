@@ -34,10 +34,15 @@ class RegisterUserRequest extends FormRequest
 
 
 
-    protected function failedValidation(Validator $validator) 
+    protected function failedValidation(Validator $validator)
     {
         throw new HttpResponseException(
             apiResponse('error', new \stdClass(), $validator->errors()->all(), 422)
         );
     }
+    // public function failedValidation(Validator $validator)
+    // {
+    //     $errors = $validator->errors()->all();
+    //     throw new HttpResponseException(apiResponse('Validation Error', new stdClass(), $errors, 422));
+    // }
 }

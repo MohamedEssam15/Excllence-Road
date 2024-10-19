@@ -40,7 +40,11 @@ class LoginController extends Controller
     {
         $this->middleware('guest')->except('logout');
     }
-
+    /**
+     * Get the guard to be used during authentication.
+     *
+     * @return \Illuminate\Contracts\Auth\StatefulGuard
+     */
     protected function guard()
     {
         return Auth::guard('web');
@@ -50,7 +54,7 @@ class LoginController extends Controller
     {
         // Check if the user has the 'admin' or 'teacher' role
         if (!$user->hasRole(['admin']) || !$user->is_active) {
-            Auth::logout(); // Log the user out
+            Auth::guard('web')->logout(); // Log the user out
             return redirect('/login')->withErrors(['email' => Lang::get('auth.notActive')]);
         }
 

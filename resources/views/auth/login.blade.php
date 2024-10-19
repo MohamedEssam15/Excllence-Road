@@ -9,10 +9,17 @@
                 <div class="col-lg-12">
                     <div class="text-center">
                         <a href="{{ url('index') }}" class="mb-5 d-block auth-logo">
-                            <img src="{{ URL::asset('/assets/images/logo-dark.png') }}" alt="" height="22"
-                                class="logo logo-dark">
-                            <img src="{{ URL::asset('/assets/images/logo-light.png') }}" alt="" height="22"
-                                class="logo logo-light">
+                            @if (config('app.locale') == 'ar')
+                                <img src="{{ URL::asset('/assets/images/logo-dark-ar.png') }}" alt="" height="80"
+                                    class="logo logo-dark">
+                                <img src="{{ URL::asset('/assets/images/logo-light-ar.png') }}" alt=""
+                                    height="200" class="logo logo-light">
+                            @else
+                                <img src="{{ URL::asset('/assets/images/logo-dark.png') }}" alt="" height="80"
+                                    class="logo logo-dark">
+                                <img src="{{ URL::asset('/assets/images/logo-light.png') }}" alt="" height="200"
+                                    class="logo logo-light">
+                            @endif
                         </a>
                     </div>
                 </div>
@@ -52,7 +59,8 @@
                                     <div class="mb-3">
                                         <div class="float-end">
                                             @if (Route::has('password.request'))
-                                                <a href="{{ route('password.request') }}" class="text-muted">@lang('auth.forgotPassword')</a>
+                                                <a href="{{ route('password.request') }}"
+                                                    class="text-muted">@lang('auth.forgotPassword')</a>
                                             @endif
                                         </div>
                                         <label class="form-label" for="userpassword">@lang('auth.password')</label>
@@ -72,15 +80,16 @@
                                     </div>
 
                                     <div class="mt-3 text-end">
-                                        <button class="btn btn-primary w-sm waves-effect waves-light" type="submit">@lang('auth.login')</button>
+                                        <button class="btn btn-primary w-sm waves-effect waves-light"
+                                            type="submit">@lang('auth.login')</button>
                                     </div>
 
 
 
-                                    <div class="mt-4 text-center">
+                                    {{-- <div class="mt-4 text-center">
                                         <p class="mb-0">@lang('auth.dontHaveAccount') <a href="{{ url('register') }}"
                                                 class="fw-medium text-primary"> @lang('auth.signUpNow') </a> </p>
-                                    </div>
+                                    </div> --}}
                                 </form>
                             </div>
 

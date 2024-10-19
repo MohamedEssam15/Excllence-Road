@@ -13,7 +13,6 @@
 
     <!-- Begin page -->
     <div id="layout-wrapper">
-        @include('layouts.horizontal')
         <!-- ============================================================== -->
         <!-- Start right Content here -->
         <!-- ============================================================== -->
@@ -24,7 +23,7 @@
                     @yield('content')
                 </div> <!-- content -->
             </div>
-            @include('layouts.footer')
+            {{-- @include('layouts.footer') --}}
         </div>
         <!-- ============================================================== -->
         <!-- End Right content here -->

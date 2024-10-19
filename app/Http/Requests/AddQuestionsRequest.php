@@ -31,6 +31,7 @@ class AddQuestionsRequest extends FormRequest
     {
         return [
             'bankQuestions' => 'nullable|array|min:1',
+            'bankQuestions.*' => 'required|exists:questions,id',
             'questions' => 'nullable|array',
             'questions.*.question' => 'required|string|max:255',
             'questions.*.answers' => 'required|array|min:2',

@@ -38,7 +38,7 @@ class VerificationController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware('auth:web');
         $this->middleware('signed')->only('verify');
         $this->middleware('throttle:6,1')->only('verify', 'resend');
     }
@@ -48,7 +48,10 @@ class VerificationController extends Controller
     }
     protected function verified(Request $request)
     {
-        Auth::logout(); // Log the user out after email verification
-        return redirect('/login')->with('status', Lang::get('auth.waitingAdminConfirmation'));
+        if(! auth('web')->user()->is_active){
+            Auth::guard('web')->logout(); // Log the user out after email verification
+            return redirect('/login')->with('status', Lang::get('auth.waitingAdminConfirmation'));
+        }
+        return redirect('/');
     }
 }
