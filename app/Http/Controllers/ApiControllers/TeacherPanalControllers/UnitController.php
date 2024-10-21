@@ -20,7 +20,7 @@ class UnitController extends Controller
         $courseServices = new CourseServices();
         $courseServices->addUnits($request->units, $course->id);
         $course->refresh();
-        return apiResponse(__('response.addedSuccessfully'), new TeacherCourseInfoResource($course));
+        return apiResponse(__('response.addedSuccessfully'), ['units' => TeacherUnitInfoResource::collection($course->units)]);
     }
     public function updateUnit(UpdateUnitRequest $request, Course $course, Unit $unit)
     {

@@ -69,6 +69,7 @@ Route::group(['prefix' => 'teachers'], function () {
         Route::post('courses/{course}/units/add', [UnitController::class, 'addUnits']);
         Route::put('courses/{course}/units/{unit}/update', [UnitController::class, 'updateUnit']);
         Route::delete('courses/{course}/units/{unit}/delete', [UnitController::class, 'deleteUnit']);
+        Route::get('units/{id}/lessons', [TeacherController::class, 'unitLessons']);
         //exams routes
         Route::post('courses/{course}/add-exam', [ExamController::class, 'addExam']);
         Route::get('courses/{course}/exams', [ExamController::class, 'couresExams']);

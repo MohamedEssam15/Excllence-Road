@@ -27,6 +27,7 @@ class TeacherUnitInfoResource extends JsonResource
             'name'=>$this->translate($this->locale),
             'enName'=>$this->name,
             'arName'=>$this->translate('ar'),
+            'order'=>$this->order,
             'lessons'=> TeacherLessonInfoResource::collection($this->lessons),
         ];
     }

@@ -11,6 +11,7 @@ use App\Http\Requests\UpdateUnitRequest;
 use App\Http\Resources\PaginatedCollection;
 use App\Http\Resources\TeacherCourseInfoResource;
 use App\Http\Resources\TeacherCourseResource;
+use App\Http\Resources\TeacherLessonInfoResource;
 use App\Http\Resources\TeacherResource;
 use App\Http\Resources\TeacherUnitInfoResource;
 use App\Models\Course;
@@ -81,14 +82,22 @@ class TeacherController extends Controller
 
     public function courseUnits($id)
     {
-        $unitsQuery = Unit::where('course_id', $id)->get();
+        $unitsQuery = Unit::where('course_id', $id)->orderBy('order', 'asc')->get();
         $units = [];
         foreach ($unitsQuery as $unit) {
             $units[] = [
                 'id' => $unit->id,
-                'name' => $unit->translate()
+                'name' => $unit->translate(),
+                'arName' => $unit->translate('ar'),
+                'enName' => $unit->translate('en'),
+                'order' => $unit->order,
             ];
         }
         return apiResponse('date Retrieved', $units);
+    }
+    public function unitLessons($id)
+    {
+        $unit = Unit::findOrFail($id);
+        return apiResponse('date Retrieved', ['lessons' => TeacherLessonInfoResource::collection($unit->lessons)]);
     }
 }
