@@ -93,7 +93,7 @@ class TeacherController extends Controller
                 'order' => $unit->order,
             ];
         }
-        return apiResponse('date Retrieved', $units);
+        return apiResponse('date Retrieved', ['units' => $units]);
     }
     public function unitLessons($id)
     {
