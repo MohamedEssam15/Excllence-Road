@@ -26,7 +26,7 @@ class UnitController extends Controller
     {
         $courseServices = new CourseServices();
         $unit = $courseServices->updateUnit($request->all(), $course, $unit);
-        return apiResponse(__('response.updatedSuccessfully'), new UnitInfoResource($unit));
+        return apiResponse(__('response.updatedSuccessfully'), new TeacherUnitInfoResource($unit));
     }
     public function deleteUnit(Course $course, Unit $unit)
     {
