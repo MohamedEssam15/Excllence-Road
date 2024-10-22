@@ -2,7 +2,12 @@
 
 namespace App\Services\Courses;
 
+use App\Enum\CourseStatus;
+use App\Http\Resources\CategoryResource;
+use App\Http\Resources\CourseLevelResource;
+use App\Models\category;
 use App\Models\Course;
+use App\Models\CourseLevel;
 use App\Models\Unit;
 use App\Services\VideoServices\VideoStorageManager;
 use Illuminate\Support\Facades\Storage;
@@ -131,4 +136,73 @@ class CourseServices
 
         return $course;
     }
+
+
+
+    public static function getAvailableCategories()
+    {
+        return category::whereIn('id', function ($query) {
+            $query->select('category_id')
+                ->from('courses')
+                ->where('status_id', CourseStatus::ACTIVE);
+        })->get();
+    }
+
+    public static function getAvailableLevels()
+    {
+        return CourseLevel::whereIn('id', function ($query) {
+            $query->select('level_id')
+                ->from('courses')
+                ->where('status_id', CourseStatus::ACTIVE); // replace ACTIVE_STATUS with your active status ID or condition
+        })->get();
+    }
+
+    public static function getAvailableRatings()
+    {
+        return Course::where('status_id', CourseStatus::ACTIVE) // replace ACTIVE_STATUS with the actual value for active courses
+            ->selectRaw('DISTINCT rating') // select distinct rating values
+            ->pluck('rating'); // fetch the rating values
+    }
+
+    public static function getAvailablePriceType()
+    {
+        $hasFree = Course::where('status_id', CourseStatus::ACTIVE)
+            ->where('price', 0)
+            ->exists();
+
+        $hasPaid = Course::where('status_id', CourseStatus::ACTIVE)
+            ->where('price', '>', 0)
+            ->exists();
+
+        $priceTypes = [];
+
+        if ($hasFree) {
+            $priceTypes[] = 'free';
+        }
+
+        if ($hasPaid) {
+            $priceTypes[] = 'paid';
+        }
+
+        return $priceTypes;
+    }
+
+    public static function getAvailableFilters()
+    {
+        $categories =  CategoryResource::collection(self::getAvailableCategories());
+        $levels =    CourseLevelResource::collection(self::getAvailableLevels());
+        $rating = self::getAvailableRatings();
+        $priceTypes = self::getAvailablePriceType();
+
+        return [
+            'categories' => $categories,
+            'levels' => $levels,
+            'rating' => $rating,
+            'priceTypes' => $priceTypes, // 'free' or 'paid'
+        ];
+    }
+
+
+
+
 }

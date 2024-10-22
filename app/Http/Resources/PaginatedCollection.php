@@ -3,17 +3,20 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\ResourceCollection;
+use stdClass;
 
 class PaginatedCollection extends ResourceCollection
 {
     private $resourceClass;
+    private $filters;
 
-    public function __construct($resource, $resourceClass)
+    public function __construct($resource, $resourceClass, $filters = new stdClass())
     {
         parent::__construct($resource);
 
         $this->resource = $this->collectResource($resource);
         $this->resourceClass = $resourceClass;
+        $this->filters = $filters;
     }
 
     public function toArray($request)
@@ -38,6 +41,7 @@ class PaginatedCollection extends ResourceCollection
             'nextUrl' => $this->resource->currentPage() == $this->resource->lastPage() ? '' : $nextUrl,
             'lastPage' => $this->resource->lastPage(),
             'currentPage' => $this->resource->currentPage(),
+            'filters' => $this->filters,
         ];
     }
 }

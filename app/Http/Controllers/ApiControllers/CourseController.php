@@ -12,6 +12,7 @@ use App\Http\Resources\TeacherLessonInfoResource;
 use App\Models\Course;
 use App\Models\CourseLevel;
 use App\Models\Lesson;
+use App\Services\Courses\CourseServices;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
@@ -89,8 +90,11 @@ class CourseController extends Controller
             return apiResponse(__('response.courseNotFound'), new stdClass(), [__('response.courseNotFound')]);
         }
 
-        return apiResponse('Data Retrieved', new PaginatedCollection($courses, PopularCourseResource::class));
+        $filters = CourseServices::getAvailableFilters();
+
+        return apiResponse('Data Retrieved', new PaginatedCollection($courses, PopularCourseResource::class,$filters));
     }
+
     public function getCourseLevels()
     {
         $courseLevels = CourseLevel::all();

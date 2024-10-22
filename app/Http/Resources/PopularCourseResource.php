@@ -36,6 +36,7 @@ class PopularCourseResource extends JsonResource
             'endDate' => $this->course->end_date,
             'isSpecific' => $this->course->is_specific,
             'specificTo' => $this->course->translate($this->locale)->specific_to,
+            'rating' => $this->rating,
         ];
     }
 }
