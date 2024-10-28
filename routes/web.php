@@ -2,6 +2,9 @@
 
 use App\Http\Controllers\Courses\CoursesController;
 use App\Http\Controllers\Packages\PackagesController;
+use App\Http\Controllers\Users\AdminController;
+use App\Http\Controllers\Users\StudentController;
+use App\Http\Controllers\Users\TeacherController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -62,5 +65,33 @@ Route::middleware('auth:web')->group(function () {
         Route::post('/modify-course', [PackagesController::class, 'modifyPackage']);
         Route::post('/cancel-course', [PackagesController::class, 'cancelPackage']);
         Route::post('/return-course-to-pending', [PackagesController::class, 'returnToPending']);
+    });
+
+
+
+    Route::group(['prefix' => 'users'], function () {
+        Route::group(['prefix' => 'admins'], function () {
+            Route::get('all-admins', [AdminController::class, 'allAdmins'])->name('users.admin.all');
+            Route::post('block', [AdminController::class, 'blockAdmin'])->name('users.admin.block');
+            Route::post('unblock', [AdminController::class, 'unblockAdmin'])->name('users.admin.unblock');
+        });
+        Route::group(['prefix' => 'students'], function () {
+            Route::get('active', [StudentController::class, 'active'])->name('users.student.active');
+            Route::get('/blocked', [StudentController::class, 'blocked'])->name('users.student.blocked');
+            Route::post('/block', [StudentController::class, 'block'])->name('users.student.block');
+            Route::post('/accept', [StudentController::class, 'accept'])->name('users.student.accept');
+            Route::post('/reactive', [StudentController::class, 'reactive'])->name('users.student.reactive');
+            Route::get('{id}/show', [StudentController::class, 'show'])->name('users.student.show');
+        });
+        Route::group(['prefix' => 'teachers'], function () {
+            Route::get('active', [TeacherController::class, 'active'])->name('users.teacher.active');
+            Route::get('pending', [TeacherController::class, 'pending'])->name('users.teacher.pending');
+            Route::get('/blocked', [TeacherController::class, 'blocked'])->name('users.teacher.blocked');
+            Route::post('/block', [TeacherController::class, 'block'])->name('users.teacher.block');
+            Route::post('/accept', [TeacherController::class, 'accept'])->name('users.teacher.accept');
+            Route::post('/reactive', [TeacherController::class, 'reactive'])->name('users.teacher.reactive');
+            Route::get('{id}/show', [TeacherController::class, 'show'])->name('users.teacher.show');
+            Route::get('/download-certificate/{id}', [TeacherController::class, 'downloadCertificate'])->name('users.teacher.certificate');
+        });
     });
 });

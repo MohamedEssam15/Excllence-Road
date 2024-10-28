@@ -16,8 +16,9 @@ return [
     'failed' => 'These credentials do not match our records.',
     'password' => 'The provided password is incorrect.',
     'throttle' => 'Too many login attempts. Please try again in :seconds seconds.',
-    'notActive'=> 'You do not have permission to access this CRM.',
-    'waitingAdminConfirmation'=> 'Your account is under review. We will contact you once the admin approves your registration.',
+    'notActive' => 'You do not have permission to access.',
+    'blocked' => 'You are blocked.',
+    'waitingAdminConfirmation' => 'Your account is under review. We will contact you once the admin approves your registration.',
 
 
     //login page text
@@ -30,9 +31,9 @@ return [
     'rememberme' => 'Remember me',
     'dontHaveAccount' => "Want to Join us as Teacher ?",
     'signUpNow' => "Signup Now",
-    'logout'=>'Signed out successfully',
-    'logoutError'=>'Please sign in frist',
-    'loginRoleError'=>'Please sign in our crm portal',
+    'logout' => 'Signed out successfully',
+    'logoutError' => 'Please sign in frist',
+    'loginRoleError' => 'Please sign in our crm portal',
 
     //signup page text
 
@@ -58,14 +59,14 @@ return [
 
 
     //reset password page
-    'resetPassword'=>'Reset Password.',
-    'resetPasswordText'=>'Enter your email to send reset link.',
-    'rememberIt'=>"Remember it ?",
-    'reset'=>"Reset",
+    'resetPassword' => 'Reset Password.',
+    'resetPasswordText' => 'Enter your email to send reset link.',
+    'rememberIt' => "Remember it ?",
+    'reset' => "Reset",
 
     //validation errors
-    'rolesIn'=> 'the selected role is invalid',
-    'loginFirst'=>'You must login first',
-    'activateFirst'=>'Please waiting the approval from Admin',
+    'rolesIn' => 'the selected role is invalid',
+    'loginFirst' => 'You must login first',
+    'activateFirst' => 'Please waiting the approval from Admin',
 
 ];

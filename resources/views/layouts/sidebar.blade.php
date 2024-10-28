@@ -95,25 +95,22 @@
                             <a href="javascript: void(0);" class="has-arrow"><i
                                     class="fas fa-chalkboard-teacher"></i><span>@lang('translation.teachers')</span></a>
                             <ul class="sub-menu" aria-expanded="true">
-                                <li><a href="layouts-dark-sidebar">@lang('translation.activeTeachers')</a></li>
-                                <li><a href="layouts-compact-sidebar">@lang('translation.pendingTeachers')</a></li>
+                                <li><a href="{{ route('users.teacher.active') }}">@lang('translation.activeTeachers')</a></li>
+                                <li><a href="{{ route('users.teacher.pending') }}">@lang('translation.pendingTeachers')</a></li>
+                                <li><a href="{{ route('users.teacher.blocked') }}">@lang('translation.blockedTeachers')</a></li>
                             </ul>
                         </li>
                         <li>
                             <a href="javascript: void(0);" class="has-arrow"><i
                                     class="fas fa-user-graduate"></i><span>@lang('translation.students')</span></a>
                             <ul class="sub-menu" aria-expanded="true">
-                                <li><a href="layouts-dark-sidebar">@lang('translation.activeStudents')</a></li>
-                                <li><a href="layouts-compact-sidebar">@lang('translation.blockedStudents')</a></li>
+                                <li><a href="{{ route('users.student.active') }}">@lang('translation.activeStudents')</a></li>
+                                <li><a href="{{ route('users.student.blocked') }}">@lang('translation.blockedStudents')</a></li>
                             </ul>
                         </li>
                         <li>
-                            <a href="javascript: void(0);" class="has-arrow"><i
+                            <a href="{{ route('users.admin.all') }}"><i
                                     class="fas fa-user-cog"></i><span>@lang('translation.admins')</span></a>
-                            <ul class="sub-menu" aria-expanded="true">
-                                <li><a href="layouts-dark-sidebar">@lang('translation.allAdmins')</a></li>
-                                <li><a href="layouts-compact-sidebar">@lang('translation.addAdmin')</a></li>
-                            </ul>
                         </li>
                     </ul>
                 </li>

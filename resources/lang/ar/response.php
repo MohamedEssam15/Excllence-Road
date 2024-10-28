@@ -24,4 +24,6 @@ return [
     'invalidTypeSelected' => 'النوع المختار غير صالح',
     'pleaseChangeExamType' => 'من فضلك قم بتعديل نوع الامتحان الي اخيار من متعدد',
     'questionShouldHaveCorrectAnswer' => 'يجب ان يحتوي كل سؤال علي اجابه صحيحه واحده',
+    'blocked' => 'تم حظر المستخدم بنجاح',
+    'unblocked' => 'تم الغاء الحظر بنجاح',
 ];

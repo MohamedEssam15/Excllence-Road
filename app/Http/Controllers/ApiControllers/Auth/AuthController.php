@@ -49,7 +49,12 @@ class AuthController extends Controller
         }
         $user = auth()->user();
         if (! $user->is_active) {
+            Auth::logout();
             return apiResponse(__('auth.notActive'), new stdClass(), [__('auth.notActive')], 401);
+        }
+        if (! $user->is_blocked) {
+            Auth::logout();
+            return apiResponse(__('auth.blocked'), new stdClass(), [__('auth.blocked')], 401);
         }
 
         if (! $user->hasAnyRole('student', 'teacher')) {
@@ -259,9 +264,7 @@ class AuthController extends Controller
         if (isset($request->certificates)) {
             foreach ($request->certificates as $certificate) {
                 $file = $certificate;
-                $fileExtension = $file->getClientOriginalExtension();
-                $fileName = Str::random(10) . '.' . $fileExtension;
-
+                $fileName = $file->getClientOriginalName();
                 $this->saveTeacherAttachment($user->id, $fileName, $file);
             }
         }
