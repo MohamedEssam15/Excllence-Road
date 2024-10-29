@@ -52,7 +52,7 @@ class AuthController extends Controller
             Auth::logout();
             return apiResponse(__('auth.notActive'), new stdClass(), [__('auth.notActive')], 401);
         }
-        if (! $user->is_blocked) {
+        if ($user->is_blocked) {
             Auth::logout();
             return apiResponse(__('auth.blocked'), new stdClass(), [__('auth.blocked')], 401);
         }
