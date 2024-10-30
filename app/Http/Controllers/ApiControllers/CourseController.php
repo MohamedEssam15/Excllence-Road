@@ -7,11 +7,14 @@ use App\Http\Resources\CourseInfoResource;
 use App\Http\Resources\CourseLevelResource;
 use App\Http\Resources\PaginatedCollection;
 use App\Http\Resources\PopularCourseResource;
+use App\Http\Resources\StudentCoursesResource;
 use App\Http\Resources\StudentLessonResource;
+use App\Http\Resources\TeacherInfoResource;
 use App\Http\Resources\TeacherLessonInfoResource;
 use App\Models\Course;
 use App\Models\CourseLevel;
 use App\Models\Lesson;
+use App\Models\User;
 use App\Services\Courses\CourseServices;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -85,6 +88,7 @@ class CourseController extends Controller
                 $query->whereNull('deleted_at');
             })
             ->where('start_date', '>=', Carbon::today());
+        $coursesQuery->orderBy('price', $request->priceOrder);
         $courses = $coursesQuery->paginate(request()->perPage);
         if (!isset($courses[0])) {
             return apiResponse(__('response.courseNotFound'), new stdClass(), [__('response.courseNotFound')]);
@@ -92,7 +96,7 @@ class CourseController extends Controller
 
         $filters = CourseServices::getAvailableFilters();
 
-        return apiResponse('Data Retrieved', new PaginatedCollection($courses, PopularCourseResource::class,$filters));
+        return apiResponse('Data Retrieved', new PaginatedCollection($courses, PopularCourseResource::class, $filters));
     }
 
     public function getCourseLevels()
@@ -124,5 +128,20 @@ class CourseController extends Controller
             return apiResponse(__('response.notAuthorized'), new stdClass(), [__('response.notAuthorized')], 401);
         }
         return apiResponse('Data Retrieved', new StudentLessonResource($lesson));
+    }
+
+    public function getCourseStudents($id)
+    {
+        $enrolledStudents = User::role('student')->whereHas('enrollments', function ($query) use ($id) {
+            $query->where('course_id', $id)->where('end_date', '>', Carbon::today());
+        })->get();
+
+        return apiResponse(__('response.dataRetrieved'), TeacherInfoResource::collection($enrolledStudents));
+    }
+    public function getStudentCourses()
+    {
+        $authUser = auth()->user();
+        $courses = $authUser->enrollments()->wherePivot('end_date', '>', Carbon::today())->paginate(request()->perPage ?? 10);
+        return apiResponse(__('response.dataRetrieved'), new PaginatedCollection($courses, StudentCoursesResource::class));
     }
 }

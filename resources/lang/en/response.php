@@ -25,5 +25,7 @@ return [
     "pleaseChangeExamType" => "please change the type of the exam to be mcq",
     "questionShouldHaveCorrectAnswer" => "Each question must have exactly one correct answer.",
     "blocked" => "User Blocked Successfully.",
+    "dataRetrieved" => "Data Retrieved.",
+    "notificationSent" => "Notification sent successfully.",
 
 ];

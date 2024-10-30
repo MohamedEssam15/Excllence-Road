@@ -26,4 +26,6 @@ return [
     'questionShouldHaveCorrectAnswer' => 'يجب ان يحتوي كل سؤال علي اجابه صحيحه واحده',
     'blocked' => 'تم حظر المستخدم بنجاح',
     'unblocked' => 'تم الغاء الحظر بنجاح',
+    'dataRetrieved' => 'تم استعادت البيانات',
+    'notificationSent' => 'تم ارسال الاشعار بنجاح',
 ];

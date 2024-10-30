@@ -13,7 +13,7 @@ class Course extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['description', 'name', 'teacher_commision', 'teacher_id', 'category_id', 'start_date', 'end_date', 'is_specific', 'specific_to', 'status_id', 'price', 'level_id', 'cover_photo_name','rating'];
+    protected $fillable = ['description', 'name', 'teacher_commision', 'teacher_id', 'category_id', 'start_date', 'end_date', 'is_specific', 'specific_to', 'status_id', 'price', 'level_id', 'cover_photo_name', 'rating'];
     protected $with = ['translations', 'level', 'status', 'category', 'teacher'];
 
 
@@ -74,7 +74,7 @@ class Course extends Model
 
     public function enrollments()
     {
-        $this->belongsToMany(User::class, 'courses_users')->withPivot('payment_id', 'start_date', 'end_date', 'from_package', 'package_id')
+        return $this->belongsToMany(User::class, 'courses_users')->withPivot('payment_id', 'start_date', 'end_date', 'from_package', 'package_id')
             ->withTimestamps();
     }
 }

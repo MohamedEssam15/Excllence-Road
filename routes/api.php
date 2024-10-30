@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ApiControllers\Auth\AuthController;
 use App\Http\Controllers\ApiControllers\CategoryController;
 use App\Http\Controllers\ApiControllers\CourseController;
+use App\Http\Controllers\ApiControllers\NotificationController;
 use App\Http\Controllers\ApiControllers\PackageController;
 use App\Http\Controllers\ApiControllers\TeacherController;
 use App\Http\Controllers\ApiControllers\PaymentController;
@@ -28,6 +29,7 @@ Route::group(['middleware' => ['api'], 'prefix' => 'auth'], function ($router) {
     Route::post('logout', [AuthController::class, 'logout']);
     Route::post('register', [AuthController::class, 'register']);
     Route::get('user-info', [AuthController::class, 'me']);
+    Route::put('user-update', [AuthController::class, 'updateProfile']);
     Route::post('teacher-register', [AuthController::class, 'teacherRegister']);
     Route::post('password/email', [AuthController::class, 'sendResetCode']);
     Route::post('password/reset', [AuthController::class, 'resetWithCode']);
@@ -45,7 +47,9 @@ Route::group(['middleware' => 'guest:api', 'prefix' => 'courses'], function () {
     Route::get('/course-info/{id}', [CourseController::class, 'guestCourseInfo']);
 });
 Route::group(["middleware" => "auth:api"], function () {
+    Route::get('courses/{id}/students', [CourseController::class, 'getCourseStudents']);
     Route::get('lessons/{lesson}', [CourseController::class, 'lessonInfo']);
+    Route::get('students/courses', [CourseController::class, 'getStudentCourses']);
 });
 
 //teacher routes
@@ -88,6 +92,15 @@ Route::group(['prefix' => 'teachers'], function () {
 //categories routes
 Route::group(['middleware' => 'guest:api', 'prefix' => 'categories'], function () {
     Route::get('/', [CategoryController::class, 'getCategories']);
+});
+
+//categories routes
+Route::group(['middleware' => 'auth:api', 'prefix' => 'notifications'], function () {
+    Route::post('/send', [NotificationController::class, 'sendNotification']);
+    Route::get('/latest-notifications', [NotificationController::class, 'userNotification']);
+    Route::get('/all-notifications', [NotificationController::class, 'userAllNotification']);
+    Route::delete('/{id}/delete', [NotificationController::class, 'deleteNotification']);
+    Route::get('/{id}/mark-as-read', [NotificationController::class, 'markAsRead']);
 });
 
 //packages Routes

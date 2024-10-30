@@ -102,6 +102,33 @@ class AuthController extends Controller
         }
         return apiResponse('Data Retrieved', $resource);
     }
+    public function updateProfile(Request $request)
+    {
+        $user = auth()->user();
+        if ($request->avatar != null) {
+            Storage::disk('publicFolder')->deleteDirectory('users_attachments/' . $user->id . '/avatar/');
+            $image_parts = explode(";base64,", $request->avatar);
+            $image_type_aux = explode("image/", $image_parts[0]);
+            $image_type = $image_type_aux[1];
+            $image = base64_decode($image_parts[1]);
+            $imageName = Str::random(10) . '.' . $image_type;
+            $user->avatar = $imageName;
+            $path = 'users_attachments/' . $user->id . '/avatar/' . $imageName;
+            Storage::disk('publicFolder')->put($path, $image);
+        }
+        $user->name = $request->name ?? $user->name;
+        if ($request->password != null) {
+            $user->password = Hash::make($request->password);
+        }
+        $user->phone = $request->phone ?? $user->phone;
+        $user->save();
+        if ($user->hasRole('teacher')) {
+            $resource = new TeacherResource($user);
+        } else {
+            $resource = new StudentResource($user);
+        }
+        return apiResponse('Data Retrieved', $resource);
+    }
 
     /**
      * Log the user out (Invalidate the token).
