@@ -133,7 +133,7 @@ class CourseController extends Controller
     public function getCourseStudents($id)
     {
         $enrolledStudents = User::role('student')->whereHas('enrollments', function ($query) use ($id) {
-            $query->where('course_id', $id)->where('end_date', '>', Carbon::today());
+            $query->where('courses_users.course_id', $id)->where('courses_users.end_date', '>', Carbon::today());
         })->get();
 
         return apiResponse(__('response.dataRetrieved'), TeacherInfoResource::collection($enrolledStudents));

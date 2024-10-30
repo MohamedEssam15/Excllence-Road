@@ -31,7 +31,7 @@ class NotificationServices
             ]);
         } else {
             $enrolledStudents = User::role('student')->whereHas('enrollments', function ($query) use ($courseId) {
-                $query->where('course_id', $courseId)->where('end_date', '>', Carbon::now());;
+                $query->where('courses_users.course_id', $courseId)->where('courses_users.end_date', '>', Carbon::today());
             })->get();
             foreach ($enrolledStudents as $student) {
                 Notification::create([
