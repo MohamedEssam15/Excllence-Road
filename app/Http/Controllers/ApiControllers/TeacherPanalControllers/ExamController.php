@@ -55,7 +55,7 @@ class ExamController extends Controller
             }
         }
 
-        $exam->questions()->sync($questions);
+        $exam->questions()->attach($questions);
         return apiResponse(__('response.addedSuccessfully'), ['questions' => TeacherQuestionsResource::collection($exam->questions)]);
     }
 
