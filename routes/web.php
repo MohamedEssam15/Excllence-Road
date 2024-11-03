@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Courses\CoursesController;
 use App\Http\Controllers\Packages\PackagesController;
+use App\Http\Controllers\Transactions\TransactionController;
 use App\Http\Controllers\Users\AdminController;
 use App\Http\Controllers\Users\StudentController;
 use App\Http\Controllers\Users\TeacherController;
@@ -93,5 +94,11 @@ Route::middleware('auth:web')->group(function () {
             Route::get('{id}/show', [TeacherController::class, 'show'])->name('users.teacher.show');
             Route::get('/download-certificate/{id}', [TeacherController::class, 'downloadCertificate'])->name('users.teacher.certificate');
         });
+    });
+
+    Route::group(['prefix' => 'transactions'], function () {
+        Route::get('orders', [TransactionController::class, 'orders'])->name('transactions.orders');
+        Route::get('teachers/revenue', [TransactionController::class, 'teacherRevenue'])->name('transactions.teachers.revenue');
+        Route::get('teachers/{id}/all-revenue', [TransactionController::class, 'teacherAllRevenue'])->name('transactions.teacher.all.revenue');
     });
 });

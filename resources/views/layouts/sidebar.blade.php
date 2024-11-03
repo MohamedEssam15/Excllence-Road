@@ -115,6 +115,40 @@
                     </ul>
                 </li>
 
+                {{-- Transactions sidebar --}}
+                <li class="menu-title">@lang('translation.transaction')</li>
+                <li>
+                    <a href="javascript: void(0);" class="has-arrow waves-effect">
+                        <i class="fas fa-exchange-alt"></i>
+                        <span>@lang('translation.transaction')</span>
+                    </a>
+                    <ul class="sub-menu" aria-expanded="true">
+                        <li>
+                            <a href="{{ route('transactions.orders') }}"><i
+                                    class="fas fa-shopping-cart"></i><span>@lang('translation.orders')</span></a>
+                        </li>
+                        {{-- <li>
+                            <a href="{{ route('users.admin.all') }}"><i
+                                    class="fas fa-user-cog"></i><span>@lang('translation.payments')</span></a>
+                        </li> --}}
+                        <li>
+                            <a href="javascript: void(0);" class="has-arrow"><i
+                                    class="fas fa-user-graduate"></i><span>@lang('translation.teachers')</span></a>
+                            <ul class="sub-menu" aria-expanded="true">
+                                <li><a href="{{ route('transactions.teachers.revenue') }}">@lang('translation.currentCommission')</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="javascript: void(0);" class="has-arrow"><i
+                                    class="fas fa-user-graduate"></i><span>@lang('translation.bestSeller')</span></a>
+                            <ul class="sub-menu" aria-expanded="true">
+                                <li><a href="{{ route('users.student.active') }}">@lang('translation.Courses')</a></li>
+                                <li><a href="{{ route('users.student.blocked') }}">@lang('translation.packages')</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+
 
 
                 {{-- <li>

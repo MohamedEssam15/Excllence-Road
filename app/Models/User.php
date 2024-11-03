@@ -69,10 +69,44 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
         return $this->belongsToMany(Course::class, 'courses_users', 'user_id', 'course_id', 'id', 'id')->withPivot('payment_id', 'start_date', 'end_date', 'from_package', 'package_id')
             ->withTimestamps();
     }
+
+    public function teacherRevenues()
+    {
+        return $this->hasMany(TeacherRevenues::class, 'teacher_id');
+    }
     public function teacherQuestionsBank()
     {
         return $this->belongsToMany(Question::class, 'teacher_questions_bank', 'teacher_id', 'question_id')->withTimestamps();
     }
+
+    public function currentMonthRevenue()
+    {
+        return $this->teacherRevenues()
+            ->forCurrentMonth()
+            ->sum('revenues');
+    }
+    public function currentMonthSoldCourses()
+    {
+        return $this->teacherRevenues()
+            ->forCurrentMonth()
+            ->count();
+    }
+
+    public function totalRevenue()
+    {
+        return $this->teacherRevenues()->sum('revenues');
+    }
+
+    public function monthlyRevenue()
+    {
+        return $this->teacherRevenues()
+            ->selectRaw('YEAR(created_at) as year, MONTH(created_at) as month, SUM(revenues) as total_revenue')
+            ->groupBy('year', 'month')
+            ->orderBy('year')
+            ->orderBy('month')
+            ->get();
+    }
+
 
 
     /**

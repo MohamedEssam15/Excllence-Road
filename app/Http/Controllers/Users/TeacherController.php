@@ -60,8 +60,9 @@ class TeacherController extends Controller
     public function show($id)
     {
         $user = User::withCount(['teacherCourses'])->findOrFail($id);
-        // dd($user);
-        return view('users.teachers.show-teacher', compact('user'));
+        $monthlyUserRevenue = $user->monthlyRevenue();
+        $userRevenueDetials = $user->teacherRevenues()->latest()->take(5)->get();
+        return view('users.teachers.show-teacher', compact('user', 'monthlyUserRevenue', 'userRevenueDetials'));
     }
 
     public function block(Request $request)

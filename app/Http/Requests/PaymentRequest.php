@@ -41,11 +41,11 @@ class PaymentRequest extends FormRequest
                 'integer',
                 'bail',
                 function ($attribute, $value, $fail) {
-                    if (request('paymnetFor') === 'course') {
+                    if (request('paymentFor') === 'course') {
                         if (!DB::table('courses')->where('id', $value)->exists()) {
                             $fail(__('response.courseNotFound'));
                         }
-                    } elseif (request('paymnetFor') === 'package') {
+                    } elseif (request('paymentFor') === 'package') {
                         if (!DB::table('packages')->where('id', $value)->exists()) {
                             $fail(__('response.packageNotFound'));
                         }

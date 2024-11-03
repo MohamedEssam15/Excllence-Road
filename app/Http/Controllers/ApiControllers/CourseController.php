@@ -88,7 +88,7 @@ class CourseController extends Controller
                 $query->whereNull('deleted_at');
             })
             ->where('start_date', '>=', Carbon::today());
-        $coursesQuery->orderBy('price', $request->priceOrder);
+        $coursesQuery->orderBy('price', $request->priceOrder ?? 'asc');
         $courses = $coursesQuery->paginate(request()->perPage);
         if (!isset($courses[0])) {
             return apiResponse(__('response.courseNotFound'), new stdClass(), [__('response.courseNotFound')]);

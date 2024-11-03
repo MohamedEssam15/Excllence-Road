@@ -68,13 +68,24 @@
                             <span class="d-none d-sm-block">@lang('translation.certificates')</span>
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-bs-toggle="tab" href="#monthlyRevenue" role="tab">
+                            <i class="uil uil-user-circle font-size-20"></i>
+                            <span class="d-none d-sm-block">@lang('translation.monthlyRevenue')</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-bs-toggle="tab" href="#latestRevenue" role="tab">
+                            <i class="uil uil-user-circle font-size-20"></i>
+                            <span class="d-none d-sm-block">@lang('translation.latestRevenue')</span>
+                        </a>
+                    </li>
                 </ul>
+
                 <!-- Tab content -->
                 <div class="tab-content p-4">
                     <div class="tab-pane active" id="about" role="tabpanel">
                         <div>
-
-
                             <div>
                                 <h5 class="font-size-16 mb-4">@lang('translation.certificates')</h5>
 
@@ -105,6 +116,113 @@
                                                                 data-attachment-name="{{ $user->name . '-' . $attachment->name }}">
                                                                 <i class="fas fa-cloud-download-alt"></i>
                                                             </a>
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
+                                            @else
+                                                <tr>
+                                                    <td colspan="10" class="text-center">@lang('translation.noCertificates')</td>
+                                                </tr>
+                                            @endif
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="monthlyRevenue" role="tabpanel">
+                        <div>
+                            <div>
+                                <h5 class="font-size-16 mb-4">@lang('translation.monthlyRevenue')</h5>
+
+                                <div class="table-responsive">
+                                    <table class="table table-nowrap table-hover mb-0">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">#</th>
+                                                <th scope="col">@lang('translation.date')</th>
+                                                <th scope="col">@lang('translation.monthRevenue')</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @php
+                                                $i = 01;
+                                            @endphp
+                                            @if (isset($monthlyUserRevenue[0]))
+                                                @foreach ($monthlyUserRevenue as $revenue)
+                                                    <tr>
+                                                        <th scope="row">{{ $i++ }}</th>
+                                                        <td>
+                                                            <p href="#" class="text-reset">
+                                                                {{ $revenue->year . '/' . $revenue->month }}
+                                                            </p>
+                                                        </td>
+                                                        <td>
+                                                            {{ $revenue->total_revenue }} @lang('translation.currency')
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
+                                            @else
+                                                <tr>
+                                                    <td colspan="10" class="text-center">@lang('translation.noRevenue')</td>
+                                                </tr>
+                                            @endif
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="latestRevenue" role="tabpanel">
+                        <div>
+                            <div>
+                                <div class="row mb-2">
+                                    <div class="col-md-6">
+                                        <h5 class="font-size-16 mb-4">@lang('translation.latestRevenue')</h5>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="form-inline float-md-end mb-3">
+                                            <a href="{{ route('transactions.teacher.all.revenue', $user->id) }}"
+                                                class="btn btn-outline-primary waves-effect waves-light">@lang('translation.allRevenue')</a>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="table-responsive">
+                                    <table class="table table-nowrap table-hover mb-0">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">#</th>
+                                                <th scope="col">@lang('translation.orderNumber')</th>
+                                                <th scope="col">@lang('translation.from')</th>
+                                                <th scope="col">@lang('translation.orderDate')</th>
+                                                <th scope="col">@lang('translation.revune')</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @php
+                                                $i = 01;
+                                            @endphp
+                                            @if (isset($userRevenueDetials[0]))
+                                                @foreach ($userRevenueDetials as $revenue)
+                                                    <tr>
+                                                        <th scope="row">{{ $i++ }}</th>
+                                                        <td>
+                                                            <p href="#" class="text-reset">
+                                                                {{ $revenue->order->order_number }}
+                                                            </p>
+                                                        </td>
+                                                        <td>
+                                                            {{ $revenue->order->product->translate()->name }}
+                                                        </td>
+                                                        <td>
+                                                            {{ $revenue->created_at->format('Y-m-d g:i A') }}
+                                                        </td>
+                                                        <td>
+                                                            {{ $revenue->revenues }} @lang('translation.currency')
                                                         </td>
                                                     </tr>
                                                 @endforeach
