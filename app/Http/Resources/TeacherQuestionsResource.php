@@ -21,7 +21,8 @@ class TeacherQuestionsResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'question' => $this->question,
+            'question' => $this->getQuestion(),
+            'type' => $this->question_type,
             'answers' => TeacherQuestionAnswerResource::collection($this->answers),
             'category' => new CategoryResource($this->category),
             'isPublicQuestionBank' => $this->is_question_bank

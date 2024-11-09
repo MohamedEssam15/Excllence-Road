@@ -5,11 +5,12 @@ namespace App\Models;
 use App\Utilities\FilterBuilder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 class Question extends Model
 {
     use HasFactory;
-    protected $fillable = ['question', 'category_id', 'answer_id', 'user_id', 'is_question_bank'];
+    protected $fillable = ['question', 'category_id', 'answer_id', 'user_id', 'is_question_bank', 'question_type'];
 
     public function answer()
     {
@@ -49,6 +50,15 @@ class Question extends Model
     public function userQuestiions()
     {
         return $this->belongsToMany(User::class, 'users_questions', 'question_id', 'user_id')->withPivot('is_correct')->withTimestamps();
+    }
+
+    public function getQuestion()
+    {
+        if ($this->question_type != 'text') {
+            return Storage::disk('public')->url('teacher_questions/' . $this->user_id . '/' . $this->id . '/' . $this->question);
+        } else {
+            return $this->question;
+        }
     }
 
     public function scopeFilterBy($query, $filters)

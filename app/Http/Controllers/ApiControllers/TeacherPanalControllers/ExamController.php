@@ -36,12 +36,31 @@ class ExamController extends Controller
         $questions = $request->bankQuestions ?? [];
         if ($request->questions != null) {
             foreach ($request->questions as $question) {
-                $questionModel = Question::create([
-                    'question' => $question['question'],
-                    'category_id' => $exam->course->category_id,
-                    'user_id' => auth()->id(),
-                    'is_question_bank' => $question['addToPublicQuestionBank'],
-                ]);
+                if ($question['type'] == 'image') {
+                    $image_parts = explode(";base64,", $question['question']);
+                    $image_type_aux = explode("image/", $image_parts[0]);
+                    $image_type = $image_type_aux[1];
+                    $image = base64_decode($image_parts[1]);
+                    $imageName = Str::random(10) . '.' . $image_type;
+                    $questionModel = Question::create([
+                        'question' => $imageName,
+                        'category_id' => $exam->courses[0]->category_id,
+                        'user_id' => auth()->id(),
+                        'question_type' => $question['type'],
+                        'is_question_bank' => $question['addToPublicQuestionBank'],
+                    ]);
+                    $path = 'teacher_questions/' . auth()->id() . '/' . $questionModel->id . '/' . $imageName;
+                    Storage::disk('public')->put($path, $image);
+                } else {
+                    $questionModel = Question::create([
+                        'question' => $question['question'],
+                        'category_id' => $exam->courses[0]->category_id,
+                        'user_id' => auth()->id(),
+                        'question_type' => $question['type'],
+                        'is_question_bank' => $question['addToPublicQuestionBank'],
+                    ]);
+                }
+
                 foreach ($question['answers'] as $answer) {
                     $questionAnswersModel = QuestionAnswer::create([
                         'answer' => $answer['answer'],

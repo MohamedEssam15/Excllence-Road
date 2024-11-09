@@ -15,7 +15,7 @@ class AddQuestionsRequest extends FormRequest
     public function authorize(): bool
     {
         $exam = $this->route('exam');
-        if ($exam->course->teacher_id == auth()->id()) {
+        if ($exam?->courses[0]->teacher_id == auth()->id()) {
             return true;
         } else {
             return false;
@@ -33,7 +33,8 @@ class AddQuestionsRequest extends FormRequest
             'bankQuestions' => 'nullable|array|min:1',
             'bankQuestions.*' => 'required|exists:questions,id',
             'questions' => 'nullable|array',
-            'questions.*.question' => 'required|string|max:255',
+            'questions.*.question' => 'required|string|',
+            'questions.*.type' => 'required|string|in:text,image',
             'questions.*.answers' => 'required|array|min:2',
             'questions.*.answers.*.answer' => 'required|string|max:255',
             'questions.*.answers.*.isCorrect' => 'required|boolean',

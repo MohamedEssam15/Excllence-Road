@@ -11,7 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        //
+        Schema::table('questions', function (Blueprint $table) {
+            $table->string('question_type')->after('question')->default('text');
+        });
     }
 
     /**
@@ -19,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        //
+        Schema::table('questions', function (Blueprint $table) {
+            $table->dropColumn('question_type');
+        });
     }
 };
