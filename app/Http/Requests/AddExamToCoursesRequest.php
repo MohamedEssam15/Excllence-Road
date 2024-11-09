@@ -2,23 +2,19 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Course;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class UpdateExamRequest extends FormRequest
+class AddExamToCoursesRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        $exam = $this->route('exam');
-        if ($exam->courses[0]->teacher_id == auth()->id()) {
-            return true;
-        } else {
-            return false;
-        }
+        return true;
     }
 
     /**
@@ -28,15 +24,11 @@ class UpdateExamRequest extends FormRequest
      */
     public function rules(): array
     {
+        $course = Course::find(request('courseId'));
         return [
-            'name' => ['required', 'string'],
-            'description' => ['required', 'string'],
-            'isUnitExam' => ['required', 'boolean'],
-            'examTime' => ['required', 'integer'],
-            'units' => ['required_if:isUnitExam,1', 'array'],
-            'units.*' => ['required', 'exists:units,id'],
-            'type' => ['nullable', 'in:mcq,file'],
-            'examFile' => ['required_if:type,file', 'max:1048576'],
+            'courseId' => ['required', 'integer', 'exists:courses,id'],
+            'availableFrom' => ['required', 'date', 'after_or_equal:' . $course?->start_date],
+            'availableTo' => ['required', 'date', 'before:' . $course?->end_date, 'after:' . request('availableFrom')],
         ];
     }
 

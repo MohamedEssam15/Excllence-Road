@@ -23,23 +23,35 @@ class AddCourseRequest extends FormRequest
      */
     public function rules(): array
     {
-        if(isset(request()->enSpecificTo) && ! is_null(request()->enSpecificTo)){
+        if ((isset(request()->enSpecificTo) && ! is_null(request()->enSpecificTo)) || (isset(request()->arSpecificTo) && ! is_null(request()->arSpecificTo))) {
             request()->merge(['isSpecific' => true]);
-        }else{
+        } else {
             request()->merge(['isSpecific' => false]);
         }
         return [
-            'enName'=>['string','required'],
-            'arName'=>['string','required'],
-            'enDescription'=>['string','required'],
-            'arDescription'=>['string','required'],
-            'categoryId'=>['required','exists:categories,id'],
-            'levelId'=>['required','exists:course_levels,id'],
-            'startDate'=>['date','required','after:'.now()->format('Y-m-d')],
-            'endDate'=>['date','required','after:startDate'],
-            'enSpecificTo'=>['required_with:arSpecificTo','string'],
-            'arSpecificTo'=>['required_with:enSpecificTo','string'],
-            'coverPhoto'=>['string','required'],
+            'enName' => ['string', 'nullable', function ($attribute, $value, $fail) {
+                if ($value || ! request()->filled('arName')) {
+                    if (request()->filled('arDescription') || request()->filled('arSpecificTo')) {
+                        $fail(__('response.oneLangEn'));
+                    }
+                }
+            }],
+            'arName' => ['string', 'nullable', function ($attribute, $value, $fail) {
+                if ($value || ! request()->filled('enName')) {
+                    if (request()->filled('enDescription') || request()->filled('enSpecificTo')) {
+                        $fail(__('response.oneLangAr'));
+                    }
+                }
+            }],
+            'enDescription' => ['string', 'nullable'],
+            'arDescription' => ['string', 'nullable'],
+            'categoryId' => ['required', 'exists:categories,id'],
+            'levelId' => ['required', 'exists:course_levels,id'],
+            'startDate' => ['date', 'required', 'after:' . now()->format('Y-m-d')],
+            'endDate' => ['date', 'required', 'after:startDate'],
+            'enSpecificTo' => ['string', 'nullable'],
+            'arSpecificTo' => ['string', 'nullable'],
+            'coverPhoto' => ['string', 'required'],
 
         ];
     }

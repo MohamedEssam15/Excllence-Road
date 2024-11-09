@@ -23,15 +23,16 @@ class TeacherLessonInfoResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'name' => $this->translate($this->locale)->name,
-            'enName' => $this->name,
-            'arName' => $this->translate('ar')->name,
-            'description' => $this->translate($this->locale)->description,
-            'enDescription' => $this->description,
-            'arDescription' => $this->translate('ar')->description,
+            'name' => $this->translate($this->locale)?->name ?? $this->name,
+            'enName' => $this->translate('en')?->name,
+            'arName' => $this->translate('ar')?->name,
+            'description' => $this->translate($this->locale)?->description ?? $this->description,
+            'enDescription' => $this->translate('en')?->description,
+            'arDescription' => $this->translate('ar')?->description,
             'type' => $this->type,
+            'meetingDate' => $this->meeting_date?->format('Y-m-d g:i A'),
             'lesson' => $this->type == 'meeting' ? $this->video_link : $this->getVideoLink(),
-            'attachments'=>LessonAttachmentsResource::collection($this->attachments)
+            'attachments' => LessonAttachmentsResource::collection($this->attachments)
         ];
     }
 }

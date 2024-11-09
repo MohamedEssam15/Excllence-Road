@@ -23,10 +23,15 @@ class AddExamRequest extends FormRequest
      */
     public function rules(): array
     {
+        $course = request()->course;
+        // ds(request()->course)->die();
         return [
             'name' => ['required', 'string'],
             'description' => ['required', 'string'],
             'isUnitExam' => ['required', 'boolean'],
+            'examTime' => ['required', 'integer'],
+            'availableFrom' => ['required', 'date', 'after_or_equal:' . $course->start_date],
+            'availableTo' => ['required', 'date', 'before:' . $course->end_date, 'after:' . request()->availableFrom],
             'units' => ['required_if:isUnitExam,1', 'array'],
             'units.*' => ['required', 'exists:units,id'],
             'type' => ['required', 'in:mcq,file'],

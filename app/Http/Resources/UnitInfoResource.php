@@ -23,9 +23,9 @@ class UnitInfoResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id'=>$this ->id,
-            'name'=>$this->translate($this->locale),
-            'lessons'=> LessonInfoResource::collection($this->lessons),
+            'id' => $this->id,
+            'name' => $this->translate($this->locale) ?? $this->name,
+            'lessons' => LessonInfoResource::collection($this->lessons),
         ];
     }
 }

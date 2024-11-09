@@ -27,5 +27,12 @@ return [
     "blocked" => "User Blocked Successfully.",
     "dataRetrieved" => "Data Retrieved.",
     "notificationSent" => "Notification sent successfully.",
+    "cantDeleteQuestion" => "Can't delete the question because it used from another teacher.",
+    "cantViewLesson" => "you can watch the lesson on the application only.",
+    "courseAlreadyAssigned" => "Course already assigned to this exam.",
+    "examHasUnits" => "Exam has units remove it to could assign the exam to another course.",
+    "examIsFile" => "Exam is file cant copy file exams.",
+    'oneLangEn' => 'You should fill the fields that related to english language',
+    'oneLangAr' => 'You should fill the fields that related to arabic language',
 
 ];

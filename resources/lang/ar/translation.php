@@ -55,6 +55,7 @@ return [
     'enDescription' => 'الوصف بالانجليزية',
     'submit' => 'تقديم',
     'reset' => 'مسح',
+    'isMobileOnly' => 'عرض في التطبيق فقط',
 
 
     //packages

@@ -13,11 +13,11 @@ class UpdateUnitRequest extends FormRequest
     public function authorize(): bool
     {
         $course = $this->route('course');
-        $unit =$this->route('unit');
+        $unit = $this->route('unit');
 
-        if($course->teacher_id == auth()->id() && $unit->course_id == $course->id){
+        if ($course->teacher_id == auth()->id() && $unit->course_id == $course->id) {
             return true;
-        }else{
+        } else {
             return false;
         }
     }
@@ -30,9 +30,9 @@ class UpdateUnitRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'enName' => 'required|string|min:1',
-            'arName' => 'required|string|min:1',
-            'order' => ['required','integer', Rule::unique('units')->where(function ($query) {
+            'enName' => 'required_without:arName|string|min:1',
+            'arName' => 'required_without:enName|string|min:1',
+            'order' => ['required', 'integer', Rule::unique('units')->where(function ($query) {
                 return $query->where('course_id', $this->route('course')->id);
             })->ignore($this->route('unit')->id)],
         ];

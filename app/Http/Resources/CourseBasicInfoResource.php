@@ -24,8 +24,8 @@ class CourseBasicInfoResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'name' => $this->translate($this->locale)->name,
-            'description' => $this->translate($this->locale)->description,
+            'name' => $this->translate($this->locale)->name ?? $this->name,
+            'description' => $this->translate($this->locale)->description ?? $this->description,
             'coverPhoto' => $this->getCoverPhotoPath(),
         ];
     }

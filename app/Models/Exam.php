@@ -10,9 +10,9 @@ class Exam extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'description', 'is_unit_exam', 'type', 'file_name', 'course_id'];
+    protected $fillable = ['name', 'description', 'is_unit_exam', 'type', 'file_name', 'exam_time'];
 
-    public function studentAnswer()
+    public function studentsAnswer()
     {
         return $this->belongsToMany(User::class, 'exams_users', 'exam_id', 'user_id')->withPivot('fileName', 'grade')
             ->withTimestamps();
@@ -28,9 +28,9 @@ class Exam extends Model
         return $this->belongsToMany(Unit::class, 'exams_units', 'exam_id', 'unit_id');
     }
 
-    public function course()
+    public function courses()
     {
-        return $this->belongsTo(Course::class, 'course_id');
+        return $this->belongsToMany(Course::class, 'courses_exams', 'exam_id', 'course_id')->withPivot('available_from', 'available_to')->withTimestamps();
     }
 
     public function getExamFile()

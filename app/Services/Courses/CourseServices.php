@@ -25,8 +25,8 @@ class CourseServices
         $imageName = Str::random(10) . '.' . $image_type;
 
         $course = Course::create([
-            'name' => $request['enName'],
-            'description' => $request['enDescription'],
+            'name' => $request['enName'] ?? $request['arName'],
+            'description' => $request['enDescription'] ?? $request['arDescription'] ?? null,
             'cover_photo_name' => $imageName,
             'teacher_id' => auth()->user()->id,
             'price' => $request['price'],
@@ -35,16 +35,19 @@ class CourseServices
             'start_date' => $request['startDate'],
             'end_date' => $request['endDate'],
             'is_specific' => $request['isSpecific'],
-            'specific_to' => $request['isSpecific'] ? $request['enSpecificTo'] : null,
+            'specific_to' => $request['isSpecific'] ? ($request['enSpecificTo'] ?? $request['arSpecificTo'])  : null,
             'status_id' => 2,
         ]);
 
         $path = 'course_attachments/' . $course->id . '/cover_photo/' . $imageName;
         Storage::disk('publicFolder')->put($path, $image);
-        $translations = [
-            ['locale' => 'en', 'name' => ucfirst($course->name), 'description' => $course->description, 'specific_to' => $course->specific_to],
-            ['locale' => 'ar', 'name' => $request['arName'], 'description' => $request['arDescription'], 'specific_to' => $request['arSpecificTo']],
-        ];
+        $translations = [];
+        if (isset($request['enName'])) {
+            $translations[] = ['locale' => 'en', 'name' => ucfirst($request['enName']), 'description' => $request['enDescription'] ?? null, 'specific_to' => $request['enSpecificTo'] ?? null];
+        }
+        if (isset($request['arName'])) {
+            $translations[] = ['locale' => 'ar', 'name' => $request['arName'], 'description' => $request['arDescription'] ?? null, 'specific_to' => $request['arSpecificTo'] ?? null];
+        }
         $course->translations()->createMany($translations);
 
 
@@ -55,45 +58,51 @@ class CourseServices
     {
         foreach ($units as $unit) {
             $unitModel = Unit::create([
-                'name' => $unit['enName'],
+                'name' => $unit['enName'] ?? $unit['arName'],
                 'course_id' => $courseId,
                 'order' => $unit['order']
             ]);
-            $unitTranslations = [
-                ['locale' => 'en', 'name' => ucfirst($unit['enName'])],
-                ['locale' => 'ar', 'name' => $unit['arName']],
-            ];
+            $unitTranslations = [];
+            if (isset($unit['enName'])) {
+                $unitTranslations[] = ['locale' => 'en', 'name' => ucfirst($unit['enName'])];
+            }
+            if (isset($unit['arName'])) {
+                $unitTranslations[] = ['locale' => 'ar', 'name' => $unit['arName']];
+            }
             $unitModel->translations()->createMany($unitTranslations);
         }
     }
     public function updateUnit($request, $course, $unit)
     {
-        $unit->name = $request['enName'];
+        $unit->name = $request['enName'] ?? $request['arName'];
         $unit->course_id = $course->id;
         $unit->order = $request['order'];
         $unit->save();
-        $unitTranslations = [
-            ['locale' => 'en', 'name' => ucfirst($request['enName'])],
-            ['locale' => 'ar', 'name' => $request['arName']],
-        ];
+        $unitTranslations = [];
+        if (isset($request['enName'])) {
+            $unitTranslations[] = ['locale' => 'en', 'name' => ucfirst($request['enName'])];
+        }
+        if (isset($request['arName'])) {
+            $unitTranslations[] = ['locale' => 'ar', 'name' => $request['arName']];
+        }
         $unit->translations()->delete();
         $unit->translations()->createMany($unitTranslations);
         return $unit;
     }
     public function deleteUnit($course, $unit)
     {
-        if($course->teacher_id != auth()->id()){
-            return apiResponse("error", new stdClass(),[__('response.notAuthorized')],401);
-        }elseif($course->id != $unit->course_id){
-            return apiResponse("error", new stdClass(),[__('response.notFound')],404);
-        }else{
-            foreach($unit->lessons as $lesson){
-                foreach($lesson->attachments as $attachment){
-                    $deleteAttachmentPath = 'lessons/lessons_attachments/' . $lesson->id .'/';
+        if ($course->teacher_id != auth()->id()) {
+            return apiResponse("error", new stdClass(), [__('response.notAuthorized')], 401);
+        } elseif ($course->id != $unit->course_id) {
+            return apiResponse("error", new stdClass(), [__('response.notFound')], 404);
+        } else {
+            foreach ($unit->lessons as $lesson) {
+                foreach ($lesson->attachments as $attachment) {
+                    $deleteAttachmentPath = 'lessons/lessons_attachments/' . $lesson->id . '/';
                     Storage::disk('public')->deleteDirectory($deleteAttachmentPath);
                 }
 
-                $videoManger= new VideoStorageManager();
+                $videoManger = new VideoStorageManager();
                 $videoManger->deleteDirectory($lesson->id);
             }
             $unit->delete();
@@ -116,21 +125,23 @@ class CourseServices
             Storage::disk('publicFolder')->put($newPhotoPath, $image);
             $course->cover_photo_name = $imageName;
         }
-        $course->name = $request['enName'];
-        $course->description = $request['enDescription'];
+        $course->name = $request['enName'] ?? $request['arName'];
+        $course->description = $request['enDescription'] ?? $request['arDescription'] ?? null;
         $course->price = $request['price'];
         $course->category_id = $request['categoryId'];
         $course->level_id = $request['levelId'];
         $course->start_date = $request['startDate'];
         $course->end_date = $request['endDate'];
         $course->is_specific = $request['isSpecific'];
-        $course->specific_to = $request['isSpecific'] ? $request['enSpecificTo'] : null;
+        $course->specific_to = $request['isSpecific'] ? $request['enSpecificTo'] ?? $request['arSpecificTo'] : null;
         $course->save();
-
-        $translations = [
-            ['locale' => 'en', 'name' => ucfirst($course->name), 'description' => $course->description, 'specific_to' => $course->specific_to],
-            ['locale' => 'ar', 'name' => $request['arName'], 'description' => $request['arDescription'], 'specific_to' => $request['arSpecificTo']],
-        ];
+        $translations = [];
+        if (isset($request['enName'])) {
+            $translations[] = ['locale' => 'en', 'name' => ucfirst($request['enName']), 'description' => $request['enDescription'] ?? null, 'specific_to' => $request['enSpecificTo'] ?? null];
+        }
+        if (isset($request['arName'])) {
+            $translations[] = ['locale' => 'ar', 'name' => $request['arName'], 'description' => $request['arDescription'] ?? null, 'specific_to' => $request['arSpecificTo'] ?? null];
+        }
         $course->translations()->delete();
         $course->translations()->createMany($translations);
 
@@ -201,8 +212,4 @@ class CourseServices
             'priceTypes' => $priceTypes, // 'free' or 'paid'
         ];
     }
-
-
-
-
 }

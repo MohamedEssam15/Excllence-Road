@@ -23,12 +23,12 @@ class TeacherUnitInfoResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id'=>$this ->id,
-            'name'=>$this->translate($this->locale),
-            'enName'=>$this->name,
-            'arName'=>$this->translate('ar'),
-            'order'=>$this->order,
-            'lessons'=> TeacherLessonInfoResource::collection($this->lessons),
+            'id' => $this->id,
+            'name' => $this->translate($this->locale) ?? $this->name,
+            'enName' => $this->translate('en'),
+            'arName' => $this->translate('ar'),
+            'order' => $this->order,
+            'lessons' => TeacherLessonInfoResource::collection($this->lessons),
         ];
     }
 }

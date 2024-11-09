@@ -23,10 +23,11 @@ class TeacherExamResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'description' => $this->description,
-            'course' => new PopularCourseResource($this->course),
+            'course' => TeacherExamCourseResource::collection($this->courses),
             'isUnitExam' => $this->is_unit_exam,
             'units' => UnitInfoResource::collection($this->units),
             'type' => $this->type,
+            'examTime' => $this->exam_time,
             'examFile' => $this->getExamFile(),
             'questions' => TeacherQuestionsResource::collection($this->questions)
         ];

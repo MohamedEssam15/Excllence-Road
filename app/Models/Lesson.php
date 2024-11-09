@@ -12,8 +12,12 @@ class Lesson extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['description','name','type','video_link','unit_id','order'];
-    protected $with=['translations'];
+    protected $fillable = ['description', 'name', 'type', 'video_link', 'unit_id', 'order', 'meeting_date'];
+    protected $with = ['translations'];
+
+    protected $casts = [
+        'meeting_date' => 'datetime'
+    ];
 
     public function unit(): BelongsTo
     {
@@ -28,20 +32,21 @@ class Lesson extends Model
     public function translate($locale = null)
     {
         $locale = $locale ?: app()->getLocale();
-        return $this->translations()->where('locale', $locale)->first() ?? $this;
+        return $this->translations()->where('locale', $locale)->first();
     }
 
     public function translations()
     {
-        return $this->hasMany(LessonTranslation::class,'lesson_id');
+        return $this->hasMany(LessonTranslation::class, 'lesson_id');
     }
 
-    public function getVideoLink(){
-        if($this->type == 'meeting'){
+    public function getVideoLink()
+    {
+        if ($this->type == 'meeting') {
             return $this->video_link;
-        }else{
-            $videoService= new VideoStorageManager();
-            return $videoService->retrieveVideo($this->video_link,$this->id);
+        } else {
+            $videoService = new VideoStorageManager();
+            return $videoService->retrieveVideo($this->video_link, $this->id);
         }
     }
 }

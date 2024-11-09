@@ -21,13 +21,13 @@ class LessonsController extends Controller
     public function addLesson(AddLessonRequest $request){
 
         $lessonService = new LessonServices();
-        $lesson = $lessonService->saveLesson($request->type,$request->enName,$request->arName,$request->enDescription,$request->arDescription,$request->unitId,$request->order,$request->meetingLink,$request->video,$request->attachments);
+        $lesson = $lessonService->saveLesson($request->type,$request->enName,$request->arName,$request->enDescription,$request->arDescription,$request->unitId,$request->order,$request->meetingLink,$request->meetingDate,$request->video,$request->attachments);
         return apiResponse(__('response.addedSuccessfully'), new TeacherLessonInfoResource($lesson));
     }
 
     public function updateLesson(UpdateLessonRequest $request,Lesson $lesson){
         $lessonService = new LessonServices();
-        $updatedLesson = $lessonService->updateLesson($lesson,$request->enName,$request->arName,$request->enDescription,$request->arDescription,$request->order,$request->type,$request->video,$request->meetingLink);
+        $updatedLesson = $lessonService->updateLesson($lesson,$request->enName,$request->arName,$request->enDescription,$request->arDescription,$request->order,$request->type,$request->video,$request->meetingLink,$request->meetingDate);
         if(is_null($lesson)){
             return apiResponse(__('response.invalidTypeSelected'), new stdClass(),[__('response.invalidTypeSelected')],422);
         }

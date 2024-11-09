@@ -43,8 +43,13 @@ class AuthController extends Controller
     public function login(ApiLoginRequest $request)
     {
         $credentials = request(['email', 'password']);
-
-        if (! $token = auth('api')->attempt($credentials, request('rememberMe'))) {
+        $isMobileRequest = $request->header('X-Requested-From') === 'mobile';
+        if ($isMobileRequest) {
+            $platform = 'mobile';
+        } else {
+            $platform = 'web';
+        }
+        if (! $token = auth('api')->claims(['platform' => $platform])->attempt($credentials, request('rememberMe'))) {
             return apiResponse(__('auth.failed'), new stdClass(), [__('auth.failed')], 401);
         }
         $user = auth()->user();
@@ -83,7 +88,13 @@ class AuthController extends Controller
         $user->assignRole('student');
         $path = 'users_attachments/' . $user->id . '/avatar/' . $imageName;
         Storage::disk('publicFolder')->put($path, $image);
-        $token = auth()->login($user, true);
+        $isMobileRequest = $request->header('X-Requested-From') === 'mobile';
+        if ($isMobileRequest) {
+            $platform = 'mobile';
+        } else {
+            $platform = 'web';
+        }
+        $token = auth()->claims(['platform' => $platform])->login($user, true);
         return $this->respondWithToken($token, $user);
     }
 

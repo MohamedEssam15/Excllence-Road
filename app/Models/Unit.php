@@ -10,8 +10,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Unit extends Model
 {
     use HasFactory;
-    protected $fillable = ['course_id','name','order'];
-    protected $with=['translations'];
+    protected $fillable = ['course_id', 'name', 'order'];
+    protected $with = ['translations'];
 
     public function course(): BelongsTo
     {
@@ -26,11 +26,11 @@ class Unit extends Model
     public function translate($locale = null)
     {
         $locale = $locale ?: app()->getLocale();
-        return $this->translations()->where('locale', $locale)->first()->name ?? $this->name;
+        return $this->translations()->where('locale', $locale)->first()?->name;
     }
 
     public function translations()
     {
-        return $this->hasMany(UnitTranslation::class,'unit_id');
+        return $this->hasMany(UnitTranslation::class, 'unit_id');
     }
 }

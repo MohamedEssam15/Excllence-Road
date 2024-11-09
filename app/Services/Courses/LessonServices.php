@@ -19,18 +19,22 @@ class LessonServices
         'video-video' => 'handleVideoVideo',
     ];
 
-    public function saveLesson($type, $enName, $arName, $enDescription, $arDescription, $unitId, $order, $meetingLink = null, $video = null, $attachments = null)
+    public function saveLesson($type, $enName, $arName, $enDescription, $arDescription, $unitId, $order, $meetingLink = null, $meetingDate = null, $video = null, $attachments = null)
     {
+        $name =  $enName ?? $arName;
+        $description = $enDescription ?? $arDescription ?? null;
         if ($type == 'meeting') {
-            $lesson = $this->saveMeetingLesson($enName, $enDescription, $unitId, $order, $meetingLink);
+            $lesson = $this->saveMeetingLesson($name, $description, $unitId, $order, $meetingLink, $meetingDate);
         } else {
-            $lesson = $this->saveVideoLesson($enName, $enDescription, $unitId, $order, $video);
+            $lesson = $this->saveVideoLesson($name, $description, $unitId, $order, $video);
         }
-
-        $lessonTranslations = [
-            ['locale' => 'en', 'name' => ucfirst($enName), 'description' => $enDescription],
-            ['locale' => 'ar', 'name' => $arName, 'description' => $arDescription],
-        ];
+        $lessonTranslations = [];
+        if ($enName != null) {
+            $lessonTranslations[] = ['locale' => 'en', 'name' => ucfirst($enName), 'description' => $enDescription];
+        }
+        if ($arName != null) {
+            $lessonTranslations[] = ['locale' => 'ar', 'name' => $arName, 'description' => $arDescription];
+        }
         $lesson->translations()->createMany($lessonTranslations);
 
         if (isset($attachments)) {
@@ -43,28 +47,29 @@ class LessonServices
         return $lesson;
     }
 
-    protected function saveMeetingLesson($enName, $enDescription, $unitId, $order, $meetingLink)
+    protected function saveMeetingLesson($name, $description, $unitId, $order, $meetingLink, $meetingDate)
     {
         $lesson = ModelsLesson::create([
-            'name' => $enName,
+            'name' => $name,
             'unit_id' => $unitId,
-            'description' => $enDescription,
+            'description' => $description,
             'order' => $order,
             'type' => 'meeting',
             'video_link' => $meetingLink,
+            'meeting_date' => $meetingDate,
         ]);
 
         return $lesson;
     }
 
-    protected function saveVideoLesson($enName, $enDescription, $unitId, $order, $video)
+    protected function saveVideoLesson($name, $description, $unitId, $order, $video)
     {
         $fileExtension = $video->getClientOriginalExtension();
         $fileName = Str::random(10) . '.' . $fileExtension;
         $lesson = ModelsLesson::create([
-            'name' => $enName,
+            'name' => $name,
             'unit_id' => $unitId,
-            'description' => $enDescription,
+            'description' => $description,
             'order' => $order,
             'type' => 'video',
             'video_link' => $fileName,
@@ -109,7 +114,7 @@ class LessonServices
     }
 
     //working on updating
-    public function updateLesson($lesson, $enName, $arName, $enDescription, $arDescription, $order, $type = null, $video = null, $meetingLink = null)
+    public function updateLesson($lesson, $enName, $arName, $enDescription, $arDescription, $order, $type = null, $video = null, $meetingLink = null, $meetingDate = null)
     {
         if ($type != null) {
             $newType = $type;
@@ -124,14 +129,18 @@ class LessonServices
             $handlerMethod = $this->updateLessonHandlers[$key];
             $this->$handlerMethod($lesson, $meetingLink, $video);
         }
-        $lesson->name = $enName;
-        $lesson->description = $enDescription;
+        $lesson->name = $enName ?? $arName;
+        $lesson->description = $enDescription ?? $arDescription;
         $lesson->order = $order;
+        $lesson->meeting_date = $meetingDate ?? $lesson->meeting_date;
         $lesson->save();
-        $lessonTranslations = [
-            ['locale' => 'en', 'name' => ucfirst($enName), 'description' => $enDescription],
-            ['locale' => 'ar', 'name' => $arName, 'description' => $arDescription],
-        ];
+        $lessonTranslations = [];
+        if ($enName != null) {
+            $lessonTranslations[] = ['locale' => 'en', 'name' => ucfirst($enName), 'description' => $enDescription];
+        }
+        if ($arName != null) {
+            $lessonTranslations[] = ['locale' => 'ar', 'name' => $arName, 'description' => $arDescription];
+        }
         $lesson->translations()->delete();
         $lesson->translations()->createMany($lessonTranslations);
         return $lesson;

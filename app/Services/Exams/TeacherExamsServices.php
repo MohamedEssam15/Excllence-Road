@@ -17,7 +17,7 @@ class TeacherExamsServices
         'file-file' => 'handleFileFile',
     ];
 
-    public function addExam($course, $type, $name, $description, $isUnitExam, $units = null, $file = null)
+    public function addExam($course, $type, $name, $description, $examTime, $availableFrom, $availableTo, $isUnitExam, $units = null, $file = null)
     {
         if ($type == 'file') {
             $path = "/courses/{$course->id}/exams/";
@@ -31,10 +31,16 @@ class TeacherExamsServices
         $exam = Exam::create([
             'name' => $name,
             'description' => $description,
-            'course_id' => $course->id,
+            'exam_time' => $examTime,
             'is_unit_exam' => $isUnitExam,
             'type' => $type,
             'file_name' => $fileName
+        ]);
+        $exam->courses()->attach([
+            $course->id => [
+                'available_from' => $availableFrom,
+                'available_to' => $availableTo,
+            ]
         ]);
         if ($isUnitExam) {
             $exam->units()->sync($units);
@@ -42,7 +48,7 @@ class TeacherExamsServices
         return $exam;
     }
 
-    public function updateExam($exam, $type, $name, $description, $isUnitExam, $units = null, $file = null)
+    public function updateExam($exam, $type, $name, $description, $examTime, $isUnitExam, $units = null, $file = null)
     {
         if ($type != null) {
             $newType = $type;
@@ -61,6 +67,7 @@ class TeacherExamsServices
 
         $exam->name = $name;
         $exam->description = $description;
+        $exam->exam_time = $examTime;
         $exam->is_unit_exam = $isUnitExam;
         $exam->save();
         if ($isUnitExam) {

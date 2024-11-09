@@ -4,7 +4,9 @@ namespace App\Http\Controllers\ApiControllers\TeacherPanalControllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AddExamRequest;
+use App\Http\Requests\AddExamToCoursesRequest;
 use App\Http\Requests\AddQuestionsRequest;
+use App\Http\Requests\CopyExamRequest;
 use App\Http\Requests\UpdateExamRequest;
 use App\Http\Resources\PaginatedCollection;
 use App\Http\Resources\TeacherCourseExamResource;
@@ -25,7 +27,7 @@ class ExamController extends Controller
     public function addExam(AddExamRequest $request, Course $course)
     {
         $teacherExamServices = new TeacherExamsServices();
-        $exam = $teacherExamServices->addExam($course, $request->type, $request->name, $request->description, $request->isUnitExam, $request->units, $request->examFile);
+        $exam = $teacherExamServices->addExam($course, $request->type, $request->name, $request->description, $request->examTime, $request->availableFrom, $request->availableTo, $request->isUnitExam, $request->units, $request->examFile);
         return apiResponse(__('response.addedSuccessfully'), new TeacherExamResource($exam));
     }
 
@@ -62,7 +64,7 @@ class ExamController extends Controller
     public function updateExam(UpdateExamRequest $request, Exam $exam)
     {
         $teacherExamServices = new TeacherExamsServices();
-        $exam = $teacherExamServices->updateExam($exam, $request->type, $request->name, $request->description, $request->isUnitExam, $request->units, $request->examFile);
+        $exam = $teacherExamServices->updateExam($exam, $request->type, $request->name, $request->description, $request->examTime, $request->isUnitExam, $request->units, $request->examFile);
         return apiResponse(__('response.updatedSuccessfully'), new TeacherExamResource($exam));
     }
     public function deleteExam(Exam $exam)
@@ -126,9 +128,71 @@ class ExamController extends Controller
     public function teacherExams()
     {
         $teacherId = auth()->user()->id;
-        $exams = Exam::whereHas('course', function ($query) use ($teacherId) {
+        $exams = Exam::whereHas('courses', function ($query) use ($teacherId) {
             $query->where('teacher_id', $teacherId);
         })->paginate(request()->perPage ?? 10);
         return apiResponse('Data Retrieved', new PaginatedCollection($exams, TeacherExamResource::class));
+    }
+
+    public function deleteQuestion(Question $question)
+    {
+        if ($question->user_id != auth()->id()) {
+            return apiResponse(__('response.notAuthorized'), new stdClass(), [__('response.notAuthorized')], 401);
+        }
+        if ($question->examsNotCreatedByTeacher()) {
+            return apiResponse(__('response.cantDeleteQuestion'), new stdClass(), [__('response.cantDeleteQuestion')], 403);
+        }
+        $question->delete();
+        return apiResponse(__('response.deletedSuccessfully'));
+    }
+
+    public function assignExamToCourse(AddExamToCoursesRequest $request, Exam $exam)
+    {
+        $course = Course::find($request->courseId);
+        if ($course->teacher_id != auth()->id()) {
+            return apiResponse(__('response.notAuthorized'), new stdClass(), [__('response.notAuthorized')], 401);
+        }
+        $exists = $exam->courses()->wherePivot('course_id', $course->id)->exists();
+        if ($exam->units()->exists()) {
+            return apiResponse(__('response.examHasUnits'), new stdClass(), [__('response.examHasUnits')], 401);
+        }
+        if (!$exists) {
+            $exam->courses()->attach([
+                $course->id => ['available_from' => $request->availableFrom, 'available_to' => $request->availableTo]
+            ]);
+        } else {
+            return apiResponse(__('response.courseAlreadyAssigned'), new stdClass(), [__('response.courseAlreadyAssigned')], 422);
+        }
+
+
+        $exam->courses()->attach([
+            $course->id => ['available_from' => $request->availableFrom, 'available_to' => $request->availableTo]
+        ]);
+
+        return apiResponse(__('response.addedSuccessfully'));
+    }
+
+    public function copyExam(CopyExamRequest $request, Exam $exam)
+    {
+        $course = Course::find($request->courseId);
+        if ($course->teacher_id != auth()->id()) {
+            return apiResponse(__('response.notAuthorized'), new stdClass(), [__('response.notAuthorized')], 401);
+        }
+        if ($exam->units()->exists()) {
+            return apiResponse(__('response.examHasUnits'), new stdClass(), [__('response.examHasUnits')], 401);
+        }
+        if ($exam->type == 'file') {
+            return apiResponse(__('response.examIsFile'), new stdClass(), [__('response.examIsFile')], 401);
+        }
+        $examQuestions = $exam->questions()->pluck('questions.id')->toArray();
+        $newExam = $exam->replicate();
+        $newExam->name = $request->name;
+        $newExam->save();
+        $newExam->courses()->attach($course->id, [
+            'available_from' => $request->availableFrom,
+            'available_to' => $request->availableTo,
+        ]);
+        $newExam->questions()->attach($examQuestions);
+        return apiResponse(__('response.addedSuccessfully'), new TeacherExamResource($newExam));
     }
 }

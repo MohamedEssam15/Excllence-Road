@@ -87,10 +87,15 @@
                                         id="teacherCommisionInput">
                                 </div>
                                 <div class="mb-3">
-                                    <div class="form-check form-switch form-switch-lg">
+                                    <div class="form-check form-switch form-switch-lg mb-2">
                                         <input type="checkbox" name="addToPopularCourses" value="1"
                                             class="form-check-input" id="addToPopularCourses">
-                                        <label class="form-check-label" for="customSwitchsizelg">@lang('translation.addToPopularCourses')</label>
+                                        <label class="form-check-label" for="addToPopularCourses">@lang('translation.addToPopularCourses')</label>
+                                    </div>
+                                    <div class="form-check form-switch form-switch-lg">
+                                        <input type="checkbox" name="isMobileOnly" value="1" class="form-check-input"
+                                            id="isMobileOnly">
+                                        <label class="form-check-label" for="isMobileOnly">@lang('translation.isMobileOnly')</label>
                                     </div>
                                 </div>
                                 <input type="hidden" name="courseId" class="form-control" id="course-id">

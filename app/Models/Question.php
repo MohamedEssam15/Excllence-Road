@@ -33,7 +33,17 @@ class Question extends Model
 
     public function exams()
     {
-        return $this->belongsToMany(Exam::class, 'exams_questions', 'exam_id', 'question_id');
+        return $this->belongsToMany(Exam::class, 'exams_questions', 'question_id', 'exam_id');
+    }
+
+    public function examsNotCreatedByTeacher()
+    {
+        $teacherId = $this->user_id;
+        return $this->exams()
+            ->whereHas('course', function ($query) use ($teacherId) {
+                $query->where('teacher_id', '!=', $teacherId);
+            })
+            ->exists();
     }
 
     public function userQuestiions()

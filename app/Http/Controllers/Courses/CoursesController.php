@@ -117,6 +117,9 @@ class CoursesController extends Controller
         if (isset($request->addToPopularCourses)) {
             $course->is_populer = true;
         }
+        if (isset($request->isMobileOnly)) {
+            $course->is_mobile_only = true;
+        }
         $course->save();
         return apiResponse(__('translation.courseAccepted'));
     }
@@ -128,6 +131,11 @@ class CoursesController extends Controller
             $course->is_populer = true;
         } else {
             $course->is_populer = false;
+        }
+        if (isset($request->isMobileOnly)) {
+            $course->is_mobile_only = true;
+        } else {
+            $course->is_mobile_only = false;
         }
         $course->save();
         return apiResponse(__('translation.courseAccepted'));

@@ -127,7 +127,17 @@ class CourseController extends Controller
         if (! $user->enrollments()->where('course_id', $lesson->unit->course->id)->exists()) {
             return apiResponse(__('response.notAuthorized'), new stdClass(), [__('response.notAuthorized')], 401);
         }
-        return apiResponse('Data Retrieved', new StudentLessonResource($lesson));
+
+        if ($lesson->unit->course->is_mobile_only) {
+            $platform = auth()->payload()->get('platform');
+            if ($platform == 'mobile') {
+                return apiResponse('Data Retrieved', new StudentLessonResource($lesson));
+            } else {
+                return apiResponse(__('response.cantViewLesson'), new stdClass(), [__('response.cantViewLesson')]);
+            }
+        } else {
+            return apiResponse('Data Retrieved', new StudentLessonResource($lesson));
+        }
     }
 
     public function getCourseStudents($id)

@@ -55,6 +55,7 @@ return [
     'enDescription' => 'English Description',
     'reset' => 'Reset',
     'submit' => 'Submit',
+    'isMobileOnly' => 'View in mobile only',
 
     //packages
     "packages" => "Packages",

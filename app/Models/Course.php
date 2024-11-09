@@ -46,7 +46,7 @@ class Course extends Model
     public function translate($locale = null)
     {
         $locale = $locale ?: app()->getLocale();
-        return $this->translations()->where('locale', $locale)->first() ?? $this;
+        return $this->translations()->where('locale', $locale)->first();
     }
 
     public function translations()
@@ -56,7 +56,7 @@ class Course extends Model
 
     public function exams()
     {
-        return $this->hasMany(Exam::class, 'course_id');
+        return $this->belongsToMany(Exam::class, 'courses_exams', 'course_id', 'exam_id')->withPivot('available_from', 'available_to')->withTimestamps();
     }
 
     public function getCoverPhotoPath()

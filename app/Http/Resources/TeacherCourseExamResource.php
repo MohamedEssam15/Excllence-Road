@@ -25,6 +25,9 @@ class TeacherCourseExamResource extends JsonResource
             'isUnitExam' => $this->is_unit_exam,
             'units' => UnitInfoResource::collection($this->units),
             'type' => $this->type,
+            'examTime' => $this->exam_time,
+            'availableFrom' => $this->pivot->available_from,
+            'availableTo' => $this->pivot->available_to,
             'examFile' => $this->getExamFile(),
             'questions' => TeacherQuestionsResource::collection($this->questions)
         ];

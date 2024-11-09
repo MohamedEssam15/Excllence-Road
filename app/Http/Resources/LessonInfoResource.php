@@ -23,9 +23,9 @@ class LessonInfoResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id'=>$this->id,
-            'name'=>$this->translate($this->locale)->name ,
-            'description'=>$this->translate($this->locale)->description,
+            'id' => $this->id,
+            'name' => $this->translate($this->locale)?->name  ?? $this->name,
+            'description' => $this->translate($this->locale)?->description ?? $this->description,
         ];
     }
 }

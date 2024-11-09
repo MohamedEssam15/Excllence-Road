@@ -25,11 +25,10 @@ class AddUnitsRequest extends FormRequest
     public function rules(): array
     {
         return [
-            // 'courseId'=>['required','exists:courses,id'],
             'units' => 'required|array|min:1',
-            'units.*.enName' => 'required|string|min:1',
-            'units.*.arName' => 'required|string|min:1',
-            'units.*.order' => ['required','integer','distinct', Rule::unique('units')->where(function ($query) {
+            'units.*.enName' => 'required_without:units.*.arName|string|min:1',
+            'units.*.arName' => 'required_without:units.*.enName|string|min:1',
+            'units.*.order' => ['required', 'integer', 'distinct', Rule::unique('units')->where(function ($query) {
                 return $query->where('course_id', $this->route('course')->id);
             })],
         ];

@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Unit;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
@@ -24,17 +25,31 @@ class AddLessonRequest extends FormRequest
      */
     public function rules(): array
     {
+        $unit = Unit::find(request('unitId'));
         return [
-            'enName' => ['string', 'required'],
-            'arName' => ['string', 'required'],
-            'enDescription' => ['string', 'required'],
-            'arDescription' => ['string', 'required'],
+            'enName' => ['string', 'nullable', function ($attribute, $value, $fail) {
+                if ($value || ! request()->filled('arName')) {
+                    if (request()->filled('arDescription')) {
+                        $fail(__('response.oneLangEn'));
+                    }
+                }
+            }],
+            'arName' => ['string', 'nullable', function ($attribute, $value, $fail) {
+                if ($value || ! request()->filled('enName')) {
+                    if (request()->filled('enDescription')) {
+                        $fail(__('response.oneLangAr'));
+                    }
+                }
+            }],
+            'enDescription' => ['string', 'nullable'],
+            'arDescription' => ['string', 'nullable'],
             'unitId' => ['required', 'exists:units,id'],
             'order' => ['required', 'integer', Rule::unique('lessons')->where(function ($query) {
                 return $query->where('unit_id', $this->input('unitId'));
             })],
             'type' => ['required', 'string', 'in:video,meeting'],
             'meetingLink' => ['required_if:type,meeting', 'url'],
+            'meetingDate' => ['required_if:type,meeting', 'date_format:Y-m-d H:i', 'after_or_equal:' . $unit?->course->start_date, 'before:' . $unit?->course->end_date],
             'video' => ['required_if:type,video', 'file', 'max:419304'],
             'attachments' => ['nullable', 'array'],
             'attachments.*' => 'required|file|max:1048576',

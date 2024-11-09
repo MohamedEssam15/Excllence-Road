@@ -54,10 +54,16 @@ $(document).ready(function () {
         var courseName = button.getAttribute('data-bs-coursename');
         var teacherCommision = button.getAttribute('data-bs-teachercommision');
         var isPopular = button.getAttribute('data-bs-ispopular');
+        var isMobileOnly = button.getAttribute('data-bs-ismobileonly');
         if (isPopular == 1) {
             $('#addToPopularCourses').prop('checked', true);
         } else {
             $('#addToPopularCourses').prop('checked', false);
+        }
+        if (isMobileOnly == 1) {
+            $('#isMobileOnly').prop('checked', true);
+        } else {
+            $('#isMobileOnly').prop('checked', false);
         }
 
         var modalTitle = modifyModal.querySelector('.modal-title');

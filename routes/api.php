@@ -25,9 +25,9 @@ use App\Http\Controllers\ApiControllers\TeacherPanalControllers\UnitController;
 // Route::post('auth/teacher-register', [AuthController::class,'teacherRegister']);
 
 Route::group(['middleware' => ['api'], 'prefix' => 'auth'], function ($router) {
-    Route::post('login', [AuthController::class, 'login']);
+    Route::post('login', [AuthController::class, 'login'])->middleware('checkPlatformHeader');
     Route::post('logout', [AuthController::class, 'logout']);
-    Route::post('register', [AuthController::class, 'register']);
+    Route::post('register', [AuthController::class, 'register'])->middleware('checkPlatformHeader');
     Route::get('user-info', [AuthController::class, 'me']);
     Route::put('user-update', [AuthController::class, 'updateProfile']);
     Route::post('teacher-register', [AuthController::class, 'teacherRegister']);
@@ -78,6 +78,8 @@ Route::group(['prefix' => 'teachers'], function () {
         Route::post('courses/{course}/add-exam', [ExamController::class, 'addExam']);
         Route::get('courses/{course}/exams', [ExamController::class, 'couresExams']);
         Route::post('exams/{exam}/add-questions', [ExamController::class, 'addQuestions']);
+        Route::post('exams/{exam}/add-course', [ExamController::class, 'assignExamToCourse']);
+        Route::post('exams/{exam}/copy-exam', [ExamController::class, 'copyExam']);
         Route::put('exams/{exam}/edit', [ExamController::class, 'updateExam']);
         Route::delete('exams/{exam}/delete', [ExamController::class, 'deleteExam']);
         Route::post('exams/{exam}/remove-questions', [ExamController::class, 'removeQuestions']);
@@ -86,6 +88,7 @@ Route::group(['prefix' => 'teachers'], function () {
         //questions
         Route::get('questions/teacher-bank', [ExamController::class, 'teacherQuestionsBank']);
         Route::get('questions/public-bank', [ExamController::class, 'publicQuestionsBank']);
+        Route::delete('questions/{question}', [ExamController::class, 'deleteQuestion']);
     });
 });
 
@@ -94,7 +97,7 @@ Route::group(['middleware' => 'guest:api', 'prefix' => 'categories'], function (
     Route::get('/', [CategoryController::class, 'getCategories']);
 });
 
-//categories routes
+//notification routes
 Route::group(['middleware' => 'auth:api', 'prefix' => 'notifications'], function () {
     Route::post('/send', [NotificationController::class, 'sendNotification']);
     Route::get('/latest-notifications', [NotificationController::class, 'userNotification']);

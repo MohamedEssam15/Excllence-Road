@@ -49,7 +49,7 @@
                 <a class="btn btn-outline-secondary btn-sm" title="@lang('translation.edit')" data-bs-toggle="modal"
                     data-bs-target="#modifyModal"
                     data-bs-courseid="{{ $course->id }}"data-bs-teachercommision="{{ $course->teacher_commision }}"
-                    data-bs-ispopular="{{ $course->is_populer }}"
+                    data-bs-ispopular="{{ $course->is_populer }}" data-bs-ismobileonly="{{ $course->is_mobile_only }}"
                     data-bs-coursename="{{ $course->translate(config('app.locale'))->name }}">
                     <i class="fas fa-pencil-alt"></i>
                 </a>
