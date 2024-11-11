@@ -37,6 +37,8 @@ class CourseInfoResource extends JsonResource
             'isSpecific' => $this->is_specific,
             'specificTo' => $this->translate($this->locale)->specific_to,
             'isMobileOnly' => $this->is_mobile_only,
+            'rating' => $this->average_rating,
+            'reviews' => ReviewResource::collection($this->reviews),
         ];
     }
 }

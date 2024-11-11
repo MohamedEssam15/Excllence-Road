@@ -53,6 +53,14 @@ class Course extends Model
     {
         return $this->hasMany(CourseTranslation::class, 'course_id');
     }
+    public function reviews()
+    {
+        return $this->hasMany(Review::class, 'course_id');
+    }
+    public function getAverageRatingAttribute()
+    {
+        return (int) $this->reviews()->avg('rating');
+    }
 
     public function exams()
     {

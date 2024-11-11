@@ -8,6 +8,7 @@ use App\Http\Controllers\ApiControllers\NotificationController;
 use App\Http\Controllers\ApiControllers\PackageController;
 use App\Http\Controllers\ApiControllers\TeacherController;
 use App\Http\Controllers\ApiControllers\PaymentController;
+use App\Http\Controllers\ApiControllers\ReviewController;
 use App\Http\Controllers\ApiControllers\TeacherPanalControllers\ExamController;
 use App\Http\Controllers\ApiControllers\TeacherPanalControllers\LessonsController;
 use App\Http\Controllers\ApiControllers\TeacherPanalControllers\UnitController;
@@ -116,4 +117,10 @@ Route::group(['middleware' => 'guest:api', 'prefix' => 'packages'], function () 
 //paymnets
 Route::group(['middleware' => 'auth:api', 'prefix' => 'payments'], function () {
     Route::post('/', [PaymentController::class, 'pay']);
+});
+//paymnets
+Route::group(['middleware' => 'auth:api', 'prefix' => 'reviews'], function () {
+    Route::post('/add', [ReviewController::class, 'addReview']);
+    Route::put('/{review}', [ReviewController::class, 'editReview']);
+    Route::delete('/{review}', [ReviewController::class, 'deleteReview']);
 });

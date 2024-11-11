@@ -37,6 +37,8 @@ class TeacherCourseResource extends JsonResource
             'specificTo' => $this->course->translate($this->locale)->specific_to ?? $this->specific_to,
             'status' => new CourseStatusResource($this->course->status),
             'level' => new CourseLevelResource($this->course->level),
+            'rating' => $this->average_rating,
+            'reviews' => ReviewResource::collection($this->reviews),
         ];
     }
 }

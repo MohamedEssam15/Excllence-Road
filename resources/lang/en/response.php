@@ -34,5 +34,6 @@ return [
     "examIsFile" => "Exam is file cant copy file exams.",
     'oneLangEn' => 'You should fill the fields that related to english language',
     'oneLangAr' => 'You should fill the fields that related to arabic language',
+    'reviewExists' => 'Review already exists',
 
 ];
