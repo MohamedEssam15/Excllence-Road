@@ -37,7 +37,6 @@ class PopularCourseResource extends JsonResource
             'isSpecific' => $this->course->is_specific,
             'specificTo' => $this->course->translate($this->locale)->specific_to,
             'rating' => $this->average_rating,
-            'reviews' => ReviewResource::collection($this->reviews),
         ];
     }
 }
