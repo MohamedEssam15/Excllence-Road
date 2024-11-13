@@ -28,14 +28,14 @@ class AddLessonRequest extends FormRequest
         $unit = Unit::find(request('unitId'));
         return [
             'enName' => ['string', 'nullable', function ($attribute, $value, $fail) {
-                if ($value || ! request()->filled('arName')) {
+                if ($value && ! request()->filled('arName')) {
                     if (request()->filled('arDescription')) {
                         $fail(__('response.oneLangEn'));
                     }
                 }
             }],
             'arName' => ['string', 'nullable', function ($attribute, $value, $fail) {
-                if ($value || ! request()->filled('enName')) {
+                if ($value && ! request()->filled('enName')) {
                     if (request()->filled('enDescription')) {
                         $fail(__('response.oneLangAr'));
                     }

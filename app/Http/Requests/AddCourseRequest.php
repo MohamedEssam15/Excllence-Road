@@ -13,7 +13,7 @@ class AddCourseRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return $this->isJson();
+        return true;
     }
 
     /**
@@ -23,21 +23,16 @@ class AddCourseRequest extends FormRequest
      */
     public function rules(): array
     {
-        if ((isset(request()->enSpecificTo) && ! is_null(request()->enSpecificTo)) || (isset(request()->arSpecificTo) && ! is_null(request()->arSpecificTo))) {
-            request()->merge(['isSpecific' => true]);
-        } else {
-            request()->merge(['isSpecific' => false]);
-        }
         return [
             'enName' => ['string', 'nullable', function ($attribute, $value, $fail) {
-                if ($value || ! request()->filled('arName')) {
+                if ($value && ! request()->filled('arName')) {
                     if (request()->filled('arDescription') || request()->filled('arSpecificTo')) {
                         $fail(__('response.oneLangEn'));
                     }
                 }
             }],
             'arName' => ['string', 'nullable', function ($attribute, $value, $fail) {
-                if ($value || ! request()->filled('enName')) {
+                if ($value && ! request()->filled('enName')) {
                     if (request()->filled('enDescription') || request()->filled('enSpecificTo')) {
                         $fail(__('response.oneLangAr'));
                     }
@@ -51,8 +46,8 @@ class AddCourseRequest extends FormRequest
             'endDate' => ['date', 'required', 'after:startDate'],
             'enSpecificTo' => ['string', 'nullable'],
             'arSpecificTo' => ['string', 'nullable'],
-            'coverPhoto' => ['string', 'required'],
-
+            'coverPhoto' => ['image', 'required', 'mimes:png,jpg,jpeg'],
+            'courseTrailer' => ['nullable', 'file', 'mimes:mp4', 'max:524288'],
         ];
     }
 

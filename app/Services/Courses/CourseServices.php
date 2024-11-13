@@ -18,16 +18,14 @@ class CourseServices
 {
     public function addCourse($request)
     {
-        $image_parts = explode(";base64,", $request['coverPhoto']);
-        $image_type_aux = explode("image/", $image_parts[0]);
-        $image_type = $image_type_aux[1];
-        $image = base64_decode($image_parts[1]);
-        $imageName = Str::random(10) . '.' . $image_type;
-
+        if ((isset($request['enSpecificTo']) && ! is_null($request['enSpecificTo'])) || (isset($request['arSpecificTo']) && ! is_null($request['arSpecificTo']))) {
+            $request['isSpecific'] = true;
+        } else {
+            $request['isSpecific'] = false;
+        }
         $course = Course::create([
             'name' => $request['enName'] ?? $request['arName'],
             'description' => $request['enDescription'] ?? $request['arDescription'] ?? null,
-            'cover_photo_name' => $imageName,
             'teacher_id' => auth()->user()->id,
             'price' => $request['price'],
             'category_id' => $request['categoryId'],
@@ -38,9 +36,22 @@ class CourseServices
             'specific_to' => $request['isSpecific'] ? ($request['enSpecificTo'] ?? $request['arSpecificTo'])  : null,
             'status_id' => 2,
         ]);
-
-        $path = 'course_attachments/' . $course->id . '/cover_photo/' . $imageName;
-        Storage::disk('publicFolder')->put($path, $image);
+        if (isset($request['courseTrailer']) && $request['courseTrailer'] != null) {
+            $video = $request['courseTrailer'];
+            $fileExtension = $video->getClientOriginalExtension();
+            $courseTrailerName = Str::random(10) . '.' . $fileExtension;
+            $path = 'course_attachments/' . $course->id . '/trailer/';
+            Storage::disk('publicFolder')->putFileAs($path, $video, $courseTrailerName);
+            $course->course_trailer = $courseTrailerName;
+        }
+        if (isset($request['coverPhoto']) && $request['coverPhoto'] != null) {
+            $coverPhoto = $request['coverPhoto'];
+            $coverPhotoExtension = $coverPhoto->getClientOriginalExtension();
+            $imageName = Str::random(10) . '.' . $coverPhotoExtension;
+            $coverPhotoPath = 'course_attachments/' . $course->id . '/cover_photo/';
+            Storage::disk('publicFolder')->putFileAs($coverPhotoPath, $coverPhoto, $imageName);
+            $course->cover_photo_name = $imageName;
+        }
         $translations = [];
         if (isset($request['enName'])) {
             $translations[] = ['locale' => 'en', 'name' => ucfirst($request['enName']), 'description' => $request['enDescription'] ?? null, 'specific_to' => $request['enSpecificTo'] ?? null];
@@ -49,9 +60,7 @@ class CourseServices
             $translations[] = ['locale' => 'ar', 'name' => $request['arName'], 'description' => $request['arDescription'] ?? null, 'specific_to' => $request['arSpecificTo'] ?? null];
         }
         $course->translations()->createMany($translations);
-
-
-
+        $course->save();
         return $course;
     }
     public function addUnits($units, $courseId)
@@ -112,17 +121,31 @@ class CourseServices
 
     public function updateCourse($request, $course)
     {
-
-        if (isset($request['coverPhoto']) && !is_null($request['coverPhoto'])) {
-            $image_parts = explode(";base64,", $request['coverPhoto']);
-            $image_type_aux = explode("image/", $image_parts[0]);
-            $image_type = $image_type_aux[1];
-            $image = base64_decode($image_parts[1]);
-            $imageName = Str::random(10) . '.' . $image_type;
-            $deletedPhotoPath = 'course_attachments/' . $course->id . '/cover_photo/' . $course->cover_photo_name;
-            $newPhotoPath = 'course_attachments/' . $course->id . '/cover_photo/' . $imageName;
-            Storage::disk('publicFolder')->delete($deletedPhotoPath);
-            Storage::disk('publicFolder')->put($newPhotoPath, $image);
+        if ((isset($request['enSpecificTo']) && ! is_null($request['enSpecificTo'])) || (isset($request['arSpecificTo']) && ! is_null($request['arSpecificTo']))) {
+            $request['isSpecific'] = true;
+        } else {
+            $request['isSpecific'] = false;
+        }
+        if (isset($request['courseTrailer']) && $request['courseTrailer'] != null) {
+            if ($course->course_trailer != null) {
+                Storage::disk('publicFolder')->delete('course_attachments/' . $course->id . '/trailer/' . $course->course_trailer);
+            }
+            $video = $request['courseTrailer'];
+            $fileExtension = $video->getClientOriginalExtension();
+            $courseTrailerName = Str::random(10) . '.' . $fileExtension;
+            $path = 'course_attachments/' . $course->id . '/trailer/';
+            Storage::disk('publicFolder')->putFileAs($path, $video, $courseTrailerName);
+            $course->course_trailer = $courseTrailerName;
+        }
+        if (isset($request['coverPhoto']) && $request['coverPhoto'] != null) {
+            if ($course->cover_photo_name != null) {
+                Storage::disk('publicFolder')->delete('course_attachments/' . $course->id . '/cover_photo/' . $course->cover_photo_name);
+            }
+            $coverPhoto = $request['coverPhoto'];
+            $coverPhotoExtension = $coverPhoto->getClientOriginalExtension();
+            $imageName = Str::random(10) . '.' . $coverPhotoExtension;
+            $coverPhotoPath = 'course_attachments/' . $course->id . '/cover_photo/';
+            Storage::disk('publicFolder')->putFileAs($coverPhotoPath, $coverPhoto, $imageName);
             $course->cover_photo_name = $imageName;
         }
         $course->name = $request['enName'] ?? $request['arName'];
