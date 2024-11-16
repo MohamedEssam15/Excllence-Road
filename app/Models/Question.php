@@ -41,7 +41,7 @@ class Question extends Model
     {
         $teacherId = $this->user_id;
         return $this->exams()
-            ->whereHas('course', function ($query) use ($teacherId) {
+            ->whereHas('courses', function ($query) use ($teacherId) {
                 $query->where('teacher_id', '!=', $teacherId);
             })
             ->exists();

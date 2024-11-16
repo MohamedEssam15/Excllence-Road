@@ -7,6 +7,7 @@ use App\Http\Requests\AddExamRequest;
 use App\Http\Requests\AddExamToCoursesRequest;
 use App\Http\Requests\AddQuestionsRequest;
 use App\Http\Requests\CopyExamRequest;
+use App\Http\Requests\RemoveQuestionsExamRequest;
 use App\Http\Requests\UpdateExamRequest;
 use App\Http\Resources\PaginatedCollection;
 use App\Http\Resources\TeacherCourseExamResource;
@@ -102,15 +103,11 @@ class ExamController extends Controller
         }
         return apiResponse('Data Retrieved', new TeacherExamResource($exam));
     }
-    public function removeQuestions(Request $request, Exam $exam)
+    public function removeQuestions(RemoveQuestionsExamRequest $request, Exam $exam)
     {
-        if ($exam->course->teacher_id != auth()->id()) {
+        if ($exam->courses[0]->teacher_id != auth()->id()) {
             return apiResponse(__('response.notAuthorized'), new stdClass(), [__('response.notAuthorized')], 401);
         }
-        $request->validate([
-            'questions' => ['required', 'array'],
-            'questions.*' => 'required|exists:questions,id',
-        ]);
         $exam->questions()->detach($request->questions);
         return apiResponse('Data Retrieved', new TeacherExamResource($exam));
     }
