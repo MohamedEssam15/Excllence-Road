@@ -34,14 +34,14 @@
                                 <div class="mb-3">
                                     <label class="form-label" for="formrow-arName-input">@lang('translation.arName')</label>
                                     <input type="text" name="arName" class="form-control" id="formrow-arName-input"
-                                        value="{{ $course->translate('ar')->name }}" readonly>
+                                        value="{{ $course->translate('ar')?->name }}" readonly>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label class="form-label" for="formrow-enName-input">@lang('translation.enName')</label>
                                     <input type="text" name="enName" class="form-control" id="formrow-enName-input"
-                                        value="{{ $course->translate('en')->name }}" readonly>
+                                        value="{{ $course->translate('en')?->name }}" readonly>
                                 </div>
                             </div>
                         </div>
