@@ -17,8 +17,9 @@
             <td data-field="@lang('translation.Courses')">
                 {{ $category->courses_count }}
             </td>
-            <td data-field="@lang('translation.date')">
-                <p style="direction: ltr">{{ $category->created_at->format('Y-m-d g:i a') }}</p>
+            <td data-field="@lang('translation.date')" style="width: 30%">
+                <p style="direction: ltr;text-align: right">
+                    {{ $category->created_at->format('Y-m-d g:i a') }}</p>
             </td>
             <td style="width: 100px">
                 <a class="btn btn-outline-secondary btn-sm" title="@lang('translation.edit')" data-bs-toggle="modal"
