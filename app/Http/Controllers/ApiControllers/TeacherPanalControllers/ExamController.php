@@ -188,7 +188,7 @@ class ExamController extends Controller
             $course->id => ['available_from' => $request->availableFrom, 'available_to' => $request->availableTo]
         ]);
 
-        return apiResponse(__('response.addedSuccessfully'));
+        return apiResponse(__('response.addedSuccessfully'), new TeacherExamResource($exam));
     }
 
     public function copyExam(CopyExamRequest $request, Exam $exam)
