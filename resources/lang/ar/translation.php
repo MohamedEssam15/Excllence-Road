@@ -98,6 +98,10 @@ return [
     'coursecountable' => 'دورات',
     'topSellingCourses' => 'الدورات الاكثر مبيعا',
     'topSeller' => 'الاكثر مبيعا',
+    'rejected' => 'مرفوض',
+    'customerName' => 'اسم العميل',
+    'latestTransactions' => 'احدث المعاملات',
+    'categories' => 'التصنيفات',
 
 
     //users

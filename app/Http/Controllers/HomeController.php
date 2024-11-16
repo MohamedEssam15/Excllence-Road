@@ -118,7 +118,10 @@ class HomeController extends Controller
             return $course->orders;
         })->count();
         $topCourses = ['topCourses' => $topCoursesModel, 'totalCoursesOrders' => $totalCoursesOrders];
-        return view('index', compact('totalRevenue', 'totalOrders', 'totalStudents', 'totalTeachers', 'topTeachers', 'topCourses'));
+
+        //latest transactions
+        $latestTransactions = Order::latest()->limit(8)->get();
+        return view('index', compact('totalRevenue', 'totalOrders', 'totalStudents', 'totalTeachers', 'topTeachers', 'topCourses', 'latestTransactions'));
     }
 
     public function getPackageCourseCounts()

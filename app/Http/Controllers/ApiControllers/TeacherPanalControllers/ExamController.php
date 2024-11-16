@@ -97,7 +97,7 @@ class ExamController extends Controller
     }
     public function getExam(Exam $exam)
     {
-        if ($exam->course->teacher_id != auth()->id()) {
+        if ($exam->courses[0]->teacher_id != auth()->id()) {
             return apiResponse(__('response.notAuthorized'), new stdClass(), [__('response.notAuthorized')], 401);
         }
         return apiResponse('Data Retrieved', new TeacherExamResource($exam));

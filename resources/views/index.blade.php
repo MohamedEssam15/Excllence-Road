@@ -20,8 +20,10 @@
                         <div id="total-revenue-chart" data-colors='["--bs-primary"]'></div>
                     </div>
                     <div>
-                        <h4 class="mb-1 mt-1">$<span
-                                data-plugin="counterup">{{ number_format($totalRevenue['totalRevenue']) }}</span></h4>
+                        <h4 class="mb-1 mt-1"><span
+                                data-plugin="counterup">{{ number_format($totalRevenue['totalRevenue']) }}</span>
+                            @lang('translation.currency')
+                        </h4>
                         <p class="text-muted mb-0">@lang('translation.totalRevenue')</p>
                     </div>
                     <p class="text-muted mt-3 mb-0"><span class="text-success me-1"><i
@@ -193,10 +195,10 @@
                                 <div class="progress mt-1" style="height: 6px;">
                                     <div class="progress-bar progress-bar bg-{{ ['primary', 'secondary', 'success', 'danger', 'warning', 'purple', 'info', 'dark'][$index % 8] }}"
                                         role="progressbar" title="{{ $course->orders_count }}"
-                                        style="width: {{ ($course->orders_count / $topCourses['totalCoursesOrders']) * 100 }}%"
-                                        aria-valuenow="{{ ($course->orders_count / $topCourses['totalCoursesOrders']) * 100 }}"
+                                        style="width: {{ round(($course->orders_count / $topCourses['totalCoursesOrders']) * 100) }}%"
+                                        aria-valuenow="{{ round(($course->orders_count / $topCourses['totalCoursesOrders']) * 100) }}"
                                         aria-valuemin="0"
-                                        aria-valuemax="{{ ($course->orders_count / $topCourses['totalCoursesOrders']) * 100 }}">
+                                        aria-valuemax="{{ round(($course->orders_count / $topCourses['totalCoursesOrders']) * 100) }}">
                                     </div>
                                 </div>
                             </div>
@@ -213,203 +215,55 @@
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="card-title mb-4">Latest Transaction</h4>
+                    <h4 class="card-title mb-4">@lang('translation.latestTransactions')</h4>
                     <div class="table-responsive">
                         <table class="table table-centered table-nowrap mb-0">
                             <thead class="table-light">
                                 <tr>
-                                    <th style="width: 20px;">
-                                        <div class="form-check font-size-16">
-                                            <input type="checkbox" class="form-check-input" id="customCheck1">
-                                            <label class="form-check-label" for="customCheck1">&nbsp;</label>
-                                        </div>
-                                    </th>
-                                    <th>Order ID</th>
-                                    <th>Billing Name</th>
-                                    <th>Date</th>
-                                    <th>Total</th>
-                                    <th>Payment Status</th>
-                                    <th>Payment Method</th>
-                                    <th>View Details</th>
+                                    <th>@lang('translation.orderNumber')</th>
+                                    <th>@lang('translation.customerName')</th>
+                                    <th>@lang('translation.orderDate')</th>
+                                    <th>@lang('translation.paidFor')</th>
+                                    <th>@lang('translation.paidForName')</th>
+                                    <th>@lang('translation.price')</th>
+                                    <th>@lang('translation.status')</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>
-                                        <div class="form-check font-size-16">
-                                            <input type="checkbox" class="form-check-input" id="customCheck2">
-                                            <label class="form-check-label" for="customCheck2">&nbsp;</label>
-                                        </div>
-                                    </td>
-                                    <td><a href="javascript: void(0);" class="text-body fw-bold">#MB2540</a> </td>
-                                    <td>Neal Matthews</td>
-                                    <td>
-                                        07 Oct, 2019
-                                    </td>
-                                    <td>
-                                        $400
-                                    </td>
-                                    <td>
-                                        <span
-                                            class="badge rounded-pill bg-success-subtle text-success font-size-12">Paid</span>
-                                    </td>
-                                    <td>
-                                        <i class="fab fa-cc-mastercard me-1"></i> Mastercard
-                                    </td>
-                                    <td>
-                                        <button type="button"
-                                            class="btn btn-primary btn-sm btn-rounded waves-effect waves-light">
-                                            View Details
-                                        </button>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>
-                                        <div class="form-check font-size-16">
-                                            <input type="checkbox" class="form-check-input" id="customCheck3">
-                                            <label class="form-check-label" for="customCheck3">&nbsp;</label>
-                                        </div>
-                                    </td>
-                                    <td><a href="javascript: void(0);" class="text-body fw-bold">#MB2541</a> </td>
-                                    <td>Jamal Burnett</td>
-                                    <td>
-                                        07 Oct, 2019
-                                    </td>
-                                    <td>
-                                        $380
-                                    </td>
-                                    <td>
-                                        <span
-                                            class="badge rounded-pill bg-danger-subtle text-danger font-size-12">Chargeback</span>
-                                    </td>
-                                    <td>
-                                        <i class="fab fa-cc-visa me-1"></i> Visa
-                                    </td>
-                                    <td>
-                                        <button type="button"
-                                            class="btn btn-primary btn-sm btn-rounded waves-effect waves-light">
-                                            View Details
-                                        </button>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>
-                                        <div class="form-check font-size-16">
-                                            <input type="checkbox" class="form-check-input" id="customCheck4">
-                                            <label class="form-check-label" for="customCheck4">&nbsp;</label>
-                                        </div>
-                                    </td>
-                                    <td><a href="javascript: void(0);" class="text-body fw-bold">#MB2542</a> </td>
-                                    <td>Juan Mitchell</td>
-                                    <td>
-                                        06 Oct, 2019
-                                    </td>
-                                    <td>
-                                        $384
-                                    </td>
-                                    <td>
-                                        <span
-                                            class="badge rounded-pill bg-success-subtle text-success font-size-12">Paid</span>
-                                    </td>
-                                    <td>
-                                        <i class="fab fa-cc-paypal me-1"></i> Paypal
-                                    </td>
-                                    <td>
-                                        <button type="button"
-                                            class="btn btn-primary btn-sm btn-rounded waves-effect waves-light">
-                                            View Details
-                                        </button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div class="form-check font-size-16">
-                                            <input type="checkbox" class="form-check-input" id="customCheck5">
-                                            <label class="form-check-label" for="customCheck5">&nbsp;</label>
-                                        </div>
-                                    </td>
-                                    <td><a href="javascript: void(0);" class="text-body fw-bold">#MB2543</a> </td>
-                                    <td>Barry Dick</td>
-                                    <td>
-                                        05 Oct, 2019
-                                    </td>
-                                    <td>
-                                        $412
-                                    </td>
-                                    <td>
-                                        <span
-                                            class="badge rounded-pill bg-success-subtle text-success font-size-12">Paid</span>
-                                    </td>
-                                    <td>
-                                        <i class="fab fa-cc-mastercard me-1"></i> Mastercard
-                                    </td>
-                                    <td>
-                                        <button type="button"
-                                            class="btn btn-primary btn-sm btn-rounded waves-effect waves-light">
-                                            View Details
-                                        </button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div class="form-check font-size-16">
-                                            <input type="checkbox" class="form-check-input" id="customCheck6">
-                                            <label class="form-check-label" for="customCheck6">&nbsp;</label>
-                                        </div>
-                                    </td>
-                                    <td><a href="javascript: void(0);" class="text-body fw-bold">#MB2544</a> </td>
-                                    <td>Ronald Taylor</td>
-                                    <td>
-                                        04 Oct, 2019
-                                    </td>
-                                    <td>
-                                        $404
-                                    </td>
-                                    <td>
-                                        <span
-                                            class="badge rounded-pill bg-warning-subtle text-warning font-size-12">Refund</span>
-                                    </td>
-                                    <td>
-                                        <i class="fab fa-cc-visa me-1"></i> Visa
-                                    </td>
-                                    <td>
-                                        <button type="button"
-                                            class="btn btn-primary btn-sm btn-rounded waves-effect waves-light">
-                                            View Details
-                                        </button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div class="form-check font-size-16">
-                                            <input type="checkbox" class="form-check-input" id="customCheck7">
-                                            <label class="form-check-label" for="customCheck7">&nbsp;</label>
-                                        </div>
-                                    </td>
-                                    <td><a href="javascript: void(0);" class="text-body fw-bold">#MB2545</a> </td>
-                                    <td>Jacob Hunter</td>
-                                    <td>
-                                        04 Oct, 2019
-                                    </td>
-                                    <td>
-                                        $392
-                                    </td>
-                                    <td>
-                                        <span
-                                            class="badge rounded-pill bg-success-subtle text-success font-size-12">Paid</span>
-                                    </td>
-                                    <td>
-                                        <i class="fab fa-cc-paypal me-1"></i> Paypal
-                                    </td>
-                                    <td>
-                                        <button type="button"
-                                            class="btn btn-primary btn-sm btn-rounded waves-effect waves-light">
-                                            View Details
-                                        </button>
-                                    </td>
-                                </tr>
+                                @foreach ($latestTransactions as $transaction)
+                                    <tr>
+                                        <td>
+                                            <p style="direction: rtl" class="text-body fw-bold">
+                                                {{ $transaction->order_number }}</p>
+                                        </td>
+                                        <td>{{ $transaction->student->name }}</td>
+                                        <td style="direction: ltr;text-align: center">
+                                            {{ $transaction->created_at->format('Y-m-d g:i A') }}
+                                        </td>
+                                        <td>
+                                            @if ($transaction->is_package)
+                                                @lang('translation.package')
+                                            @else
+                                                @lang('translation.course')
+                                            @endif
+                                        </td>
+                                        <td>
+                                            {{ $transaction->product->translate()->name ?? $transaction->product->name }}
+                                        </td>
+                                        <td>
+                                            {{ number_format($transaction->payment->amount) }} @lang('translation.currency')
+                                        </td>
+                                        <td>
+                                            @if ($transaction->payment->status == 'done')
+                                                <span
+                                                    class="badge rounded-pill bg-success-subtle text-success font-size-12">@lang('translation.completed')</span>
+                                            @else
+                                                <span
+                                                    class="badge rounded-pill bg-danger-subtle text-danger font-size-12">@lang('translation.rejected')</span>
+                                            @endif
+                                        </td>
+                                    </tr>
+                                @endforeach
                             </tbody>
                         </table>
                     </div>

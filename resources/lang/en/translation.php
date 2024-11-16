@@ -88,6 +88,8 @@ return [
     'coursecountable' => 'Courses',
     'topSellingCourses' => 'Top Selling Courses',
     'topSeller' => 'Top Seller',
+    'customerName' => 'Customer Name',
+    'latestTransactions' => 'Latest Transactions',
     //packages
     "packages" => "Packages",
     "activePackages" => "Active Packages",
@@ -98,6 +100,7 @@ return [
     "currentImage" => "Current Cover",
     "editPackages" => "Edit Package",
     "showPackage" => "Show Packages",
+    'categories' => 'Categories',
 
     //users
     "users" => "Users",

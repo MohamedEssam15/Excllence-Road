@@ -4,6 +4,7 @@
     "/assets/js/used/cancel-modal.init.js": "/assets/js/used/cancel-modal.init.js",
     "/assets/js/used/back-to-pending-modal.init.js": "/assets/js/used/back-to-pending-modal.init.js",
     "/assets/js/used/dashboard.init.js": "/assets/js/used/dashboard.init.js",
+    "/assets/js/used/add-category-modal.init.js": "/assets/js/used/add-category-modal.init.js",
     "/assets/js/used/apexcharts.init.js": "/assets/js/used/apexcharts.init.js",
     "/assets/js/pages/alerts.init.js": "/assets/js/pages/alerts.init.js",
     "/assets/js/pages/apexcharts.init.js": "/assets/js/pages/apexcharts.init.js",

@@ -158,8 +158,6 @@
                             <div class="d-flex flex-wrap gap-3 mt-3">
                                 <button type="submit"
                                     class="btn btn-primary waves-effect waves-light w-md">@lang('translation.submit')</button>
-                                <button type="reset"
-                                    class="btn btn-outline-danger waves-effect waves-light w-md">@lang('translation.reset')</button>
                             </div>
                         </form>
                     </div>

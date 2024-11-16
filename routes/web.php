@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Categories\CategoryController;
 use App\Http\Controllers\Courses\CoursesController;
 use App\Http\Controllers\Packages\PackagesController;
 use App\Http\Controllers\Transactions\TransactionController;
@@ -39,6 +40,10 @@ Route::middleware('auth:web')->group(function () {
     Route::post('/formsubmit', [App\Http\Controllers\HomeController::class, 'FormSubmit'])->name('FormSubmit');
     Route::get('/{any}', [App\Http\Controllers\HomeController::class, 'index']);
 
+    Route::group(['prefix' => 'categories'], function () {
+        Route::get('all', [CategoryController::class, 'index'])->name('categories.all');
+        Route::post('/add-category', [CategoryController::class, 'store'])->name('categories.store');
+    });
 
     Route::group(['prefix' => 'courses'], function () {
         Route::get('active', [CoursesController::class, 'activeCourses'])->name('courses.active');
