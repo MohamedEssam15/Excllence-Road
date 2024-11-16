@@ -110,6 +110,9 @@ return [
     'arCategoryName' => 'اسم التصنيف بالعربية',
     'enCategoryName' => 'اسم التصنيف بالانجليزية',
     'noRevenue' => 'لا يوجد دخل',
+    'noCourses' => 'لا يوجد دورات',
+    'noPackages' => 'لا يوجد حزم',
+    'noOrders' => 'لا يوجد طلبات',
 
 
     //users

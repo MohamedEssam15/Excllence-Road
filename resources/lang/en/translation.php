@@ -109,6 +109,8 @@ return [
     'arCategoryName' => 'Arabic Category Name',
     'enCategoryName' => 'English Category Name',
     'noRevenue' => 'No Revenue',
+    'noCourses' => 'No Courses',
+    'noPackages' => 'No Packages',
 
     //users
     "users" => "Users",
