@@ -51,7 +51,7 @@ class HomeController extends Controller
             ->whereMonth('created_at', Carbon::now()->subMonth()->month)
             ->whereYear('created_at', Carbon::now()->subMonth()->year)
             ->sum('amount');
-        $growthPercentage = $previousMonthDonePayments > 0 && $currentMonthDonePayments > 0
+        $growthPercentage = $previousMonthDonePayments > 0 && $currentMonthDonePayments > 0 && $previousMonthDonePayments < $currentMonthDonePayments
             ? (($currentMonthDonePayments - $previousMonthDonePayments) / $previousMonthDonePayments) * 100
             : null;
         $totalRevenue = ['totalRevenue' => $totalDonePayments, 'growthPercentage' => $growthPercentage];
@@ -85,7 +85,7 @@ class HomeController extends Controller
             ->whereMonth('created_at', Carbon::now()->subMonth()->month)
             ->whereYear('created_at', Carbon::now()->subMonth()->year)
             ->count();
-        $studentsGrowthPercentage = $previousMonthStudents > 0 && $currentMonthStudents > 0
+        $studentsGrowthPercentage = $previousMonthStudents > 0 && $currentMonthStudents > 0 && $previousMonthStudents < $currentMonthStudents
             ? (($currentMonthStudents - $previousMonthStudents) / $previousMonthStudents) * 100
             : 0;
         $totalStudents = ['totalStudents' => $totalStudents, 'growthPercentage' => $studentsGrowthPercentage];
@@ -100,7 +100,7 @@ class HomeController extends Controller
             ->whereMonth('created_at', Carbon::now()->subMonth()->month)
             ->whereYear('created_at', Carbon::now()->subMonth()->year)
             ->count();
-        $teachersGrowthPercentage = $previousMonthTeachers > 0 && $currentMonthTeachers > 0
+        $teachersGrowthPercentage = $previousMonthTeachers > 0 && $currentMonthTeachers > 0 && $previousMonthTeachers < $currentMonthTeachers
             ? abs((($currentMonthTeachers - $previousMonthTeachers) / $previousMonthTeachers) * 100)
             : 0;
         $totalTeachers = ['totalTeachers' => $totalTeachers, 'growthPercentage' => $teachersGrowthPercentage];
