@@ -13,7 +13,8 @@
             </th>
             <td>
                 <img src="{{ $teacher->getAvatarPath() }}" alt="" class="avatar-xs rounded-circle me-2">
-                <a href="{{ route('users.teacher.show', $teacher->id) }}" class="text-body">{{ $teacher->name }}</a>
+                <a class="btn-outline-secondary" href="{{ route('users.teacher.show', $teacher->id) }}"
+                    class="text-body">{{ $teacher->name }}</a>
             </td>
             <td>{{ $teacher->teacher_courses_count }}</td>
             <td>{{ $teacher->email }}</td>

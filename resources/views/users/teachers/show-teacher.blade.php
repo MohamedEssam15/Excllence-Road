@@ -228,7 +228,7 @@
                                                 @endforeach
                                             @else
                                                 <tr>
-                                                    <td colspan="10" class="text-center">@lang('translation.noCertificates')</td>
+                                                    <td colspan="10" class="text-center">@lang('translation.noRevunue')</td>
                                                 </tr>
                                             @endif
 

@@ -150,15 +150,17 @@
                             <a href="javascript: void(0);" class="has-arrow"><i
                                     class="far fa-star"></i><span>@lang('translation.bestSeller')</span></a>
                             <ul class="sub-menu" aria-expanded="true">
-                                <li><a href="{{ route('transactions.bestSeller.courses') }}">@lang('translation.Courses')</a></li>
-                                <li><a href="{{ route('transactions.bestSeller.packages') }}">@lang('translation.packages')</a></li>
+                                <li><a href="{{ route('transactions.bestSeller.courses') }}">@lang('translation.Courses')</a>
+                                </li>
+                                <li><a href="{{ route('transactions.bestSeller.packages') }}">@lang('translation.packages')</a>
+                                </li>
                             </ul>
                         </li>
                     </ul>
                 </li>
 
 
-
+                {{--
                 <li>
                     <a href="javascript: void(0);" class="has-arrow waves-effect">
                         <i class="uil-window-section"></i>
@@ -416,7 +418,7 @@
                             </ul>
                         </li>
                     </ul>
-                </li>
+                </li> --}}
 
             </ul>
         </div>

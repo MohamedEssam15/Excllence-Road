@@ -42,7 +42,8 @@ Route::middleware('auth:web')->group(function () {
 
     Route::group(['prefix' => 'categories'], function () {
         Route::get('all', [CategoryController::class, 'index'])->name('categories.all');
-        Route::post('/add-category', [CategoryController::class, 'store'])->name('categories.store');
+        Route::post('/store', [CategoryController::class, 'store'])->name('categories.store');
+        Route::put('/update', [CategoryController::class, 'update'])->name('categories.update');
     });
 
     Route::group(['prefix' => 'courses'], function () {

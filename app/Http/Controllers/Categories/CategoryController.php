@@ -16,8 +16,8 @@ class CategoryController extends Controller
                 $query->WhereHas('translations', function ($query) use ($term) {
                     $query->where('name', 'LIKE', '%' . $term . '%');
                 });
-            })->orderBy('updated_at', 'desc')->paginate(10);
-
+            })->withCount('courses')->orderBy('updated_at', 'desc')->paginate(10);
+            ds($categories);
             return response()->json([
                 'table_data' => view('categories.Partial-Components.all-partial-table', compact('categories'))->render(),
                 'pagination' => $categories->links('vendor.pagination.bootstrap-5')->render()
@@ -26,5 +26,39 @@ class CategoryController extends Controller
 
         return view('categories.all-categories');
     }
-    public function store(Request $request) {}
+    public function store(Request $request)
+    {
+        $request->validate([
+            'arCategoryName' => 'required|string',
+            'enCategoryName' => 'required|string',
+        ]);
+        $category = category::create([
+            'name' => $request->enCategoryName,
+        ]);
+        $categoryTranslations = [
+            ['locale' => 'ar', 'name' => $request->arCategoryName],
+            ['locale' => 'en', 'name' => $request->enCategoryName],
+        ];
+        $category->translations()->createMany($categoryTranslations);
+        return apiResponse(__('response.addedSuccessfully'));
+    }
+    public function update(Request $request)
+    {
+        $request->validate([
+            'categoryId' => 'required|exists:categories,id',
+            'arCategoryName' => 'required|string',
+            'enCategoryName' => 'required|string',
+        ]);
+        $category = category::find($request->categoryId);
+        $category->update([
+            'name' => $request->enCategoryName,
+        ]);
+        $categoryTranslations = [
+            ['locale' => 'ar', 'name' => $request->arCategoryName],
+            ['locale' => 'en', 'name' => $request->enCategoryName],
+        ];
+        $category->translations()->delete();
+        $category->translations()->createMany($categoryTranslations);
+        return apiResponse(__('response.updatedSuccessfully'));
+    }
 }

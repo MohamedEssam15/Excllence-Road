@@ -102,6 +102,14 @@ return [
     'customerName' => 'اسم العميل',
     'latestTransactions' => 'احدث المعاملات',
     'categories' => 'التصنيفات',
+    'addCategory' => 'اضافة تصنيف',
+    'allCategories' => 'جميع التصنيفات',
+    'editCategory' => 'تعديل التصنيف',
+    'categoryName' => 'اسم التصنيف',
+    'noCategories' => 'لا يوجد تصنيفات',
+    'arCategoryName' => 'اسم التصنيف بالعربية',
+    'enCategoryName' => 'اسم التصنيف بالانجليزية',
+    'noRevenue' => 'لا يوجد دخل',
 
 
     //users

@@ -70,7 +70,7 @@ class HomeController extends Controller
         })->whereMonth('created_at', Carbon::now()->subMonth()->month)
             ->whereYear('created_at', Carbon::now()->subMonth()->year)
             ->count();
-        $ordersGrowthPercentage = $previousMonthDoneOrdersCount > 0 && $currentMonthDoneOrdersCount > 0
+        $ordersGrowthPercentage = $previousMonthDoneOrdersCount > 0 && $currentMonthDoneOrdersCount > 0 && $previousMonthDoneOrdersCount < $currentMonthDoneOrdersCount
             ? (($currentMonthDoneOrdersCount - $previousMonthDoneOrdersCount) / $previousMonthDoneOrdersCount) * 100
             : 0;
         $totalOrders = ['totalOrders' => $totalDoneOrdersCount, 'ordersGrowthPercentage' => $ordersGrowthPercentage];

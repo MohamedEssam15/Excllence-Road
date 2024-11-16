@@ -101,6 +101,14 @@ return [
     "editPackages" => "Edit Package",
     "showPackage" => "Show Packages",
     'categories' => 'Categories',
+    'addCategory' => 'Add Category',
+    'allCategories' => 'All Categories',
+    'editCategory' => 'Edit Category',
+    'categoryName' => 'Category Name',
+    'noCategories' => 'No Categories',
+    'arCategoryName' => 'Arabic Category Name',
+    'enCategoryName' => 'English Category Name',
+    'noRevenue' => 'No Revenue',
 
     //users
     "users" => "Users",
