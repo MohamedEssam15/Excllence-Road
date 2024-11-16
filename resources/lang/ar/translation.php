@@ -90,11 +90,14 @@ return [
     'topStudents' => ' اكثر الطلاب شراء',
     'topTeachers' => 'اهم المعلمين',
     'ordersCompleted' => 'الطلبات المكتملة',
-    'sortBy'=>'ترتيب حسب',
+    'sortBy' => 'ترتيب حسب',
     'yearly' => 'سنوي',
     'monthly' => 'شهري',
     'daily' => 'يومي',
     'compareBetweenPackagesAndCourses' => 'مقارنة بين الحزم والدورات',
+    'coursecountable' => 'دورات',
+    'topSellingCourses' => 'الدورات الاكثر مبيعا',
+    'topSeller' => 'الاكثر مبيعا',
 
 
     //users

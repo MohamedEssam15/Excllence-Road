@@ -265,7 +265,7 @@ $(document).ready(function () {
       },
       yaxis: {
         title: {
-          text: 'Points'
+          text: 'orders'
         }
       },
       tooltip: {
@@ -274,7 +274,7 @@ $(document).ready(function () {
         y: {
           formatter: function formatter(y) {
             if (typeof y !== "undefined") {
-              return y.toFixed(0) + " points";
+              return y.toFixed(0) + " orders";
             }
             return y;
           }
@@ -285,21 +285,13 @@ $(document).ready(function () {
       }
     };
     var chart = new ApexCharts(document.querySelector("#sales-analytics-chart"), options);
-
+    chart.render();
     // Fetch monthly counts data
     $.ajax({
       url: '/get-package-course-counts',
       // Your endpoint to get data
       method: 'GET',
       success: function success(response) {
-        // Assuming the response structure looks like this:
-        // {
-        //   "months": ["2023-11", "2023-12", ..., "2024-10"],  // List of months
-        //   "package_counts": [12, 15, 20, ..., 10],  // Count of packages for each month
-        //   "course_counts": [5, 10, 12, ..., 8]  // Count of courses for each month
-        // }
-        console.log(response);
-        // Prepare the dates (months)
         var months = response.months;
         var packageCounts = response.package_counts;
         var courseCounts = response.course_counts;
@@ -320,7 +312,6 @@ $(document).ready(function () {
         });
 
         // Render the updated chart
-        chart.render();
       },
       error: function error(err) {
         console.error('Error fetching data: ', err);

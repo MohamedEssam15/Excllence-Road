@@ -18,10 +18,10 @@ class Package extends Model
         return $this->belongsToMany(Course::class, 'courses_packages', 'package_id', 'course_id');
     }
 
-    // public function enrollments()
-    // {
-    //     return $this->morphMany(Enrollment::class, 'enrollable');
-    // }
+    public function orders()
+    {
+        return $this->hasMany(Order::class, 'package_id');
+    }
 
     public function translate($locale = null)
     {

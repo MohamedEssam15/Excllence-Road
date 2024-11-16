@@ -37,6 +37,7 @@ class TeacherCourseResource extends JsonResource
             'status' => new CourseStatusResource($this->course->status),
             'level' => new CourseLevelResource($this->course->level),
             'rating' => $this->course->average_rating,
+            'courseTrailer' => $this->course->getCourseTrailerPath(),
             'reviews' => ReviewResource::collection($this->course->reviews),
         ];
     }

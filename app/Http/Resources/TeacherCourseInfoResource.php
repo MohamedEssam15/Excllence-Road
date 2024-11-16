@@ -42,6 +42,8 @@ class TeacherCourseInfoResource extends JsonResource
             'enSpecificTo' => $this->translate('en')?->specific_to,
             'arSpecificTo' => $this->translate('ar')?->specific_to,
             'rating' => $this->average_rating,
+            'isMobileOnly' => $this->is_mobile_only,
+            'courseTrailer' => $this->getCourseTrailerPath(),
             'reviews' => ReviewResource::collection($this->reviews),
         ];
     }

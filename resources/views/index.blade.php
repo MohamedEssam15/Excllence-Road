@@ -114,7 +114,8 @@
                     <div class="float-end">
                         <div class="dropdown">
                             <p class="dropdown-toggle text-reset">
-                                <span class="fw-semibold">@lang('translation.sortBy')</span> <span class="text-muted">@lang('translation.yearly')</span>
+                                <span class="fw-semibold">@lang('translation.sortBy')</span> <span
+                                    class="text-muted">@lang('translation.yearly')</span>
                             </p>
 
 
@@ -122,7 +123,7 @@
                     </div>
                     <h4 class="card-title mb-4">@lang('translation.compareBetweenPackagesAndCourses')</h4>
 
-                    
+
 
                     <div class="mt-3">
                         <div id="sales-analytics-chart" data-colors='["--bs-primary", "#dfe2e6", "--bs-warning"]'
@@ -131,103 +132,7 @@
                 </div> <!-- end card-body-->
             </div> <!-- end card-->
         </div> <!-- end col-->
-        {{-- top selling section --}}
-        {{-- <div class="col-xl-4">
-            <div class="card">
-                <div class="card-body">
-                    <div class="float-end">
-                        <div class="dropdown">
-                            <a class="dropdown-toggle text-reset" href="#" id="dropdownMenuButton1"
-                                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="fw-semibold">Sort By:</span> <span class="text-muted">Yearly<i
-                                        class="mdi mdi-chevron-down ms-1"></i></span>
-                            </a>
 
-                            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton1">
-                                <a class="dropdown-item" href="#">Monthly</a>
-                                <a class="dropdown-item" href="#">Yearly</a>
-                                <a class="dropdown-item" href="#">Weekly</a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <h4 class="card-title mb-4">Top Selling Products</h4>
-
-
-                    <div class="row align-items-center g-0 mt-3">
-                        <div class="col-sm-3">
-                            <p class="text-truncate mt-1 mb-0"><i class="mdi mdi-circle-medium text-primary me-2"></i>
-                                Desktops </p>
-                        </div>
-
-                        <div class="col-sm-9">
-                            <div class="progress mt-1" style="height: 6px;">
-                                <div class="progress-bar progress-bar bg-primary" role="progressbar" style="width: 52%"
-                                    aria-valuenow="52" aria-valuemin="0" aria-valuemax="52">
-                                </div>
-                            </div>
-                        </div>
-                    </div> <!-- end row-->
-
-                    <div class="row align-items-center g-0 mt-3">
-                        <div class="col-sm-3">
-                            <p class="text-truncate mt-1 mb-0"><i class="mdi mdi-circle-medium text-info me-2"></i>
-                                iPhones </p>
-                        </div>
-                        <div class="col-sm-9">
-                            <div class="progress mt-1" style="height: 6px;">
-                                <div class="progress-bar progress-bar bg-info" role="progressbar" style="width: 45%"
-                                    aria-valuenow="45" aria-valuemin="0" aria-valuemax="45">
-                                </div>
-                            </div>
-                        </div>
-                    </div> <!-- end row-->
-
-                    <div class="row align-items-center g-0 mt-3">
-                        <div class="col-sm-3">
-                            <p class="text-truncate mt-1 mb-0"><i class="mdi mdi-circle-medium text-success me-2"></i>
-                                Android </p>
-                        </div>
-                        <div class="col-sm-9">
-                            <div class="progress mt-1" style="height: 6px;">
-                                <div class="progress-bar progress-bar bg-success" role="progressbar" style="width: 48%"
-                                    aria-valuenow="48" aria-valuemin="0" aria-valuemax="48">
-                                </div>
-                            </div>
-                        </div>
-                    </div> <!-- end row-->
-
-                    <div class="row align-items-center g-0 mt-3">
-                        <div class="col-sm-3">
-                            <p class="text-truncate mt-1 mb-0"><i class="mdi mdi-circle-medium text-warning me-2"></i>
-                                Tablets </p>
-                        </div>
-                        <div class="col-sm-9">
-                            <div class="progress mt-1" style="height: 6px;">
-                                <div class="progress-bar progress-bar bg-warning" role="progressbar" style="width: 78%"
-                                    aria-valuenow="78" aria-valuemin="0" aria-valuemax="78">
-                                </div>
-                            </div>
-                        </div>
-                    </div> <!-- end row-->
-
-                    <div class="row align-items-center g-0 mt-3">
-                        <div class="col-sm-3">
-                            <p class="text-truncate mt-1 mb-0"><i class="mdi mdi-circle-medium text-purple me-2"></i>
-                                Cables </p>
-                        </div>
-                        <div class="col-sm-9">
-                            <div class="progress mt-1" style="height: 6px;">
-                                <div class="progress-bar progress-bar bg-purple" title="88" role="progressbar" style="width: 88%"
-                                    aria-valuenow="99" aria-valuemin="0" aria-valuemax="100">
-                                </div>
-                            </div>
-                        </div>
-                    </div> <!-- end row-->
-
-                </div> <!-- end card-body-->
-            </div> <!-- end card-->
-        </div> <!-- end Col --> --}}
     </div> <!-- end row-->
 
     <div class="row">
@@ -240,19 +145,21 @@
                         <div class="table-responsive">
                             <table class="table table-borderless table-centered table-nowrap">
                                 <tbody>
-                                    <tr>
-                                        <td style="width: 20px;"><img
-                                                src="{{ URL::asset('assets/images/users/avatar-4.jpg') }}"
-                                                class="avatar-xs rounded-circle " alt="..."></td>
-                                        <td>
-                                            <h6 class="font-size-15 mb-1 fw-normal">Glenn Holden</h6>
+                                    @foreach ($topTeachers as $teacher)
+                                        <tr>
+                                            <td style="width: 20px;"><img src="{{ $teacher->getAvatarPath() }}"
+                                                    class="avatar-xs rounded-circle " alt="..."></td>
+                                            <td>
+                                                <h6 class="font-size-15 mb-1 fw-normal">{{ $teacher->name }}</h6>
 
-                                        </td>
-                                        </td>
-                                        <td class="text-muted fw-semibold text-end"><i
-                                                class="icon-xs icon me-2 text-success"
-                                                data-feather="trending-up"></i>$250.00</td>
-                                    </tr>
+                                            </td>
+                                            </td>
+                                            <td class="text-muted fw-semibold text-end"><i
+                                                    class="icon-xs icon me-2 text-success"
+                                                    data-feather="trending-up"></i>{{ $teacher->teacher_courses_count }}
+                                                @lang('translation.coursecountable')</td>
+                                        </tr>
+                                    @endforeach
                                 </tbody>
                             </table>
                         </div> <!-- enbd table-responsive-->
@@ -260,133 +167,45 @@
                 </div><!-- end card-body-->
             </div> <!-- end card-->
         </div><!-- end col -->
-        <div class="col-xl-4">
+        {{-- top selling section --}}
+        <div class="col-xl-8">
             <div class="card">
                 <div class="card-body">
                     <div class="float-end">
                         <div class="dropdown">
-                            <a class=" dropdown-toggle" href="#" id="dropdownMenuButton2" data-bs-toggle="dropdown"
-                                aria-haspopup="true" aria-expanded="false">
-                                <span class="text-muted">All Members<i class="mdi mdi-chevron-down ms-1"></i></span>
-                            </a>
-
-                            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton2">
-                                <a class="dropdown-item" href="#">Locations</a>
-                                <a class="dropdown-item" href="#">Revenue</a>
-                                <a class="dropdown-item" href="#">Join Date</a>
-                            </div>
+                            <p class="dropdown-toggle text-reset">
+                                <span class="fw-semibold">@lang('translation.sortBy')</span> <span
+                                    class="text-muted">@lang('translation.topSeller')</span>
+                            </p>
                         </div>
                     </div>
-                    <h4 class="card-title mb-4">Top Users</h4>
 
-                    <div data-simplebar style="max-height: 339px;">
-                        <div class="table-responsive">
-                            <table class="table table-borderless table-centered table-nowrap">
-                                <tbody>
-                                    <tr>
-                                        <td style="width: 20px;"><img
-                                                src="{{ URL::asset('assets/images/users/avatar-4.jpg') }}"
-                                                class="avatar-xs rounded-circle " alt="..."></td>
-                                        <td>
-                                            <h6 class="font-size-15 mb-1 fw-normal">Glenn Holden</h6>
-                                            <p class="text-muted font-size-13 mb-0"><i class="mdi mdi-map-marker"></i>
-                                                Nevada</p>
-                                        </td>
-                                        <td><span class="badge bg-danger-subtle text-danger font-size-12">Cancel</span>
-                                        </td>
-                                        <td class="text-muted fw-semibold text-end"><i
-                                                class="icon-xs icon me-2 text-success"
-                                                data-feather="trending-up"></i>$250.00</td>
-                                    </tr>
-                                    <tr>
-                                        <td><img src="{{ URL::asset('assets/images/users/avatar-5.jpg') }}"
-                                                class="avatar-xs rounded-circle " alt="..."></td>
-                                        <td>
-                                            <h6 class="font-size-15 mb-1 fw-normal">Lolita Hamill</h6>
-                                            <p class="text-muted font-size-13 mb-0"><i class="mdi mdi-map-marker"></i>
-                                                Texas</p>
-                                        </td>
-                                        <td><span class="badge bg-success-subtle text-success font-size-12">Success</span>
-                                        </td>
-                                        <td class="text-muted fw-semibold text-end"><i
-                                                class="icon-xs icon me-2 text-danger"
-                                                data-feather="trending-down"></i>$110.00</td>
-                                    </tr>
-                                    <tr>
-                                        <td><img src="{{ URL::asset('assets/images/users/avatar-6.jpg') }}"
-                                                class="avatar-xs rounded-circle " alt="..."></td>
-                                        <td>
-                                            <h6 class="font-size-15 mb-1 fw-normal">Robert Mercer</h6>
-                                            <p class="text-muted font-size-13 mb-0"><i class="mdi mdi-map-marker"></i>
-                                                California</p>
-                                        </td>
-                                        <td><span class="badge bg-info-subtle text-info font-size-12">Active</span></td>
-                                        <td class="text-muted fw-semibold text-end"><i
-                                                class="icon-xs icon me-2 text-success"
-                                                data-feather="trending-up"></i>$420.00</td>
-                                    </tr>
-                                    <tr>
-                                        <td><img src="{{ URL::asset('assets/images/users/avatar-7.jpg') }}"
-                                                class="avatar-xs rounded-circle " alt="..."></td>
-                                        <td>
-                                            <h6 class="font-size-15 mb-1 fw-normal">Marie Kim</h6>
-                                            <p class="text-muted font-size-13 mb-0"><i class="mdi mdi-map-marker"></i>
-                                                Montana</p>
-                                        </td>
-                                        <td><span class="badge bg-warning-subtle text-warning font-size-12">Pending</span>
-                                        </td>
-                                        <td class="text-muted fw-semibold text-end"><i
-                                                class="icon-xs icon me-2 text-danger"
-                                                data-feather="trending-down"></i>$120.00</td>
-                                    </tr>
-                                    <tr>
-                                        <td><img src="{{ URL::asset('assets/images/users/avatar-8.jpg') }}"
-                                                class="avatar-xs rounded-circle " alt="..."></td>
-                                        <td>
-                                            <h6 class="font-size-15 mb-1 fw-normal">Sonya Henshaw</h6>
-                                            <p class="text-muted font-size-13 mb-0"><i class="mdi mdi-map-marker"></i>
-                                                Colorado</p>
-                                        </td>
-                                        <td><span class="badge bg-info-subtle text-info font-size-12">Active</span></td>
-                                        <td class="text-muted fw-semibold text-end"><i
-                                                class="icon-xs icon me-2 text-success"
-                                                data-feather="trending-up"></i>$112.00</td>
-                                    </tr>
-                                    <tr>
-                                        <td><img src="{{ URL::asset('assets/images/users/avatar-2.jpg') }}"
-                                                class="avatar-xs rounded-circle " alt="..."></td>
-                                        <td>
-                                            <h6 class="font-size-15 mb-1 fw-normal">Marie Kim</h6>
-                                            <p class="text-muted font-size-13 mb-0"><i class="mdi mdi-map-marker"></i>
-                                                Australia</p>
-                                        </td>
-                                        <td><span class="badge bg-success-subtle text-success font-size-12">Success</span>
-                                        </td>
-                                        <td class="text-muted fw-semibold text-end"><i
-                                                class="icon-xs icon me-2 text-danger"
-                                                data-feather="trending-down"></i>$120.00</td>
-                                    </tr>
-                                    <tr>
-                                        <td><img src="{{ URL::asset('assets/images/users/avatar-1.jpg') }}"
-                                                class="avatar-xs rounded-circle " alt="..."></td>
-                                        <td>
-                                            <h6 class="font-size-15 mb-1 fw-normal">Sonya Henshaw</h6>
-                                            <p class="text-muted font-size-13 mb-0"><i class="mdi mdi-map-marker"></i>
-                                                India</p>
-                                        </td>
-                                        <td><span class="badge bg-danger-subtle text-danger font-size-12">Cancel</span>
-                                        </td>
-                                        <td class="text-muted fw-semibold text-end"><i
-                                                class="icon-xs icon me-2 text-success"
-                                                data-feather="trending-up"></i>$112.00</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div> <!-- enbd table-responsive-->
-                    </div> <!-- data-sidebar-->
-                </div><!-- end card-body-->
+                    <h4 class="card-title mb-4">@lang('translation.topSellingCourses')</h4>
+                    @foreach ($topCourses['topCourses'] as $index => $course)
+                        <div class="row align-items-center g-0 mt-3">
+                            <div class="col-sm-3 mt-1">
+                                <p class="text-truncate mt-1 mb-0"><i
+                                        class="mdi mdi-circle-medium text-{{ ['primary', 'secondary', 'success', 'danger', 'warning', 'purple', 'info', 'dark'][$index % 8] }} me-2"></i>
+                                    {{ $course->translate()->name ?? $course->name }} </p>
+                            </div>
+
+                            <div class="col-sm-9">
+                                <div class="progress mt-1" style="height: 6px;">
+                                    <div class="progress-bar progress-bar bg-{{ ['primary', 'secondary', 'success', 'danger', 'warning', 'purple', 'info', 'dark'][$index % 8] }}"
+                                        role="progressbar" title="{{ $course->orders_count }}"
+                                        style="width: {{ ($course->orders_count / $topCourses['totalCoursesOrders']) * 100 }}%"
+                                        aria-valuenow="{{ ($course->orders_count / $topCourses['totalCoursesOrders']) * 100 }}"
+                                        aria-valuemin="0"
+                                        aria-valuemax="{{ ($course->orders_count / $topCourses['totalCoursesOrders']) * 100 }}">
+                                    </div>
+                                </div>
+                            </div>
+                        </div> <!-- end row-->
+                    @endforeach
+
+                </div> <!-- end card-body-->
             </div> <!-- end card-->
-        </div><!-- end col -->
+        </div> <!-- end Col -->
     </div>
     <!-- end row -->
 

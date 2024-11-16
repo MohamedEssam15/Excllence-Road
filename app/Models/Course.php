@@ -73,9 +73,17 @@ class Course extends Model
     }
     public function getCourseTrailerPath()
     {
+        if ($this->course_trailer != null) {
+            return asset('course_attachments/' . $this->id . '/trailer/' . $this->course_trailer);
+        } else {
+            return null;
+        }
         return asset('course_attachments/' . $this->id . '/trailer/' . $this->course_trailer);
     }
-
+    public function orders()
+    {
+        return $this->hasMany(Order::class, 'course_id');
+    }
     public function scopeFilterBy($query, $filters)
     {
         $namespace = 'App\Utilities\CourseFilters';

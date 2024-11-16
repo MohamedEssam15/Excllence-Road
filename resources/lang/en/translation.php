@@ -85,6 +85,9 @@ return [
     'monthly' => 'Monthly',
     'daily' => 'Daily',
     'compareBetweenPackagesAndCourses' => 'Compare Between Packages And Courses',
+    'coursecountable' => 'Courses',
+    'topSellingCourses' => 'Top Selling Courses',
+    'topSeller' => 'Top Seller',
     //packages
     "packages" => "Packages",
     "activePackages" => "Active Packages",

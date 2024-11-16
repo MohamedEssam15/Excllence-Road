@@ -104,13 +104,27 @@ class HomeController extends Controller
             ? abs((($currentMonthTeachers - $previousMonthTeachers) / $previousMonthTeachers) * 100)
             : 0;
         $totalTeachers = ['totalTeachers' => $totalTeachers, 'growthPercentage' => $teachersGrowthPercentage];
-        return view('index', compact('totalRevenue', 'totalOrders', 'totalStudents', 'totalTeachers'));
+
+        //top teachers
+        $topTeachers = User::whereHas('teacherCourses')->withCount('teacherCourses')->orderBy('teacher_courses_count', 'desc')->limit(5)->get();
+
+        //Top selling Courses
+        $topCoursesModel = Course::whereHas('orders', function ($query) {
+            $query->whereHas('payment', function ($q) {
+                $q->where('status', 'done');
+            });
+        })->withCount('orders')->orderBy('orders_count', 'desc')->limit(7)->get();
+        $totalCoursesOrders = $topCoursesModel->flatMap(function ($course) {
+            return $course->orders;
+        })->count();
+        $topCourses = ['topCourses' => $topCoursesModel, 'totalCoursesOrders' => $totalCoursesOrders];
+        return view('index', compact('totalRevenue', 'totalOrders', 'totalStudents', 'totalTeachers', 'topTeachers', 'topCourses'));
     }
 
     public function getPackageCourseCounts()
     {
         $startDate = now()->subYear();  // One year ago
-        $endDate = now();  // Today
+        $endDate = now()->addMonth();  // Today
 
         // Get months from startDate to endDate
         $months = [];
@@ -123,8 +137,27 @@ class HomeController extends Controller
         $courseCounts = [];
 
         foreach ($months as $month) {
-            $packageCounts[] = Package::whereBetween('created_at', [$month . '-01', $month . '-31'])->count();
-            $courseCounts[] = Course::whereBetween('created_at', [$month . '-01', $month . '-31'])->count();
+            $firstDayOfMonth = Carbon::parse($month)->startOfMonth();  // First day of the month
+            $lastDayOfMonth = Carbon::parse($month)->endOfMonth();  // Last day of the month
+            $packages = Package::whereHas('orders', function ($query) use ($firstDayOfMonth, $lastDayOfMonth) {
+                $query->whereHas('payment', function ($q) {
+                    $q->where('status', 'done');
+                })->whereBetween('created_at', [$firstDayOfMonth, $lastDayOfMonth]);
+            })->get();
+            $totalPackageOrders = $packages->flatMap(function ($package) {
+                return $package->orders;
+            })->count();
+            $packageCounts[] = $totalPackageOrders;
+
+            $courses = Course::whereHas('orders', function ($query) use ($firstDayOfMonth, $lastDayOfMonth) {
+                $query->whereHas('payment', function ($q) {
+                    $q->where('status', 'done');
+                })->whereBetween('created_at', [$firstDayOfMonth, $lastDayOfMonth]);
+            })->get();
+            $totalCoursesOrders = $courses->flatMap(function ($course) {
+                return $course->orders;
+            })->count();
+            $courseCounts[] = $totalCoursesOrders;
         }
 
         return response()->json([
