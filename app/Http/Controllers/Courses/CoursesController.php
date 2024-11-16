@@ -175,7 +175,10 @@ class CoursesController extends Controller
      */
     public function show(string $id)
     {
-        return redirect()->back();
+        $course = Course::withCount('reviews')->with(['units', 'units.lessons', 'reviews' => function ($query) {
+            $query->latest()->take(5); // Get the latest 5 reviews
+        }])->findOrFail($id);
+        return view('courses.show-course', compact('course'));
     }
 
     /**

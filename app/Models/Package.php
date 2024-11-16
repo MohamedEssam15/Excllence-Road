@@ -10,12 +10,12 @@ use Illuminate\Database\Eloquent\Relations\MorphToMany;
 class Package extends Model
 {
     use HasFactory;
-    protected $fillable = ['name','description','price','cover_photo','start_date','end_date','is_popular' ];
-    protected $with=['translations'];
+    protected $fillable = ['name', 'description', 'price', 'cover_photo', 'start_date', 'end_date', 'is_popular'];
+    protected $with = ['translations'];
 
     public function courses(): BelongsToMany
     {
-        return $this->belongsToMany(Course::class,'courses_packages','package_id','course_id');
+        return $this->belongsToMany(Course::class, 'courses_packages', 'package_id', 'course_id');
     }
 
     // public function enrollments()
@@ -31,9 +31,21 @@ class Package extends Model
 
     public function translations()
     {
-        return $this->hasMany(PackageTranslation::class,'package_id');
+        return $this->hasMany(PackageTranslation::class, 'package_id');
     }
-    public function getCoverPhotoPath(){
-        return asset('packages_attachments/'.$this->id.'/cover_photo/'.$this->cover_photo);
+    public function getCoverPhotoPath()
+    {
+        return asset('packages_attachments/' . $this->id . '/cover_photo/' . $this->cover_photo);
+    }
+
+    public function userEnrollments()
+    {
+        return $this->belongsToMany(User::class, 'courses_users', 'package_id', 'user_id')->withPivot('payment_id', 'start_date', 'end_date', 'from_package', 'course_id')
+            ->withTimestamps();
+    }
+    public function cousresEnrollments()
+    {
+        return $this->belongsToMany(Course::class, 'courses_users', 'package_id', 'course_id')->withPivot('payment_id', 'start_date', 'end_date', 'from_package', 'user_id')
+            ->withTimestamps();
     }
 }

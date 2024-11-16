@@ -228,6 +228,8 @@ var app_live_assets = {
         folder.src + "js/used/modify-modal.init.js",
         folder.src + "js/used/cancel-modal.init.js",
         folder.src + "js/used/back-to-pending-modal.init.js",
+        folder.src + "js/used/dashboard.init.js",
+        folder.src + "js/used/apexcharts.init.js",
     ]
 };
 

@@ -11,7 +11,7 @@
             <td data-field="#" style="width: 80px">{{ $i++ }}</td>
             <td data-field="@lang('translation.name')">
                 <a class="btn-outline-secondary" href="{{ route('courses.info', $course->id) }}" title="@lang('translation.show')">
-                    {{ $course->translate(config('app.locale'))->name }}
+                    {{ $course->translate(config('app.locale'))->name ?? $course->name }}
                 </a>
             </td>
             <td data-field="@lang('translation.image')">
@@ -28,7 +28,7 @@
             </td>
             <td data-field="@lang('translation.specificTo')">
                 @if ($course->is_specific)
-                    {{ $course->translate(config('app.locale'))->specific_to }}
+                    {{ $course->translate(config('app.locale'))->specific_to ?? $course->specific_to }}
                 @else
                     @lang('translation.notSpecific')
                 @endif
@@ -50,7 +50,7 @@
                     data-bs-target="#modifyModal"
                     data-bs-courseid="{{ $course->id }}"data-bs-teachercommision="{{ $course->teacher_commision }}"
                     data-bs-ispopular="{{ $course->is_populer }}" data-bs-ismobileonly="{{ $course->is_mobile_only }}"
-                    data-bs-coursename="{{ $course->translate(config('app.locale'))->name }}">
+                    data-bs-coursename="{{ $course->translate(config('app.locale'))->name ?? $course->name }}">
                     <i class="fas fa-pencil-alt"></i>
                 </a>
             </td>

@@ -13,7 +13,7 @@ class Course extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['description', 'name', 'teacher_commision', 'teacher_id', 'category_id', 'start_date', 'end_date', 'is_specific', 'specific_to', 'status_id', 'price', 'level_id', 'cover_photo_name', 'rating'];
+    protected $fillable = ['description', 'name', 'teacher_commision', 'teacher_id', 'category_id', 'start_date', 'end_date', 'is_specific', 'specific_to', 'status_id', 'price', 'level_id', 'cover_photo_name', 'rating', 'course_trailer'];
     protected $with = ['translations', 'level', 'status', 'category', 'teacher'];
 
 
@@ -70,6 +70,10 @@ class Course extends Model
     public function getCoverPhotoPath()
     {
         return asset('course_attachments/' . $this->id . '/cover_photo/' . $this->cover_photo_name);
+    }
+    public function getCourseTrailerPath()
+    {
+        return asset('course_attachments/' . $this->id . '/trailer/' . $this->course_trailer);
     }
 
     public function scopeFilterBy($query, $filters)

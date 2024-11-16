@@ -11,7 +11,7 @@
             <td data-field="#" style="width: 80px">{{ $i++ }}</td>
             <td data-field="@lang('translation.name')">
                 <a class="btn-outline-secondary" href="{{ route('courses.info', $course->id) }}" title="@lang('translation.show')">
-                    {{ $course->translate(config('app.locale'))->name }}
+                    {{ $course->translate(config('app.locale'))->name ?? $course->name }}
                 </a>
             </td>
             <td data-field="@lang('translation.image')">
@@ -21,14 +21,14 @@
             <td data-field="@lang('translation.price')">{{ $course->price }}</td>
             <td data-field="@lang('translation.teacherCommistion')">{{ $course->teacher_commision . '%' }}</td>
             <td data-field="@lang('translation.category')">
-                {{ $course->category->translate(config('app.locale'))->name }}
+                {{ $course->category->translate(config('app.locale'))->name ?? $course->name }}
             </td>
             <td data-field="@lang('translation.level')">
                 {{ $course->level->translate(config('app.locale')) }}
             </td>
             <td data-field="@lang('translation.specificTo')">
                 @if ($course->is_specific)
-                    {{ $course->translate(config('app.locale'))->specific_to }}
+                    {{ $course->translate(config('app.locale'))->specific_to ?? $course->specific_to }}
                 @else
                     @lang('translation.notSpecific')
                 @endif

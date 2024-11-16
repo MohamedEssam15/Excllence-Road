@@ -2,6 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Course;
+use App\Models\Order;
+use App\Models\Package;
+use App\Models\Payment;
+use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\App;
@@ -35,8 +41,99 @@ class HomeController extends Controller
 
     public function root()
     {
-        return view('index');
+        // total revunue calculations
+        $totalDonePayments = Payment::where('status', 'done')->sum('amount');
+        $currentMonthDonePayments = Payment::where('status', 'done')
+            ->whereMonth('created_at', Carbon::now()->month)
+            ->whereYear('created_at', Carbon::now()->year)
+            ->sum('amount');
+        $previousMonthDonePayments = Payment::where('status', 'done')
+            ->whereMonth('created_at', Carbon::now()->subMonth()->month)
+            ->whereYear('created_at', Carbon::now()->subMonth()->year)
+            ->sum('amount');
+        $growthPercentage = $previousMonthDonePayments > 0 && $currentMonthDonePayments > 0
+            ? (($currentMonthDonePayments - $previousMonthDonePayments) / $previousMonthDonePayments) * 100
+            : null;
+        $totalRevenue = ['totalRevenue' => $totalDonePayments, 'growthPercentage' => $growthPercentage];
+
+        //orders calculations
+        $totalDoneOrdersCount = Order::whereHas('payment', function ($query) {
+            $query->where('status', 'done');
+        })->count();
+        $currentMonthDoneOrdersCount = Order::whereHas('payment', function ($query) {
+            $query->where('status', 'done');
+        })->whereMonth('created_at', Carbon::now()->month)
+            ->whereYear('created_at', Carbon::now()->year)
+            ->count();
+        $previousMonthDoneOrdersCount = Order::whereHas('payment', function ($query) {
+            $query->where('status', 'done');
+        })->whereMonth('created_at', Carbon::now()->subMonth()->month)
+            ->whereYear('created_at', Carbon::now()->subMonth()->year)
+            ->count();
+        $ordersGrowthPercentage = $previousMonthDoneOrdersCount > 0 && $currentMonthDoneOrdersCount > 0
+            ? (($currentMonthDoneOrdersCount - $previousMonthDoneOrdersCount) / $previousMonthDoneOrdersCount) * 100
+            : 0;
+        $totalOrders = ['totalOrders' => $totalDoneOrdersCount, 'ordersGrowthPercentage' => $ordersGrowthPercentage];
+
+        //students calculations
+        $totalStudents = User::role('student', 'api')->count();
+        $currentMonthStudents = User::role('student', 'api')
+            ->whereMonth('created_at', Carbon::now()->month)
+            ->whereYear('created_at', Carbon::now()->year)
+            ->count();
+        $previousMonthStudents = User::role('student', 'api')
+            ->whereMonth('created_at', Carbon::now()->subMonth()->month)
+            ->whereYear('created_at', Carbon::now()->subMonth()->year)
+            ->count();
+        $studentsGrowthPercentage = $previousMonthStudents > 0 && $currentMonthStudents > 0
+            ? (($currentMonthStudents - $previousMonthStudents) / $previousMonthStudents) * 100
+            : 0;
+        $totalStudents = ['totalStudents' => $totalStudents, 'growthPercentage' => $studentsGrowthPercentage];
+
+        //teachers calculations
+        $totalTeachers = User::role('student', 'api')->count();
+        $currentMonthTeachers = User::role('teacher', 'api')
+            ->whereMonth('created_at', Carbon::now()->month)
+            ->whereYear('created_at', Carbon::now()->year)
+            ->count();
+        $previousMonthTeachers = User::role('teacher', 'api')
+            ->whereMonth('created_at', Carbon::now()->subMonth()->month)
+            ->whereYear('created_at', Carbon::now()->subMonth()->year)
+            ->count();
+        $teachersGrowthPercentage = $previousMonthTeachers > 0 && $currentMonthTeachers > 0
+            ? abs((($currentMonthTeachers - $previousMonthTeachers) / $previousMonthTeachers) * 100)
+            : 0;
+        $totalTeachers = ['totalTeachers' => $totalTeachers, 'growthPercentage' => $teachersGrowthPercentage];
+        return view('index', compact('totalRevenue', 'totalOrders', 'totalStudents', 'totalTeachers'));
     }
+
+    public function getPackageCourseCounts()
+    {
+        $startDate = now()->subYear();  // One year ago
+        $endDate = now();  // Today
+
+        // Get months from startDate to endDate
+        $months = [];
+        for ($date = $startDate; $date->lte($endDate); $date->addMonth()) {
+            $months[] = $date->format('Y-m');
+        }
+
+        // Get the package and course counts for each month
+        $packageCounts = [];
+        $courseCounts = [];
+
+        foreach ($months as $month) {
+            $packageCounts[] = Package::whereBetween('created_at', [$month . '-01', $month . '-31'])->count();
+            $courseCounts[] = Course::whereBetween('created_at', [$month . '-01', $month . '-31'])->count();
+        }
+
+        return response()->json([
+            'months' => $months,
+            'package_counts' => $packageCounts,
+            'course_counts' => $courseCounts,
+        ]);
+    }
+
 
     /*Language Translation*/
     public function lang($locale)

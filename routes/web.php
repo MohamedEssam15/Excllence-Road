@@ -34,6 +34,7 @@ Route::middleware('auth:web')->group(function () {
 
     //Language Translation
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'root']);
+    Route::get('/get-package-course-counts', [App\Http\Controllers\HomeController::class, 'getPackageCourseCounts']);
     Route::get('change-lang/{locale}', [App\Http\Controllers\HomeController::class, 'lang']);
     Route::post('/formsubmit', [App\Http\Controllers\HomeController::class, 'FormSubmit'])->name('FormSubmit');
     Route::get('/{any}', [App\Http\Controllers\HomeController::class, 'index']);
@@ -100,5 +101,7 @@ Route::middleware('auth:web')->group(function () {
         Route::get('orders', [TransactionController::class, 'orders'])->name('transactions.orders');
         Route::get('teachers/revenue', [TransactionController::class, 'teacherRevenue'])->name('transactions.teachers.revenue');
         Route::get('teachers/{id}/all-revenue', [TransactionController::class, 'teacherAllRevenue'])->name('transactions.teacher.all.revenue');
+        Route::get('courses/best-seller', [TransactionController::class, 'bestSellerCourses'])->name('transactions.bestSeller.courses');
+        Route::get('packages/best-seller', [TransactionController::class, 'bestSellerPackages'])->name('transactions.bestSeller.packages');
     });
 });
