@@ -182,12 +182,6 @@ class ExamController extends Controller
         } else {
             return apiResponse(__('response.courseAlreadyAssigned'), new stdClass(), [__('response.courseAlreadyAssigned')], 422);
         }
-
-
-        $exam->courses()->attach([
-            $course->id => ['available_from' => $request->availableFrom, 'available_to' => $request->availableTo]
-        ]);
-
         return apiResponse(__('response.addedSuccessfully'), new TeacherExamResource($exam));
     }
 
