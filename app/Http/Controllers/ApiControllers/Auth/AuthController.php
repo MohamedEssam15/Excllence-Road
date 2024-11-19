@@ -49,7 +49,7 @@ class AuthController extends Controller
         } else {
             $platform = 'web';
         }
-        if (! $token = auth('api')->claims(['platform' => $platform])->attempt($credentials, request('rememberMe'))) {
+        if (! $token = auth('api')->claims(['platform' => $platform])->attempt($credentials)) {
             return apiResponse(__('auth.failed'), new stdClass(), [__('auth.failed')], 401);
         }
         $user = auth()->user();
