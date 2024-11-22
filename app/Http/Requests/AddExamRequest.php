@@ -29,13 +29,14 @@ class AddExamRequest extends FormRequest
             'name' => ['required', 'string'],
             'description' => ['required', 'string'],
             'isUnitExam' => ['required', 'boolean'],
-            'examTime' => ['required', 'integer'],
+            'examTime' => ['nullable', 'integer'],
             'availableFrom' => ['required', 'date', 'after_or_equal:' . $course->start_date],
             'availableTo' => ['required', 'date', 'before:' . $course->end_date, 'after:' . request()->availableFrom],
             'units' => ['required_if:isUnitExam,1', 'array'],
             'units.*' => ['required', 'exists:units,id'],
             'type' => ['required', 'in:mcq,file'],
             'examFile' => ['required_if:type,file', 'max:1048576'],
+            'examDegree' => ['required_if:type,file', 'integer', 'min:0', 'max:100'],
         ];
     }
 

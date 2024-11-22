@@ -17,14 +17,12 @@ class TeacherExamsServices
         'file-file' => 'handleFileFile',
     ];
 
-    public function addExam($course, $type, $name, $description, $examTime, $availableFrom, $availableTo, $isUnitExam, $units = null, $file = null)
+    public function addExam($course, $type, $name, $description, $examTime, $examDegree, $availableFrom, $availableTo, $isUnitExam, $units = null, $file = null)
     {
         if ($type == 'file') {
-            $path = "/courses/{$course->id}/exams/";
             $examFile = $file;
             $fileExtension = $examFile->getClientOriginalExtension();
             $fileName = Str::random(10) . '.' . $fileExtension;
-            $examFile->storeAs($path, $fileName, 'public');
         } else {
             $fileName = null;
         }
@@ -34,8 +32,14 @@ class TeacherExamsServices
             'exam_time' => $examTime,
             'is_unit_exam' => $isUnitExam,
             'type' => $type,
-            'file_name' => $fileName
+            'file_name' => $fileName,
+            'degree' => $examDegree
         ]);
+        if ($type == 'file') {
+            $path = "/exams/{$exam->id}/";
+            $examFile = $file;
+            $examFile->storeAs($path, $fileName, 'public');
+        }
         $exam->courses()->attach([
             $course->id => [
                 'available_from' => $availableFrom,
@@ -48,7 +52,7 @@ class TeacherExamsServices
         return $exam;
     }
 
-    public function updateExam($exam, $type, $name, $description, $examTime, $isUnitExam, $units = null, $file = null)
+    public function updateExam($exam, $type, $name, $description, $examTime, $examDegree, $isUnitExam, $units = null, $file = null)
     {
         if ($type != null) {
             $newType = $type;
@@ -63,6 +67,7 @@ class TeacherExamsServices
             $handlerMethod = $this->updateExamHandlers[$key];
             $this->$handlerMethod($exam, $file);
             $exam->type = $type;
+            $exam->degree = $examDegree;
         }
 
         $exam->name = $name;
@@ -80,14 +85,14 @@ class TeacherExamsServices
     public function deleteExam($exam)
     {
         if ($exam->type == 'file') {
-            $deletePath = "/courses/{$exam->course->id}/exams/{$exam->file_name}";
+            $deletePath = "/exams/{$exam->id}/{$exam->file_name}";
             Storage::disk('public')->delete($deletePath);
         }
         $exam->delete();
     }
     private function handleMcqFile($exam, $file = null)
     {
-        $path = "/courses/{$exam->course->id}/exams/";
+        $path = "/exams/{$exam->id}/";
         $examFile = $file;
         $fileExtension = $examFile->getClientOriginalExtension();
         $fileName = Str::random(10) . '.' . $fileExtension;
@@ -99,8 +104,8 @@ class TeacherExamsServices
     private function handleMcqMcq($exam, $file = null) {}
     private function handleFileFile($exam, $file = null)
     {
-        $deletePath = "/courses/{$exam->course->id}/exams/{$exam->file_name}";
-        $path = "/courses/{$exam->course->id}/exams/";
+        $deletePath = "/exams/{$exam->id}/{$exam->file_name}";
+        $path = "/exams/{$exam->id}/";
         Storage::disk('public')->delete($deletePath);
         $examFile = $file;
         $fileExtension = $examFile->getClientOriginalExtension();
@@ -110,7 +115,7 @@ class TeacherExamsServices
     }
     private function handleFileMcq($exam, $file = null)
     {
-        $deletePath = "/courses/{$exam->course->id}/exams/{$exam->file_name}";
+        $deletePath = "/exams/{$exam->id}/{$exam->file_name}";
         Storage::disk('public')->delete($deletePath);
         $exam->file_name = null;
         $exam->type = 'mcq';

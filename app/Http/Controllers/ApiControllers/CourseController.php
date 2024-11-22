@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\ApiControllers;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\AuthCourseInfoResource;
 use App\Http\Resources\CourseInfoResource;
 use App\Http\Resources\CourseLevelResource;
 use App\Http\Resources\PaginatedCollection;
@@ -109,15 +110,23 @@ class CourseController extends Controller
         return apiResponse('Data Retrieved', CourseLevelResource::collection($courseLevels));
     }
 
-    public function guestCourseInfo($id)
+    public function courseInfo($id)
     {
-        $course = Course::where('id', $id)->whereHas('status', function ($query) {
-            $query->where('name', 'active');
-        })->first();
+        $course = Course::where('id', $id)->first();
         if (is_null($course)) {
             return apiResponse(__('response.courseNotFound'), new stdClass(), [__('response.courseNotFound')]);
         }
-
+        if ($course->is_mobile_only && auth()->check()) {
+            $platform = auth()->payload()->get('platform');
+            if ($platform == 'mobile') {
+                return apiResponse('Data Retrieved', new AuthCourseInfoResource($course));
+            } else {
+                return apiResponse(__('response.cantViewCourse'), new stdClass(), [__('response.cantViewCourse')]);
+            }
+        }
+        if (auth()->check()) {
+            return apiResponse('Data Retrieved', new AuthCourseInfoResource($course));
+        }
         return apiResponse('Data Retrieved', new CourseInfoResource($course));
     }
 

@@ -36,4 +36,11 @@ return [
     'oneLangEn' => 'يجب ملئ الخانات الخاصة باللغة الانجليزية',
     'oneLangAr' => 'يجب ملئ الخانات الخاصة باللغة العربية',
     'reviewExists' => 'تم اضافة تقييم لهذا الدورة مسبقا',
+    'courseNotHaveThatExam' => 'الدورة لا تحتوي علي هذا الامتحان',
+    'youHaveThatExam' => 'لقد اخذت هذا الامتحان من قبل',
+    'examTimeExpired' => 'لقد انتهي وقت الامتحان',
+    'emailNotVerfiedAlready' => 'يرجى أثبات ملكية البريد الالكتروني اولا',
+    'examSubmittedSuccessfully' => 'تم تقديم الاجابات بنجاح',
+    'studentDidNotTakeThatExam' => 'الطالب لم يقم بتقديم الامتحان',
+    'theGradeIsCalculatedAutomatically' => 'الدرجة يتم احتسابها تلقائيا',
 ];

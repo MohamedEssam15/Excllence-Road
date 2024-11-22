@@ -1,0 +1,38 @@
+<?php
+
+namespace App\Http\Resources;
+
+use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\JsonResource;
+
+class StudentExamResource extends JsonResource
+{
+    public function __construct($resource)
+    {
+        parent::__construct($resource);
+    }
+    /**
+     * Transform the resource into an array.
+     *
+     * @return array<string, mixed>
+     */
+    public function toArray(Request $request): array
+    {
+
+        return [
+            'id' => $this->id,
+            'name' => $this->name,
+            'description' => $this->description,
+            'type' => $this->type,
+            'questions' => $this->type == 'mcq' ? StudentQuestionResource::collection($this->questions) : null,
+            'examFile' => $this->getExamFile(),
+            'availableFrom' => $this->pivot->available_from,
+            'availableTo' => $this->pivot->available_to,
+            'course' => new CourseBasicInfoResource($this->pivot->pivotParent),
+            'examTime' => $this->exam_time,
+            'isUnitExam' => $this->is_unit_exam,
+            'units' => $this->is_unit_exam ? UnitInfoResource::collection($this->units) : null,
+
+        ];
+    }
+}

@@ -9,9 +9,11 @@ use App\Http\Controllers\ApiControllers\PackageController;
 use App\Http\Controllers\ApiControllers\TeacherController;
 use App\Http\Controllers\ApiControllers\PaymentController;
 use App\Http\Controllers\ApiControllers\ReviewController;
+use App\Http\Controllers\ApiControllers\ExamController as StudentExamController;
 use App\Http\Controllers\ApiControllers\TeacherPanalControllers\ExamController;
 use App\Http\Controllers\ApiControllers\TeacherPanalControllers\LessonsController;
 use App\Http\Controllers\ApiControllers\TeacherPanalControllers\UnitController;
+use App\Models\Exam;
 
 /*
 |--------------------------------------------------------------------------
@@ -39,16 +41,23 @@ Route::group(['middleware' => ['api'], 'prefix' => 'auth'], function ($router) {
     Route::delete('/delete', [AuthController::class, 'delete']);
 });
 
-Route::group(['middleware' => 'guest:api', 'prefix' => 'courses'], function () {
+Route::group([ 'prefix' => 'courses'], function () {
     Route::get('popular', [CourseController::class, 'getPopularCourses']);
     Route::get('teacher/{id}', [CourseController::class, 'getTeacherCourses']);
     Route::get('search', [CourseController::class, 'courseSearch']);
     Route::get('/', [CourseController::class, 'coursesFilters']);
     Route::get('/levels', [CourseController::class, 'getCourseLevels']);
-    Route::get('/course-info/{id}', [CourseController::class, 'guestCourseInfo']);
+    Route::get('/course-info/{id}', [CourseController::class, 'courseInfo']);
 });
 Route::group(["middleware" => "auth:api"], function () {
-    Route::get('courses/{id}/students', [CourseController::class, 'getCourseStudents']);
+    Route::group(['prefix' => 'courses'], function () {
+        Route::get('{id}/students', [CourseController::class, 'getCourseStudents']);
+        Route::get('{course}/exams/{exam}', [StudentExamController::class, 'getCourseExams']);
+        Route::post('{course}/exams/{exam}', [StudentExamController::class, 'submitExam']);
+        Route::get('{course}/exams/{exam}/get-students-degree', [StudentExamController::class, 'studentsDegree']);
+        Route::get('{course}/exams/{exam}/get-student-answers/{user}', [StudentExamController::class, 'studentAnswers']);
+        Route::put('{course}/exams/{exam}/assign-grade/{user}', [StudentExamController::class, 'updateExamGrade']);
+    });
     Route::get('lessons/{lesson}', [CourseController::class, 'lessonInfo']);
     Route::get('students/courses', [CourseController::class, 'getStudentCourses']);
 });

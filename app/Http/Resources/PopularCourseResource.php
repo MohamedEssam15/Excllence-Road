@@ -34,6 +34,7 @@ class PopularCourseResource extends JsonResource
             'price' => $this->course->price,
             'startDate' => $this->course->start_date,
             'endDate' => $this->course->end_date,
+            'isJoined' => $this->enrollments()->where('user_id', auth()->user()->id ?? null)->exists(),
             'isSpecific' => $this->course->is_specific,
             'specificTo' => $this->course->translate($this->locale)->specific_to,
             'rating' => $this->average_rating,

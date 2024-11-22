@@ -28,6 +28,7 @@ class StudentCoursesResource extends JsonResource
             'name' => $this->translate($this->locale)->name,
             'description' => $this->translate($this->locale)->description,
             'coverPhoto' => $this->getCoverPhotoPath(),
+            'isJoined' => $this->enrollments()->where('user_id', auth()->user()->id ?? null)->exists(),
             'fromPackage' => $this->pivot->from_package,
             'package' => $this->pivot->from_package ? $this->getPackageInfo($this->pivot->package_id) : null
         ];

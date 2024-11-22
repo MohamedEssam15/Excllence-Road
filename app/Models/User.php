@@ -64,6 +64,15 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
         return $this->hasMany(Course::class, 'teacher_id');
     }
 
+
+    public function studentExams()
+    {
+        return $this->belongsToMany(Exam::class, 'exams_users', 'user_id', 'exam_id')->withPivot('file_name', 'grade', 'degree', 'start_time', 'course_id')->withTimestamps();
+    }
+    public function studentQuestions()
+    {
+        return $this->belongsToMany(Question::class, 'users_questions', 'user_id', 'question_id')->withPivot('is_correct', 'exam_id', 'course_id', 'answer_id')->withTimestamps();
+    }
     public function enrollments()
     {
         return $this->belongsToMany(Course::class, 'courses_users', 'user_id', 'course_id', 'id', 'id')->withPivot('payment_id', 'start_date', 'end_date', 'from_package', 'package_id')

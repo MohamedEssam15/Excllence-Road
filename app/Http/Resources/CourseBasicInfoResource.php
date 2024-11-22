@@ -27,6 +27,7 @@ class CourseBasicInfoResource extends JsonResource
             'name' => $this->translate($this->locale)->name ?? $this->name,
             'description' => $this->translate($this->locale)->description ?? $this->description,
             'coverPhoto' => $this->getCoverPhotoPath(),
+            'isJoined' => $this->enrollments()->where('user_id', auth()->user()->id ?? null)->exists(),
             'rating' => $this->average_rating,
         ];
     }

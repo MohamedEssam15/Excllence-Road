@@ -32,7 +32,7 @@ class AuthController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['login', 'register', 'sendResetCode', 'resetWithCode', 'teacherRegister']]);
+        $this->middleware('auth:api', ['except' => ['login', 'register', 'sendResetCode', 'sendVerificationCode', 'verifyEmail', 'resetWithCode', 'teacherRegister']]);
     }
 
     /**
@@ -53,10 +53,16 @@ class AuthController extends Controller
             return apiResponse(__('auth.failed'), new stdClass(), [__('auth.failed')], 401);
         }
         $user = auth()->user();
+        if ($user->email_verified_at == null) {
+            Auth::logout();
+            return apiResponse(__('response.emailNotVerfiedAlready'), new stdClass(), [__('response.emailNotVerfiedAlready')], 422);
+        }
         if (! $user->is_active) {
             Auth::logout();
             return apiResponse(__('auth.notActive'), new stdClass(), [__('auth.notActive')], 401);
         }
+
+
         if ($user->is_blocked) {
             Auth::logout();
             return apiResponse(__('auth.blocked'), new stdClass(), [__('auth.blocked')], 401);
@@ -219,7 +225,14 @@ class AuthController extends Controller
 
     public function sendVerificationCode(Request $request)
     {
-        $user = auth('api')->user();
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email|exists:users,email',
+        ]);
+
+        if ($validator->fails()) {
+            return apiResponse('error', new stdClass(), $validator->errors()->all(), 422);
+        }
+        $user = User::where('email', $request->email)->first();
         if ($user->email_verified_at != null) {
             return apiResponse(__('response.emailVerfiedAlready'), new stdClass(), [__('response.emailVerfiedAlready')], 422);
         }
@@ -239,6 +252,7 @@ class AuthController extends Controller
     public function verifyEmail(Request $request)
     {
         $validator = Validator::make($request->all(), [
+            'email' => 'required|email|exists:users,email',
             'code' => 'required|numeric',
         ]);
 
@@ -247,7 +261,7 @@ class AuthController extends Controller
         }
 
         // Find user
-        $user = auth()->user();
+        $user = User::where('email', $request->email)->first();
         $resetEntry = DB::table('password_resets_jwt')
             ->where('email', $user->email)
             ->where('code', $request->code)
@@ -262,7 +276,8 @@ class AuthController extends Controller
         $user->save();
 
         DB::table('password_resets_jwt')->where('email', $request->email)->delete();
-        return apiResponse(__('passwords.emailVerfied'));
+
+        return $this->respondWithToken(auth()->login($user), $user, __('passwords.emailVerfied'));
     }
 
     public function delete()
@@ -306,7 +321,6 @@ class AuthController extends Controller
                 $this->saveTeacherAttachment($user->id, $fileName, $file);
             }
         }
-
         return apiResponse(__('response.teacherSignedUp'), new stdClass());
     }
     /**
@@ -316,7 +330,7 @@ class AuthController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    protected function respondWithToken($token, $user = null)
+    protected function respondWithToken($token, $user = null, $message = 'login Successfully')
     {
         $resource = null;
         if ($user->hasRole('teacher')) {
@@ -330,7 +344,7 @@ class AuthController extends Controller
             'token_type' => 'bearer',
             'expires_in' => auth()->factory()->getTTL() * 60
         ];
-        return apiResponse('login successfully', $response);
+        return apiResponse($message, $response);
     }
 
     protected function saveTeacherAttachment($userId, $attachName, $file)

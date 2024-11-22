@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class UpdateCourseRequest extends FormRequest
 {
@@ -52,5 +54,11 @@ class UpdateCourseRequest extends FormRequest
             'coverPhoto' => ['nullable', 'image', 'mimes:jpg,jpeg,png', 'max:10240'],
             'courseTrailer' => ['nullable', 'file', 'mimes:mp4', 'max:524288'],
         ];
+    }
+    protected function failedValidation(Validator $validator)
+    {
+        throw new HttpResponseException(
+            apiResponse('error', new \stdClass(), $validator->errors()->all(), 422)
+        );
     }
 }

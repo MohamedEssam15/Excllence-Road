@@ -35,5 +35,12 @@ return [
     'oneLangEn' => 'You should fill the fields that related to english language',
     'oneLangAr' => 'You should fill the fields that related to arabic language',
     'reviewExists' => 'Review already exists',
+    'courseNotHaveThatExam' => 'Course not have that exam',
+    'youHaveThatExam' => 'You have taked that exam before',
+    'examTimeExpired' => 'The exam time is expired',
+    'emailNotVerfiedAlready' => 'Please verify your email first',
+    'examSubmittedSuccessfully' => 'Exam submitted successfully',
+    'studentDidNotTakeThatExam' => 'Student did not take that exam',
+    'theGradeIsCalculatedAutomatically' => 'The grade is calculated automatically',
 
 ];

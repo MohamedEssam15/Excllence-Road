@@ -4,6 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\App;
 
 class AuthCourseInfoResource extends JsonResource
 {
@@ -33,10 +34,12 @@ class AuthCourseInfoResource extends JsonResource
             'price' => $this->price,
             'startDate' => $this->start_date,
             'endDate' => $this->end_date,
+            'isJoined' => $this->enrollments()->where('user_id', auth()->user()->id ?? null)->exists(),
             'isSpecific' => $this->is_specific,
             'specificTo' => $this->translate($this->locale)->specific_to,
             'rating' => $this->average_rating,
             'reviews' => ReviewResource::collection($this->reviews),
+            'exams'=> ExamInfoResource::collection($this->exams),
         ];
     }
 }

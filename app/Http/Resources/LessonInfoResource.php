@@ -26,6 +26,7 @@ class LessonInfoResource extends JsonResource
             'id' => $this->id,
             'name' => $this->translate($this->locale)?->name  ?? $this->name,
             'description' => $this->translate($this->locale)?->description ?? $this->description,
+            'type' => $this->type,
         ];
     }
 }

@@ -28,6 +28,7 @@ class CourseInfoResource extends JsonResource
             'description' => $this->translate($this->locale)->description,
             'coverPhoto' => $this->getCoverPhotoPath(),
             'teacher' => new TeacherInfoResource($this->teacher),
+            'isJoined' => $this->enrollments()->where('user_id', auth()->user()->id ?? null)->exists(),
             'category' => new CategoryInfoResource($this->category),
             'units' => UnitInfoResource::collection($this->units),
             'level' => new CourseLevelResource($this->level),

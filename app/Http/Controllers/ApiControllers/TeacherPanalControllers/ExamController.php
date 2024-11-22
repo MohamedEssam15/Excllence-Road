@@ -8,8 +8,10 @@ use App\Http\Requests\AddExamToCoursesRequest;
 use App\Http\Requests\AddQuestionsRequest;
 use App\Http\Requests\CopyExamRequest;
 use App\Http\Requests\RemoveQuestionsExamRequest;
+use App\Http\Requests\SubmitExamRequest;
 use App\Http\Requests\UpdateExamRequest;
 use App\Http\Resources\PaginatedCollection;
+use App\Http\Resources\StudentExamResource;
 use App\Http\Resources\TeacherCourseExamResource;
 use App\Http\Resources\TeacherExamResource;
 use App\Http\Resources\TeacherQuestionsResource;
@@ -19,6 +21,7 @@ use App\Models\Question;
 use App\Models\QuestionAnswer;
 use App\Services\Exams\TeacherExamsServices;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use stdClass;
@@ -28,7 +31,7 @@ class ExamController extends Controller
     public function addExam(AddExamRequest $request, Course $course)
     {
         $teacherExamServices = new TeacherExamsServices();
-        $exam = $teacherExamServices->addExam($course, $request->type, $request->name, $request->description, $request->examTime, $request->availableFrom, $request->availableTo, $request->isUnitExam, $request->units, $request->examFile);
+        $exam = $teacherExamServices->addExam($course, $request->type, $request->name, $request->description, $request->examTime,$request->examDegree, $request->availableFrom, $request->availableTo, $request->isUnitExam, $request->units, $request->examFile);
         return apiResponse(__('response.addedSuccessfully'), new TeacherExamResource($exam));
     }
 
