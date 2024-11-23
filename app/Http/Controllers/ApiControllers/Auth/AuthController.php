@@ -285,7 +285,7 @@ class AuthController extends Controller
         $user = auth()->user();
         auth()->logout();
         if ($user->hasRole('teacher')) {
-            $user->delete();
+            $user->forceDelete();
         } else {
             $deletePath = "/users_attachments/{$user->id}";
             Storage::disk('publicFolder')->deleteDirectory($deletePath);
