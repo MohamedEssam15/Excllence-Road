@@ -41,7 +41,7 @@ Route::group(['middleware' => ['api'], 'prefix' => 'auth'], function ($router) {
     Route::delete('/delete', [AuthController::class, 'delete']);
 });
 
-Route::group([ 'prefix' => 'courses'], function () {
+Route::group(['prefix' => 'courses'], function () {
     Route::get('popular', [CourseController::class, 'getPopularCourses']);
     Route::get('teacher/{id}', [CourseController::class, 'getTeacherCourses']);
     Route::get('search', [CourseController::class, 'courseSearch']);
@@ -108,12 +108,11 @@ Route::group(['middleware' => 'guest:api', 'prefix' => 'categories'], function (
 });
 
 //notification routes
-Route::group(['middleware' => 'auth:api', 'prefix' => 'notifications'], function () {
-    Route::post('/send', [NotificationController::class, 'sendNotification']);
+Route::group(['middleware' => 'auth:api', 'prefix' => 'messages'], function () {
+    Route::post('/send', [NotificationController::class, 'sendMessage']);
     Route::get('/latest-notifications', [NotificationController::class, 'userNotification']);
-    Route::get('/all-notifications', [NotificationController::class, 'userAllNotification']);
-    Route::delete('/{id}/delete', [NotificationController::class, 'deleteNotification']);
-    Route::get('/{id}/mark-as-read', [NotificationController::class, 'markAsRead']);
+    Route::get('/', [NotificationController::class, 'userAllMessages']);
+    Route::delete('/{id}/delete', [NotificationController::class, 'deleteMessage']);
 });
 
 //packages Routes

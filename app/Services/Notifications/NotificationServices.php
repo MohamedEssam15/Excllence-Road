@@ -5,54 +5,66 @@ namespace App\Services\Notifications;
 use App\Models\Course;
 use App\Models\Notification;
 use App\Models\User;
+use App\Models\UserMessage;
 use Carbon\Carbon;
 
 class NotificationServices
 {
-    public function sendNotification($message, $courseId, $recieverId = null, $lessonId = null)
+    public function sendMessage($message, $courseId, $recieverId = null)
     {
         $authUser = auth()->user();
         if ($authUser->hasRole('student')) {
-            $this->studentNotification($authUser, $message, $courseId, $lessonId);
+            $response =  $this->studentMessage($authUser, $message, $courseId);
         } else {
-            $this->teacherNotification($authUser, $message, $courseId, $recieverId, $lessonId);
+            $response = $this->teacherMessage($authUser, $message, $courseId, $recieverId);
         }
+        return $response;
     }
 
-    private function teacherNotification($authUser, $message, $courseId, $recieverId = null, $lessonId = null)
+    private function teacherMessage($authUser, $message, $courseId, $recieverId = null)
     {
         if ($recieverId != null) {
-            Notification::create([
+            $messageResponse =  UserMessage::create([
                 'message' => $message,
-                'reciever_id' => $recieverId,
+                'receiver_id' => $recieverId,
                 'sender_id' => $authUser->id,
                 'course_id' => $courseId,
-                'lesson_id' => $lessonId
             ]);
+            return $response = [
+                'message' => $messageResponse,
+                'type' => 'message'
+            ];
         } else {
             $enrolledStudents = User::role('student')->whereHas('enrollments', function ($query) use ($courseId) {
                 $query->where('courses_users.course_id', $courseId)->where('courses_users.end_date', '>', Carbon::today());
             })->get();
             foreach ($enrolledStudents as $student) {
-                Notification::create([
+                UserMessage::create([
                     'message' => $message,
-                    'reciever_id' => $student->id,
+                    'receiver_id' => $student->id,
                     'sender_id' => $authUser->id,
                     'course_id' => $courseId,
-                    'lesson_id' => $lessonId
                 ]);
             }
+            return $response = [
+                'message' => null,
+                'type' => 'broadcast'
+            ];
         }
     }
-    private function studentNotification($authUser, $message, $courseId, $lessonId = null)
+
+    private function studentMessage($authUser, $message, $courseId)
     {
         $course = Course::find($courseId);
-        Notification::create([
+        $messageResponse =  UserMessage::create([
             'message' => $message,
-            'reciever_id' => $course->teacher_id,
+            'receiver_id' => $course->teacher_id,
             'sender_id' => $authUser->id,
             'course_id' => $courseId,
-            'lesson_id' => $lessonId
         ]);
+        return $response = [
+            'message' => $messageResponse,
+            'type' => 'message'
+        ];
     }
 }

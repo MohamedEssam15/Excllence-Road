@@ -5,23 +5,27 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Notification extends Model
+class UserMessage extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['message', 'receiver_id', 'sender_id', 'is_read', 'course_id'];
+    protected $table = 'user_messages';
 
-    public function sender()
-    {
+    protected $fillable = [
+        'message',
+        'sender_id',
+        'receiver_id',
+        'course_id',
+    ];
+
+    public function sender(){
         return $this->belongsTo(User::class, 'sender_id');
     }
 
-    public function reciever()
-    {
+    public function receiver(){
         return $this->belongsTo(User::class, 'receiver_id');
     }
-    public function course()
-    {
+    public function course(){
         return $this->belongsTo(Course::class, 'course_id');
     }
 }

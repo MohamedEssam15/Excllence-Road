@@ -6,7 +6,7 @@ use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class AddTeacherNotificationRequest extends FormRequest
+class AddMessageRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,12 +23,14 @@ class AddTeacherNotificationRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
+        $valdiationRules = [
             'message' => ['required', 'string'],
-            'studentId' => ['nullable', 'exists:users,id'],
             'courseId' => ['required', 'exists:courses,id'],
-            'lesson_id' => ['nullable', 'exists:lessons,id']
         ];
+        if (auth()->user()->hasRole('teacher')) {
+            $valdiationRules['studentId'] = ['nullable', 'exists:users,id'];
+        }
+        return $valdiationRules;
     }
 
     protected function failedValidation(Validator $validator)

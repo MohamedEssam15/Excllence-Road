@@ -3,42 +3,56 @@
 namespace App\Http\Controllers\ApiControllers;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\AddTeacherNotificationRequest;
-use App\Http\Resources\NotificationResource;
-use App\Models\Course;
+use App\Http\Requests\AddMessageRequest;
+use App\Http\Resources\AllMessagesResource;
+use App\Http\Resources\MessageResource;
 use App\Models\Notification;
-use App\Models\User;
+use App\Models\UserMessage;
 use App\Services\Notifications\NotificationServices;
 use Illuminate\Http\Request;
 
 class NotificationController extends Controller
 {
-    public function userNotification()
+
+    public function userAllMessages(Request $request)
     {
-        $userNotificaitons = Notification::where('reciever_id', auth()->id())->latest()->take(5)->get();
-        $unreadCount = Notification::where('reciever_id', auth()->id())->where('is_read', false)->count();
-        return apiResponse(__('response.dataRetrieved'), ['notifications' => NotificationResource::collection($userNotificaitons), 'unReadNotifcationCount' => $unreadCount]);
+        $validator = validator($request->all(), [
+            'courseId' => 'required|exists:courses,id',
+            'studentId' => 'nullable|exists:users,id',
+        ]);
+        if ($validator->fails()) {
+            return apiResponse('error', new \stdClass(), $validator->errors()->all(), 422);
+        }
+        $userMessages = UserMessage::where('course_id', $request->courseId);
+        if (auth()->user()->hasRole('teacher')) {
+            $userMessages->where(function ($query) use ($request) {
+                $query->where('sender_id', $request->studentId)->orWhere('receiver_id', $request->studentId);
+            });
+        } else {
+            $userMessages->where(function ($query) use ($request) {
+                $query->where('sender_id', auth()->id())->orWhere('receiver_id', auth()->id());
+            });
+        }
+        return apiResponse(__('response.dataRetrieved'), ['messages' => MessageResource::collection($userMessages->latest()->get())]);
     }
 
-    public function userAllNotification()
-    {
-        $userNotificaitons = Notification::where('reciever_id', auth()->id())->latest()->get();
-        $unreadCount = Notification::where('reciever_id', auth()->id())->where('is_read', false)->count();
-        return apiResponse(__('response.dataRetrieved'), ['notifications' => NotificationResource::collection($userNotificaitons), 'unReadNotifcationCount' => $unreadCount]);
-    }
 
-    public function sendNotification(AddTeacherNotificationRequest $request)
+
+    public function sendMessage(AddMessageRequest $request)
     {
 
         $notificationService = new NotificationServices();
-        $notificationService->sendNotification($request->message, $request->courseId, $request->studentId, $request->lessonId);
-        return apiResponse(__('response.notificationSent'));
+        $response = $notificationService->sendMessage($request->message, $request->courseId, $request->studentId);
+        if ($response['type'] == 'broadcast') {
+            return apiResponse(__('response.messageSent'));
+        }
+        return apiResponse(__('response.messageSent'), new MessageResource($response['message']));
     }
 
-    public function deleteNotification($id)
+    public function deleteMessage($id)
     {
-        $notification = Notification::findOrFail($id);
-        $notification->delete();
+        $message = UserMessage::findOrFail($id);
+        $message->delete();
         return apiResponse(__('response.deletedSuccessfully'));
     }
     public function markAsRead($id)

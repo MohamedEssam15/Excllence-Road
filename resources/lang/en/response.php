@@ -42,5 +42,6 @@ return [
     'examSubmittedSuccessfully' => 'Exam submitted successfully',
     'studentDidNotTakeThatExam' => 'Student did not take that exam',
     'theGradeIsCalculatedAutomatically' => 'The grade is calculated automatically',
+    'messageSent' => 'Message sent successfully',
 
 ];
