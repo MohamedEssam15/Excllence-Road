@@ -101,7 +101,7 @@ class ExamController extends Controller
     public function updateExamGrade(AssignGradeRequest $request, Course $course, Exam $exam, User $user)
     {
         $teacher = auth()->user();
-        if ($course->teacher_id != $user->id) {
+        if ($course->teacher_id != $teacher->id) {
             return apiResponse(__('response.notAuthorized'), new stdClass(), [__('response.notAuthorized')], 401);
         }
         if ($exam->type != 'file') {
