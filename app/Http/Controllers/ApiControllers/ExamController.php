@@ -60,14 +60,14 @@ class ExamController extends Controller
         if ($exam->exam_time != null && $elapsedTime > $exam->exam_time) {
             return apiResponse(__('response.examTimeExpired'), new stdClass(), [__('response.examTimeExpired')], 422);
         }
-        if ($userExamResult->pivot->grade != null) {
+        if ($userExamResult->pivot->grade != null || $userExamResult->pivot->file_name != null) {
             return apiResponse(__('response.youHaveThatExam'), new stdClass(), [__('response.youHaveThatExam')], 422);
         }
         if ($exam->type == 'file') {
             $file = $request->file('answerFile');
             $path = "/exams/{$exam->id}/students_answers/{$user->id}/";
             $file->storeAs($path, $file->getClientOriginalName(), 'public');
-            $userExamResultQuery->update(['file_name' => $file->getClientOriginalName()]);
+            $userExamResultQuery->updateExistingPivot($exam->id, ['file_name' => $file->getClientOriginalName()]);
         } else {
             $grade  = 0;
             $questions = $exam->questions;
@@ -90,7 +90,7 @@ class ExamController extends Controller
     {
 
         $teacher = auth()->user();
-        if ($course->teacher_id != $user->id) {
+        if ($course->teacher_id != $teacher->id) {
             return apiResponse(__('response.notAuthorized'), new stdClass(), [__('response.notAuthorized')], 401);
         }
         if (!$user->studentExams()->where('exam_id', $exam->id)->wherePivot('course_id', $course->id)->exists()) {
