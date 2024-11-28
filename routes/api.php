@@ -107,12 +107,19 @@ Route::group(['middleware' => 'guest:api', 'prefix' => 'categories'], function (
     Route::get('/', [CategoryController::class, 'getCategories']);
 });
 
-//notification routes
+//messages routes
 Route::group(['middleware' => 'auth:api', 'prefix' => 'messages'], function () {
     Route::post('/send', [NotificationController::class, 'sendMessage']);
     Route::get('/latest-notifications', [NotificationController::class, 'userNotification']);
     Route::get('/', [NotificationController::class, 'userAllMessages']);
     Route::delete('/{id}/delete', [NotificationController::class, 'deleteMessage']);
+});
+
+//notifications routes
+Route::group(['middleware' => 'auth:api', 'prefix' => 'notifications'], function () {
+    Route::get('/', [NotificationController::class, 'userNotification']);
+    Route::get('/{id}/mark-as-read', [NotificationController::class, 'markAsRead']);
+    Route::delete('/{id}/delete', [NotificationController::class, 'deleteNotification']);
 });
 
 //packages Routes

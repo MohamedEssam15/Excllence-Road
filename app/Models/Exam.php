@@ -32,6 +32,10 @@ class Exam extends Model
     {
         return $this->belongsToMany(Course::class, 'courses_exams', 'exam_id', 'course_id')->withPivot('available_from', 'available_to')->withTimestamps();
     }
+    public function course($courseId)
+    {
+        return $this->courses()->where('course_id', $courseId)->first();
+    }
 
     public function getExamFile()
     {

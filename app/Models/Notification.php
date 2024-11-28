@@ -9,7 +9,7 @@ class Notification extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['message', 'receiver_id', 'sender_id', 'is_read', 'course_id'];
+    protected $fillable = ['message', 'reciever_id', 'sender_id', 'is_read', 'course_id', 'exam_id', 'type'];
 
     public function sender()
     {
@@ -23,5 +23,9 @@ class Notification extends Model
     public function course()
     {
         return $this->belongsTo(Course::class, 'course_id');
+    }
+    public function exam()
+    {
+        return $this->belongsTo(Exam::class, 'exam_id');
     }
 }

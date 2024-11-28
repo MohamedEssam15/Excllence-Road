@@ -43,5 +43,8 @@ return [
     'examSubmittedSuccessfully' => 'تم تقديم الاجابات بنجاح',
     'studentDidNotTakeThatExam' => 'الطالب لم يقم بتقديم الامتحان',
     'theGradeIsCalculatedAutomatically' => 'الدرجة يتم احتسابها تلقائيا',
-    'messageSent'=>'تم ارسال الرسالة بنجاح',
+    'messageSent' => 'تم ارسال الرسالة بنجاح',
+    'newMessageFromStudent' => 'رسالة جديدة من الطالب',
+    'examWillAvailableTommorrow' => 'الامتحان سيتم نشره غدا',
+    'examExpiry' => "اخر معاد لتقديم الامتحان غدا"
 ];

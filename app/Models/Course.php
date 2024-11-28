@@ -67,6 +67,11 @@ class Course extends Model
         return $this->belongsToMany(Exam::class, 'courses_exams', 'course_id', 'exam_id')->withPivot('available_from', 'available_to', 'id')->withTimestamps();
     }
 
+    public function exam($examId)
+    {
+        return $this->exams()->where('exam_id', $examId)->first();
+    }
+
     public function getCoverPhotoPath()
     {
         return asset('course_attachments/' . $this->id . '/cover_photo/' . $this->cover_photo_name);

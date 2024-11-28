@@ -43,5 +43,8 @@ return [
     'studentDidNotTakeThatExam' => 'Student did not take that exam',
     'theGradeIsCalculatedAutomatically' => 'The grade is calculated automatically',
     'messageSent' => 'Message sent successfully',
+    'newMessageFromStudent' => 'New message from student',
+    'examWillAvailableTommorrow' => 'The exam will available Tommorrow',
+    'examExpiry' => "The exam expiry date is Tommorrow",
 
 ];

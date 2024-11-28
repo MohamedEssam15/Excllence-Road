@@ -62,9 +62,27 @@ class NotificationServices
             'sender_id' => $authUser->id,
             'course_id' => $courseId,
         ]);
+        $this->saveNotification("newMessageFromStudent", $course->teacher_id, 'message', $courseId, null, $authUser->id);
         return $response = [
             'message' => $messageResponse,
             'type' => 'message'
         ];
+    }
+    public function getNotifications()
+    {
+        $notifications = Notification::where('reciever_id', auth()->id())->latest()->get();
+        return $notifications;
+    }
+    public function saveNotification($message, $recieverId, $type, $courseId = null, $examId = null, $senderId = null)
+    {
+        return Notification::create([
+            'message' => $message,
+            'reciever_id' => $recieverId,
+            'sender_id' => $senderId,
+            'course_id' => $courseId,
+            'exam_id' => $examId,
+            'is_read' => false,
+            'type' => $type
+        ]);
     }
 }

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\AddMessageRequest;
 use App\Http\Resources\AllMessagesResource;
 use App\Http\Resources\MessageResource;
+use App\Http\Resources\NotificationResource;
 use App\Models\Notification;
 use App\Models\UserMessage;
 use App\Services\Notifications\NotificationServices;
@@ -60,6 +61,18 @@ class NotificationController extends Controller
         $notification = Notification::findOrFail($id);
         $notification->is_read = true;
         $notification->save();
-        return apiResponse(__('response.updatedSuccessfully'));
+        return apiResponse(__('response.updatedSuccessfully'), new NotificationResource($notification));
+    }
+    public function deleteNotification($id)
+    {
+        $notification = Notification::findOrFail($id);
+        $notification->delete();
+        return apiResponse(__('response.deletedSuccessfully'));
+    }
+    public function userNotification()
+    {
+        $notificationService = new NotificationServices();
+        $notifications =  $notificationService->getNotifications();
+        return apiResponse(__('response.dataRetrieved'), ['notifications' => NotificationResource::collection($notifications)]);
     }
 }
