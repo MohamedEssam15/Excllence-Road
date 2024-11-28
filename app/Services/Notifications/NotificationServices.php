@@ -30,6 +30,7 @@ class NotificationServices
                 'sender_id' => $authUser->id,
                 'course_id' => $courseId,
             ]);
+            $this->saveNotification("newMessage", $recieverId, 'message', $courseId, null, $authUser->id);
             return $response = [
                 'message' => $messageResponse,
                 'type' => 'message'
@@ -45,6 +46,7 @@ class NotificationServices
                     'sender_id' => $authUser->id,
                     'course_id' => $courseId,
                 ]);
+                $this->saveNotification("newMessage", $student->id, 'message', $courseId, null, $authUser->id);
             }
             return $response = [
                 'message' => null,
@@ -62,7 +64,7 @@ class NotificationServices
             'sender_id' => $authUser->id,
             'course_id' => $courseId,
         ]);
-        $this->saveNotification("newMessageFromStudent", $course->teacher_id, 'message', $courseId, null, $authUser->id);
+        $this->saveNotification("newMessage", $course->teacher_id, 'message', $courseId, null, $authUser->id);
         return $response = [
             'message' => $messageResponse,
             'type' => 'message'

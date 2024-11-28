@@ -44,7 +44,7 @@ return [
     'studentDidNotTakeThatExam' => 'الطالب لم يقم بتقديم الامتحان',
     'theGradeIsCalculatedAutomatically' => 'الدرجة يتم احتسابها تلقائيا',
     'messageSent' => 'تم ارسال الرسالة بنجاح',
-    'newMessageFromStudent' => 'رسالة جديدة من الطالب',
+    'newMessage' => 'لديك رسالة جديدة',
     'examWillAvailableTommorrow' => 'الامتحان سيتم نشره غدا',
     'examExpiry' => "اخر معاد لتقديم الامتحان غدا"
 ];
