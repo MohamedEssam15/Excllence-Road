@@ -17,15 +17,27 @@ class UserMessage extends Model
         'receiver_id',
         'course_id',
     ];
+    protected $with = ['sender', 'receiver', 'course', 'user'];
 
-    public function sender(){
+    protected $casts = [
+        'latest_message_time' => 'datetime',
+    ];
+
+    public function sender()
+    {
         return $this->belongsTo(User::class, 'sender_id');
     }
 
-    public function receiver(){
+    public function receiver()
+    {
         return $this->belongsTo(User::class, 'receiver_id');
     }
-    public function course(){
+    public function course()
+    {
         return $this->belongsTo(Course::class, 'course_id');
+    }
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
     }
 }

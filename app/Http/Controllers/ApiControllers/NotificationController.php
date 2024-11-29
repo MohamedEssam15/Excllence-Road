@@ -7,10 +7,12 @@ use App\Http\Requests\AddMessageRequest;
 use App\Http\Resources\AllMessagesResource;
 use App\Http\Resources\MessageResource;
 use App\Http\Resources\NotificationResource;
+use App\Http\Resources\TeacherChatResource;
 use App\Models\Notification;
 use App\Models\UserMessage;
 use App\Services\Notifications\NotificationServices;
 use Illuminate\Http\Request;
+use stdClass;
 
 class NotificationController extends Controller
 {
@@ -74,5 +76,31 @@ class NotificationController extends Controller
         $notificationService = new NotificationServices();
         $notifications =  $notificationService->getNotifications();
         return apiResponse(__('response.dataRetrieved'), ['notifications' => NotificationResource::collection($notifications)]);
+    }
+
+    public function teacherChats()
+    {
+        $user = auth()->user();
+        if (! $user->hasRole('teacher')) {
+            return apiResponse(__('response.notAuthorized'), new stdClass(), [__('response.notAuthorized')], 401);
+        }
+        $teacherId = $user->id;
+        $latestChats = UserMessage::selectRaw('
+            CASE
+                WHEN sender_id = ? THEN receiver_id
+                ELSE sender_id
+            END AS user_id,
+            course_id,
+            MAX(created_at) AS latest_message_time
+        ', [$teacherId])
+            ->where(function ($query) use ($teacherId) {
+                $query->where('sender_id', $teacherId)
+                    ->orWhere('receiver_id', $teacherId);
+            })
+            ->groupBy('user_id', 'course_id') // Group by user and course
+            ->orderByDesc('latest_message_time') // Order by latest message time
+            ->get();
+
+        return apiResponse(__('response.dataRetrieved'), ['chats' => TeacherChatResource::collection($latestChats)]);
     }
 }

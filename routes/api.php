@@ -113,6 +113,7 @@ Route::group(['middleware' => 'auth:api', 'prefix' => 'messages'], function () {
     Route::get('/latest-notifications', [NotificationController::class, 'userNotification']);
     Route::get('/', [NotificationController::class, 'userAllMessages']);
     Route::delete('/{id}/delete', [NotificationController::class, 'deleteMessage']);
+    Route::get('/teacher-chats', [NotificationController::class, 'teacherChats']);
 });
 
 //notifications routes

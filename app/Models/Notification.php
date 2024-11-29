@@ -10,6 +10,7 @@ class Notification extends Model
     use HasFactory;
 
     protected $fillable = ['message', 'reciever_id', 'sender_id', 'is_read', 'course_id', 'exam_id', 'type'];
+    protected $with = ['sender', 'reciever', 'course', 'exam'];
 
     public function sender()
     {
