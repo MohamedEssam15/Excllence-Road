@@ -124,7 +124,7 @@ Route::group(['middleware' => 'auth:api', 'prefix' => 'notifications'], function
 });
 
 //packages Routes
-Route::group(['middleware' => 'guest:api', 'prefix' => 'packages'], function () {
+Route::group(['prefix' => 'packages'], function () {
     Route::get('/', [PackageController::class, 'getPackages']);
     Route::get('/popular', [PackageController::class, 'getPopularPackages']);
     Route::get('/{id}', [PackageController::class, 'show']);
