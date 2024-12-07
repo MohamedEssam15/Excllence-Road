@@ -22,11 +22,22 @@ class LessonInfoResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $type = $this->type;
+        if ($type == 'meeting') {
+            $availableIn = $this->meeting_date?->subHours(1);
+            $isAvailable = $availableIn?->lt(now());
+        } else {
+            $isAvailable = false;
+            $availableIn = null;
+        }
+        ds([$this->id, $availableIn?->format('Y-m-d g:i A'), $isAvailable]);
         return [
             'id' => $this->id,
             'name' => $this->translate($this->locale)?->name  ?? $this->name,
             'description' => $this->translate($this->locale)?->description ?? $this->description,
             'type' => $this->type,
+            'isAvailable' => $isAvailable,
+            'availableIn' => $availableIn?->format('Y-m-d g:i A'),
         ];
     }
 }

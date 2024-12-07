@@ -21,13 +21,23 @@ class StudentLessonResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $type = $this->type;
+        if ($type == 'meeting') {
+            $availableIn = $this->meeting_date?->subHours(1);
+            $isAvailable = $availableIn?->lt(now());
+        } else {
+            $isAvailable = false;
+            $availableIn = null;
+        }
         return [
             'id' => $this->id,
             'name' => $this->translate($this->locale)->name,
             'description' => $this->translate($this->locale)->description,
             'type' => $this->type,
             'lesson' => $this->type == 'meeting' ? $this->video_link : $this->getVideoLink(),
-            'attachments'=>LessonAttachmentsResource::collection($this->attachments)
+            'attachments' => LessonAttachmentsResource::collection($this->attachments),
+            'isAvailable' => $isAvailable,
+            'availableIn' => $availableIn?->format('Y-m-d g:i A'),
         ];
     }
 }
