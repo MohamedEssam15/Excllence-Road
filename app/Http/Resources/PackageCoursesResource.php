@@ -12,8 +12,8 @@ class PackageCoursesResource extends JsonResource
     private $package;
     public function __construct($package)
     {
-        $this->locale =App::getLocale();
-        $this->package =$package;
+        $this->locale = App::getLocale();
+        $this->package = $package;
     }
     /**
      * Transform the resource into an array.
@@ -23,14 +23,15 @@ class PackageCoursesResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id'=>$this->package->id,
-            'name'=>$this->package->translate($this->locale)->name,
-            'description'=>$this->package->translate($this->locale)->description,
-            'coverPhoto'=>$this->package->getCoverPhotoPath(),
-            'price'=>$this->package->price,
-            'startDate'=>$this->package->start_date,
-            'endDate'=>$this->package->end_date,
-            'courses'=> PopularCourseResource::collection($this->package->courses)
+            'id' => $this->package->id,
+            'name' => $this->package->translate($this->locale)->name,
+            'description' => $this->package->translate($this->locale)->description,
+            'coverPhoto' => $this->package->getCoverPhotoPath(),
+            'isJoined' => $this->package->userEnrollments()->where('user_id', auth()->user()->id ?? null)->exists(),
+            'price' => $this->package->price,
+            'startDate' => $this->package->start_date,
+            'endDate' => $this->package->end_date,
+            'courses' => PopularCourseResource::collection($this->package->courses)
         ];;
     }
 }
