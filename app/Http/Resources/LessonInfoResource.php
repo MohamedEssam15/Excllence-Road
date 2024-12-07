@@ -25,7 +25,7 @@ class LessonInfoResource extends JsonResource
         $type = $this->type;
         if ($type == 'meeting') {
             $availableIn = $this->meeting_date?->subHours(1);
-            $isAvailable = $availableIn?->lt(now());
+            $isAvailable = $availableIn?->lt(now()) ?? false;
         } else {
             $isAvailable = true;
             $availableIn = null;
