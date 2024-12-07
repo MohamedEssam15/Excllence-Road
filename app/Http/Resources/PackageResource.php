@@ -27,6 +27,7 @@ class PackageResource extends JsonResource
             'id' => $this->package->id,
             'name' => $this->package->translate($this->locale)->name,
             'description' => $this->package->translate($this->locale)->description,
+            'isJoined' => $this->userEnrollments()->where('user_id', auth()->user()->id ?? null)->exists(),
             'coverPhoto' => $this->package->getCoverPhotoPath(),
             'price' => $this->package->price,
             'startDate' => $this->package->start_date,
