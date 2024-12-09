@@ -5,6 +5,7 @@ namespace App\Http\Controllers\ApiControllers;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AssignGradeRequest;
 use App\Http\Requests\SubmitExamRequest;
+use App\Http\Resources\ExamInfoResource;
 use App\Http\Resources\StudentAnswersResource;
 use App\Http\Resources\StudentDegreeExamResource;
 use App\Http\Resources\StudentDegreeResource;
@@ -33,7 +34,7 @@ class ExamController extends Controller
             $userExamResult = $user->studentExams()->where('exam_id', $exam->id)->wherePivot('course_id', $course->id)->first();
             $elapsedTime = $currentTime->diffInMinutes($userExamResult->pivot->start_time);
             if ($exam->exam_time == null || $elapsedTime < $exam->exam_time) {
-                return apiResponse('Data Retrieved', ['exam' => new StudentExamResource($course->exams()->where('exam_id', $exam->id)->first())]);
+                return apiResponse('Data Retrieved', ['exam' => new ExamInfoResource($course->exams()->where('exam_id', $exam->id)->first())]);
             }
             // else {
             //     return apiResponse(__('response.youHaveThatExam'), new stdClass(), [__('response.youHaveThatExam')], 422);
@@ -47,7 +48,7 @@ class ExamController extends Controller
 
         $user->studentExams()->attach([$exam->id => ['file_name' => null, 'grade' => null, 'degree' => $degree, 'start_time' => $currentTime->addMinutes(5), 'course_id' => $course->id]]);
 
-        return apiResponse('Data Retrieved', ['exam' => new StudentExamResource($course->exams()->where('exam_id', $exam->id)->first())]);
+        return apiResponse('Data Retrieved', ['exam' => new ExamInfoResource($course->exams()->where('exam_id', $exam->id)->first())]);
     }
 
     public function submitExam(SubmitExamRequest $request, Course $course, Exam $exam)
