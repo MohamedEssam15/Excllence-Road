@@ -7,7 +7,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class ExamInfoResource extends JsonResource
 {
-
+    public $resource;
     public function __construct($resource)
     {
         parent::__construct($resource);
@@ -36,6 +36,7 @@ class ExamInfoResource extends JsonResource
             'examTime' => $this->exam_time,
             'isUnitExam' => $this->is_unit_exam,
             'units' => $this->is_unit_exam ? UnitInfoResource::collection($this->units) : null,
+            'questions' => StudentQuestionResource::collection($this->questions),
             'isPassed' => $this->studentsAnswer()->where('user_id', auth()->user()->id ?? null)->exists(),
             'availableFrom' => $this->pivot->available_from,
             'availableTo' => $this->pivot->available_to,
