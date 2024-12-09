@@ -47,5 +47,7 @@ return [
     'newMessage' => 'لديك رسالة جديدة',
     'examWillAvailableTommorrow' => 'الامتحان سيتم نشره غدا',
     'examExpiry' => "اخر معاد لتقديم الامتحان غدا",
-    'teacherNotFound' => 'لم يتم العثور علي المعلم'
+    'teacherNotFound' => 'لم يتم العثور علي المعلم',
+    'pending' => 'قيد المراجعة',
+    'notTakenYet' => 'لم يتم الاجابة علي الامتحان بعد'
 ];

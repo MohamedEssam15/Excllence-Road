@@ -30,7 +30,6 @@ class LessonInfoResource extends JsonResource
             $isAvailable = true;
             $availableIn = null;
         }
-        ds([$this->id, $availableIn?->format('Y-m-d g:i A'), $isAvailable]);
         return [
             'id' => $this->id,
             'name' => $this->translate($this->locale)?->name  ?? $this->name,

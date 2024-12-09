@@ -7,7 +7,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class ExamInfoResource extends JsonResource
 {
-    public $resource;
+
     public function __construct($resource)
     {
         parent::__construct($resource);
@@ -19,6 +19,14 @@ class ExamInfoResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $student = $this->studentsAnswer()->where('user_id', auth()->user()->id ?? null)->first();
+        if (is_null($student)) {
+            $grade = __('response.notTakenYet');
+        } elseif ($student->pivot->grade == null) {
+            $grade = __('response.pending');
+        } else {
+            $grade = (string) $student->pivot->grade;
+        }
         return [
             'id' => $this->id,
             'name' => $this->name,
@@ -32,7 +40,7 @@ class ExamInfoResource extends JsonResource
             'availableFrom' => $this->pivot->available_from,
             'availableTo' => $this->pivot->available_to,
             'degree' => $this->degree,
-            'student'
+            'studentGrade' => $grade,
         ];
     }
 }

@@ -26,6 +26,8 @@ class StudentInfoWithCoursesAndExamsResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'email' => $this->email,
+            'avatar' => $this->getAvatarPath(),
+            'phone' => $this->phone,
             'courses' => StudentCourseResource::collection($this->enrollments),
             'exams' => StudentExamResource::collection($this->studentExams),
         ];

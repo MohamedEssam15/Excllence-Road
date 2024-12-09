@@ -24,8 +24,8 @@ class AuthCourseInfoResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'name' => $this->translate($this->locale)->name,
-            'description' => $this->translate($this->locale)->description,
+            'name' => $this->translate($this->locale)->name ?? $this->name,
+            'description' => $this->translate($this->locale)->description ?? $this->description,
             'coverPhoto' => $this->getCoverPhotoPath(),
             'teacher' => new TeacherInfoResource($this->teacher),
             'category' => new CategoryInfoResource($this->category),
@@ -36,10 +36,10 @@ class AuthCourseInfoResource extends JsonResource
             'endDate' => $this->end_date,
             'isJoined' => $this->enrollments()->where('user_id', auth()->user()->id ?? null)->exists(),
             'isSpecific' => $this->is_specific,
-            'specificTo' => $this->translate($this->locale)->specific_to,
+            'specificTo' => $this->translate($this->locale)->specific_to ?? $this->specific_to,
             'rating' => $this->average_rating,
             'reviews' => ReviewResource::collection($this->reviews),
-            'exams'=> ExamInfoResource::collection($this->exams),
+            'exams' => ExamInfoResource::collection($this->exams),
         ];
     }
 }
