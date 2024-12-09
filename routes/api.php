@@ -14,6 +14,7 @@ use App\Http\Controllers\ApiControllers\TeacherPanalControllers\ExamController;
 use App\Http\Controllers\ApiControllers\TeacherPanalControllers\LessonsController;
 use App\Http\Controllers\ApiControllers\TeacherPanalControllers\UnitController;
 use App\Models\Exam;
+use App\Http\Controllers\ApiControllers\StudentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -49,22 +50,24 @@ Route::group(['prefix' => 'courses'], function () {
     Route::get('/levels', [CourseController::class, 'getCourseLevels']);
     Route::get('/course-info/{id}', [CourseController::class, 'courseInfo']);
 });
-Route::group(["middleware" => "auth:api"], function () {
-    Route::group(['prefix' => 'courses'], function () {
-        Route::get('{id}/students', [CourseController::class, 'getCourseStudents']);
-        Route::get('{course}/exams/{exam}', [StudentExamController::class, 'getCourseExams']);
-        Route::post('{course}/exams/{exam}', [StudentExamController::class, 'submitExam']);
-        Route::get('{course}/exams/{exam}/get-students-degree', [StudentExamController::class, 'studentsDegree']);
-        Route::get('{course}/exams/{exam}/get-student-answers/{user}', [StudentExamController::class, 'studentAnswers']);
-        Route::put('{course}/exams/{exam}/assign-grade/{user}', [StudentExamController::class, 'updateExamGrade']);
-    });
+Route::group(["middleware" => "auth:api", 'prefix' => 'courses'], function () {
+    Route::get('{id}/students', [CourseController::class, 'getCourseStudents']);
+    Route::get('{course}/exams/{exam}', [StudentExamController::class, 'getCourseExams']);
+    Route::post('{course}/exams/{exam}', [StudentExamController::class, 'submitExam']);
+    Route::get('{course}/exams/{exam}/get-students-degree', [StudentExamController::class, 'studentsDegree']);
+    Route::get('{course}/exams/{exam}/get-student-answers/{user}', [StudentExamController::class, 'studentAnswers']);
+    Route::put('{course}/exams/{exam}/assign-grade/{user}', [StudentExamController::class, 'updateExamGrade']);
+});
+Route::group(['middleware' => 'auth:api'], function () {
     Route::get('lessons/{lesson}', [CourseController::class, 'lessonInfo']);
     Route::get('students/courses', [CourseController::class, 'getStudentCourses']);
+    Route::get('students/info',[StudentController::class,'getStudentInfo']);
 });
 
 //teacher routes
 Route::group(['prefix' => 'teachers'], function () {
     Route::get('/', [TeacherController::class, 'getAllTeachers']);
+    Route::get('/{id}/courses', [TeacherController::class, 'getTeacherInfoAndCourses']);
     Route::group(['middleware' => ['auth:api', 'checkUserActivation', 'role:teacher,api']], function () {
         Route::group(['prefix' => 'lessons'], function () {
             Route::delete('attachments/{id}', [LessonsController::class, 'deleteLessonAttachment']);

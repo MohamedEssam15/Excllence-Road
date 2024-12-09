@@ -11,6 +11,7 @@ use App\Http\Requests\UpdateUnitRequest;
 use App\Http\Resources\PaginatedCollection;
 use App\Http\Resources\TeacherCourseInfoResource;
 use App\Http\Resources\TeacherCourseResource;
+use App\Http\Resources\TeacherInfoAndCoursesResource;
 use App\Http\Resources\TeacherLessonInfoResource;
 use App\Http\Resources\TeacherResource;
 use App\Http\Resources\TeacherUnitInfoResource;
@@ -43,6 +44,15 @@ class TeacherController extends Controller
             return apiResponse(__('response.noTeachers'), new stdClass(), [__('response.noTeachers')]);
         }
         return apiResponse('Data Retrieved', new PaginatedCollection($teachers, TeacherResource::class));
+    }
+    public function getTeacherInfoAndCourses($id)
+    {
+        $teacher = User::where('id', $id)->where('is_active', true)->role('teacher')->with(['teacherCourses', 'attachments'])->whereHas('teacherCourses', function ($query) {
+            $query->whereHas('status', function ($statusQuery) {
+                $statusQuery->where('name', 'active');
+            });
+        })->first();
+        return apiResponse('Data Retrieved', new TeacherInfoAndCoursesResource($teacher));
     }
 
     public function getAllTeacherCourses()
