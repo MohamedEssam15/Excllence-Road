@@ -27,6 +27,8 @@ class StudentExamResource extends JsonResource
             'course' => new CourseBasicInfoResource(Course::find($this->pivot->course_id)),
             'examTime' => $this->exam_time,
             'degree' => $this->getExamDegree(),
+            'questions' => StudentQuestionResource::collection($this->questions),
+            'examFile' => $this->getExamFile(),
             'studentGrade' =>  $this->pivot->grade != null ? (string) $this->pivot->grade : __('response.pending'),
             'isUnitExam' => $this->is_unit_exam,
             'units' => $this->is_unit_exam ? UnitInfoResource::collection($this->units) : null,
