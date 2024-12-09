@@ -37,6 +37,7 @@ class ExamInfoResource extends JsonResource
             'isUnitExam' => $this->is_unit_exam,
             'units' => $this->is_unit_exam ? UnitInfoResource::collection($this->units) : null,
             'questions' => StudentQuestionResource::collection($this->questions),
+            'examFile' => $this->getExamFile(),
             'isPassed' => $this->studentsAnswer()->where('user_id', auth()->user()->id ?? null)->exists(),
             'availableFrom' => $this->pivot->available_from,
             'availableTo' => $this->pivot->available_to,
