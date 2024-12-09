@@ -30,7 +30,9 @@ class ExamInfoResource extends JsonResource
             'units' => $this->is_unit_exam ? UnitInfoResource::collection($this->units) : null,
             'isPassed' => $this->studentsAnswer()->where('user_id', auth()->user()->id ?? null)->exists(),
             'availableFrom' => $this->pivot->available_from,
-            'availableTo' => $this->pivot->available_to
+            'availableTo' => $this->pivot->available_to,
+            'degree' => $this->degree,
+            'student'
         ];
     }
 }

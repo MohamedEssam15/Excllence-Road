@@ -47,7 +47,7 @@ class TeacherController extends Controller
     }
     public function getTeacherInfoAndCourses($id)
     {
-        $teacher = User::where('id', $id)->where('is_active', true)->role('teacher')->with(['teacherCourses', 'attachments'])->whereHas('teacherCourses', function ($query) {
+        $teacher = User::where('id', $id)->where('is_active', true)->role('teacher', 'api')->with(['teacherCourses', 'attachments'])->whereHas('teacherCourses', function ($query) {
             $query->whereHas('status', function ($statusQuery) {
                 $statusQuery->where('name', 'active');
             });
