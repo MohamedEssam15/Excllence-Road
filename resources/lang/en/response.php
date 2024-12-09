@@ -46,5 +46,6 @@ return [
     'newMessage' => 'You have a new message',
     'examWillAvailableTommorrow' => 'The exam will available Tommorrow',
     'examExpiry' => "The exam expiry date is Tommorrow",
+    'teacherNotFound' => 'Teacher not found'
 
 ];

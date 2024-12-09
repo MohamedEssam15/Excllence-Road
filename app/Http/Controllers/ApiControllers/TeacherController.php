@@ -52,6 +52,10 @@ class TeacherController extends Controller
                 $statusQuery->where('name', 'active');
             });
         })->first();
+
+        if (is_null($teacher)) {
+            return apiResponse(__('response.teacherNotFound'), new stdClass(), [__('response.teacherNotFound')]);
+        }
         return apiResponse('Data Retrieved', new TeacherInfoAndCoursesResource($teacher));
     }
 

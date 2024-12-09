@@ -46,5 +46,6 @@ return [
     'messageSent' => 'تم ارسال الرسالة بنجاح',
     'newMessage' => 'لديك رسالة جديدة',
     'examWillAvailableTommorrow' => 'الامتحان سيتم نشره غدا',
-    'examExpiry' => "اخر معاد لتقديم الامتحان غدا"
+    'examExpiry' => "اخر معاد لتقديم الامتحان غدا",
+    'teacherNotFound' => 'لم يتم العثور علي المعلم'
 ];
