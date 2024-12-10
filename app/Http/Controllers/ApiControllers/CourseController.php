@@ -62,15 +62,20 @@ class CourseController extends Controller
     public function courseSearch(Request $request)
     {
         $term = $request->term;
+        // ds($term)->die();
         $courses = Course::whereHas('status', function ($query) {
             $query->where('name', 'active');
-        })
-            ->whereHas('teacher', function ($query) {
-                $query->whereNull('deleted_at');
-            })
-            ->whereHas('translations', function ($query) use ($term) {
-                $query->where('name', 'LIKE', $term . '%');
-            })->where('start_date', '>=', Carbon::today())->take(5)->get();
+        })->where(function ($query) use ($term) {
+            $query->WhereHas('translations', function ($query) use ($term) {
+                $query->where('name', 'LIKE', '%' . $term . '%');
+            });
+            $query->orWhereHas('category.translations', function ($query) use ($term) {
+                $query->where('name', 'LIKE', '%' . $term . '%');
+            });
+            $query->orWhereHas('teacher', function ($query) use ($term) {
+                $query->where('name', 'LIKE', '%' . $term . '%');
+            });
+        })->take(5)->get();
         if (!isset($courses[0])) {
             return apiResponse(__('response.courseNotFound'), new stdClass(), [__('response.courseNotFound')]);
         }
