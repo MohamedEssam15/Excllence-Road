@@ -107,7 +107,7 @@ Route::group(['prefix' => 'teachers'], function () {
 });
 
 //categories routes
-Route::group(['middleware' => 'guest:api', 'prefix' => 'categories'], function () {
+Route::group([ 'prefix' => 'categories'], function () {
     Route::get('/', [CategoryController::class, 'getCategories']);
 });
 
