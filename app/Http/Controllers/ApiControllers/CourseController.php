@@ -62,7 +62,7 @@ class CourseController extends Controller
     public function courseSearch(Request $request)
     {
         $term = $request->term;
-        // ds($term)->die();
+
         $courses = Course::whereHas('status', function ($query) {
             $query->where('name', 'active');
         })->where(function ($query) use ($term) {
