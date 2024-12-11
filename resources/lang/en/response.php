@@ -48,5 +48,6 @@ return [
     'examExpiry' => "The exam expiry date is Tommorrow",
     'teacherNotFound' => 'Teacher not found',
     'pending' => 'Pending',
-    'notTakenYet' => 'Not taken yet'
+    'notTakenYet' => 'Not taken yet',
+    'messageSent' => 'Message sent successfully',
 ];

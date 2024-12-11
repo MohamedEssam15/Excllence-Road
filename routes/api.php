@@ -144,3 +144,6 @@ Route::group(['middleware' => 'auth:api', 'prefix' => 'reviews'], function () {
     Route::put('/{review}', [ReviewController::class, 'editReview']);
     Route::delete('/{review}', [ReviewController::class, 'deleteReview']);
 });
+
+//contact us
+Route::post('contact-us', [StudentController::class, 'contactUS']);
