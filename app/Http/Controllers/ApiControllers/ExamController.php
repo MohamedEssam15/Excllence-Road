@@ -36,9 +36,9 @@ class ExamController extends Controller
             if ($exam->exam_time == null || $elapsedTime < $exam->exam_time) {
                 return apiResponse('Data Retrieved', ['exam' => new ExamInfoResource($course->exams()->where('exam_id', $exam->id)->first())]);
             }
-            // else {
-            //     return apiResponse(__('response.youHaveThatExam'), new stdClass(), [__('response.youHaveThatExam')], 422);
-            // }
+            else {
+                return apiResponse(__('response.youHaveThatExam'), new stdClass(), [__('response.youHaveThatExam')], 422);
+            }
         }
         if ($exam->type == 'mcq') {
             $degree = $exam->questions()->count();
@@ -59,12 +59,12 @@ class ExamController extends Controller
         $userExamResult = $userExamResultQuery->first();
         $elapsedTime = $currentTime->diffInMinutes($userExamResult->pivot->start_time);
 
-        // if ($exam->exam_time != null && $elapsedTime > $exam->exam_time) {
-        //     return apiResponse(__('response.examTimeExpired'), new stdClass(), [__('response.examTimeExpired')], 422);
-        // }
-        // if ($userExamResult->pivot->grade != null || $userExamResult->pivot->file_name != null) {
-        //     return apiResponse(__('response.youHaveThatExam'), new stdClass(), [__('response.youHaveThatExam')], 422);
-        // }
+        if ($exam->exam_time != null && $elapsedTime > $exam->exam_time) {
+            return apiResponse(__('response.examTimeExpired'), new stdClass(), [__('response.examTimeExpired')], 422);
+        }
+        if ($userExamResult->pivot->grade != null || $userExamResult->pivot->file_name != null) {
+            return apiResponse(__('response.youHaveThatExam'), new stdClass(), [__('response.youHaveThatExam')], 422);
+        }
         if ($exam->type == 'file') {
             $file = $request->file('answerFile');
             $path = "/exams/{$exam->id}/students_answers/{$user->id}/";
