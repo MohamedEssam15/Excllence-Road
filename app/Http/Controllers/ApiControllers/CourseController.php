@@ -138,7 +138,7 @@ class CourseController extends Controller
     public function lessonInfo(Lesson $lesson)
     {
         $user = auth()->user();
-        if (! $user->enrollments()->where('course_id', $lesson->unit->course->id)->exists()) {
+        if (! $user->enrollments()->where('course_id', $lesson->unit->course->id)->exists() || $user->id != $lesson->unit->course->teacher_id) {
             return apiResponse(__('response.notAuthorized'), new stdClass(), [__('response.notAuthorized')], 401);
         }
 
