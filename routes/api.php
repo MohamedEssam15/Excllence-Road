@@ -13,8 +13,8 @@ use App\Http\Controllers\ApiControllers\ExamController as StudentExamController;
 use App\Http\Controllers\ApiControllers\TeacherPanalControllers\ExamController;
 use App\Http\Controllers\ApiControllers\TeacherPanalControllers\LessonsController;
 use App\Http\Controllers\ApiControllers\TeacherPanalControllers\UnitController;
-use App\Models\Exam;
 use App\Http\Controllers\ApiControllers\StudentController;
+use App\Http\Controllers\FeatureContentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -61,8 +61,8 @@ Route::group(["middleware" => "auth:api", 'prefix' => 'courses'], function () {
 Route::group(['middleware' => 'auth:api'], function () {
     Route::get('lessons/{lesson}', [CourseController::class, 'lessonInfo']);
     Route::get('students/courses', [CourseController::class, 'getStudentCourses']);
-    Route::get('students/info',[StudentController::class,'getStudentInfo']);
-    Route::get('students/answers/{id}',[StudentController::class,'getStudentAnswers']);
+    Route::get('students/info', [StudentController::class, 'getStudentInfo']);
+    Route::get('students/answers/{id}', [StudentController::class, 'getStudentAnswers']);
 });
 
 //teacher routes
@@ -107,7 +107,7 @@ Route::group(['prefix' => 'teachers'], function () {
 });
 
 //categories routes
-Route::group([ 'prefix' => 'categories'], function () {
+Route::group(['prefix' => 'categories'], function () {
     Route::get('/', [CategoryController::class, 'getCategories']);
 });
 
@@ -146,4 +146,5 @@ Route::group(['middleware' => 'auth:api', 'prefix' => 'reviews'], function () {
 });
 
 //contact us
-Route::post('contact-us', [StudentController::class, 'contactUS']);
+Route::post('add-feature-content', [FeatureContentController::class, 'store']);
+Route::get('feature-content', [FeatureContentController::class, 'getFeatureContent']);

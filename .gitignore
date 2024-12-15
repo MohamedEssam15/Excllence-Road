@@ -14,4 +14,5 @@ yarn-error.log
 /public/packages_attachments/*
 /public/course_attachments/*
 /public/users_attachments/*
+/public/feature_content/*
 /resources/views/dashboard/*
