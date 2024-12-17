@@ -9,6 +9,6 @@ class Level extends QueryFilter implements FilterContract
 {
     public function handle($value): void
     {
-        $this->query->where('level_id', (int) $value);
+        $this->query->whereIn('level_id', $value);
     }
 }
