@@ -5,10 +5,12 @@ namespace App\Services\Courses;
 use App\Enum\CourseStatus;
 use App\Http\Resources\CategoryResource;
 use App\Http\Resources\CourseLevelResource;
+use App\Http\Resources\TeacherInfoResource;
 use App\Models\category;
 use App\Models\Course;
 use App\Models\CourseLevel;
 use App\Models\Unit;
+use App\Models\User;
 use App\Services\VideoServices\VideoStorageManager;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -197,6 +199,14 @@ class CourseServices
             ->selectRaw('DISTINCT rating') // select distinct rating values
             ->pluck('rating'); // fetch the rating values
     }
+    public static function getAvailableTeachers()
+    {
+        return User::whereIn('id', function ($query) {
+            $query->select('teacher_id')
+                ->from('courses')
+                ->where('status_id', CourseStatus::ACTIVE);
+        })->get();
+    }
 
     public static function getAvailablePriceType()
     {
@@ -227,12 +237,13 @@ class CourseServices
         $levels =    CourseLevelResource::collection(self::getAvailableLevels());
         $rating = self::getAvailableRatings();
         $priceTypes = self::getAvailablePriceType();
-
+        $teachers = TeacherInfoResource::collection(self::getAvailableTeachers());
         return [
             'categories' => $categories,
             'levels' => $levels,
             'rating' => $rating,
             'priceTypes' => $priceTypes, // 'free' or 'paid'
+            'teachers' => $teachers,
         ];
     }
 }
