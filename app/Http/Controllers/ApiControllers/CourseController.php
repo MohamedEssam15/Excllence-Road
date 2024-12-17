@@ -96,11 +96,11 @@ class CourseController extends Controller
             ->where('start_date', '>=', Carbon::today());
         $coursesQuery->orderBy('price', $request->priceOrder ?? 'asc');
         $courses = $coursesQuery->paginate(request()->perPage);
-        if (!isset($courses[0])) {
-            return apiResponse(__('response.courseNotFound'), new stdClass(), [__('response.courseNotFound')]);
-        }
 
         $filters = CourseServices::getAvailableFilters();
+        if (!isset($courses[0])) {
+            return apiResponse(__('response.courseNotFound'), new PaginatedCollection($courses, PopularCourseResource::class, $filters), [__('response.courseNotFound')]);
+        }
 
         return apiResponse('Data Retrieved', new PaginatedCollection($courses, PopularCourseResource::class, $filters));
     }

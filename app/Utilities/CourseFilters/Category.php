@@ -9,6 +9,6 @@ class Category extends QueryFilter implements FilterContract
 {
     public function handle($value): void
     {
-        $this->query->where('category_id', (int) $value);
+        $this->query->whereIn('category_id', $value);
     }
 }
