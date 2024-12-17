@@ -55,7 +55,7 @@ class AuthController extends Controller
         $user = auth()->user();
         if ($user->email_verified_at == null) {
             Auth::logout();
-            return apiResponse(__('response.emailNotVerfiedAlready'), new stdClass(), [__('response.emailNotVerfiedAlready')], 422);
+            return apiResponse(__('response.emailNotVerfiedAlready'), ['isVerified' => false], [__('response.emailNotVerfiedAlready')], 422);
         }
         if (! $user->is_active) {
             Auth::logout();
