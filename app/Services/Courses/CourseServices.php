@@ -12,6 +12,7 @@ use App\Models\CourseLevel;
 use App\Models\Unit;
 use App\Models\User;
 use App\Services\VideoServices\VideoStorageManager;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use stdClass;
@@ -180,7 +181,8 @@ class CourseServices
         return category::whereIn('id', function ($query) {
             $query->select('category_id')
                 ->from('courses')
-                ->where('status_id', CourseStatus::ACTIVE);
+                ->where('status_id', CourseStatus::ACTIVE)
+                ->where('start_date', '>=', Carbon::today());
         })->get();
     }
 
@@ -189,22 +191,25 @@ class CourseServices
         return CourseLevel::whereIn('id', function ($query) {
             $query->select('level_id')
                 ->from('courses')
-                ->where('status_id', CourseStatus::ACTIVE); // replace ACTIVE_STATUS with your active status ID or condition
+                ->where('status_id', CourseStatus::ACTIVE)
+                ->where('start_date', '>=', Carbon::today());
         })->get();
     }
 
     public static function getAvailableRatings()
     {
-        return Course::where('status_id', CourseStatus::ACTIVE) // replace ACTIVE_STATUS with the actual value for active courses
-            ->selectRaw('DISTINCT rating') // select distinct rating values
-            ->pluck('rating'); // fetch the rating values
+        return Course::where('status_id', CourseStatus::ACTIVE)
+            ->where('start_date', '>=', Carbon::today())
+            ->selectRaw('DISTINCT rating')
+            ->pluck('rating');
     }
     public static function getAvailableTeachers()
     {
         return User::whereIn('id', function ($query) {
             $query->select('teacher_id')
                 ->from('courses')
-                ->where('status_id', CourseStatus::ACTIVE);
+                ->where('status_id', CourseStatus::ACTIVE)
+                ->where('start_date', '>=', Carbon::today());
         })->get();
     }
 
