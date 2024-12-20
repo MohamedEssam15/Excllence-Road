@@ -162,6 +162,13 @@ return [
     "bestSeller" => "Most Seller",
     "monthlyCommission" => "Monthly revenue",
     "currentCommission" => "Current Revenue",
+    "contactUsMessages" => "Contact Us Messages",
+    "noContactUsMessages" => "No Contact Us Messages",
+    "name" => "Name",
+    "email" => "Email",
+    "phone" => "Phone",
+    "message" => "Message",
+    "sentAt" => "Sent At",
 
     "orderNumber" => "Order Number",
     "amount" => "Amount",

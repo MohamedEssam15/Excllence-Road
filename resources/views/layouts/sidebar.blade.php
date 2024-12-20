@@ -145,9 +145,9 @@
                                     class="fas fa-shopping-cart"></i><span>@lang('translation.orders')</span></a>
                         </li>
                         {{-- <li>
-                            <a href="{{ route('users.admin.all') }}"><i
+                                <a href="{{ route('users.admin.all') }}"><i
                                     class="fas fa-user-cog"></i><span>@lang('translation.payments')</span></a>
-                        </li> --}}
+                                </li> --}}
                         <li>
                             <a href="javascript: void(0);" class="has-arrow"><i
                                     class="fas fa-user-graduate"></i><span>@lang('translation.teachers')</span></a>
@@ -167,7 +167,14 @@
                         </li>
                     </ul>
                 </li>
-
+                {{-- contact us sidebar --}}
+                <li class="menu-title">@lang('translation.contactUsMessages')</li>
+                <li>
+                    <a href="{{ route('contactUs.all') }}">
+                        <i class="fas fa-envelope"></i>
+                        <span>@lang('translation.contactUsMessages')</span>
+                    </a>
+                </li>
 
                 {{--
                 <li>
@@ -178,7 +185,7 @@
                     <ul class="sub-menu" aria-expanded="true">
                         <li>
                             <a href="javascript: void(0);" class="has-arrow">@lang('translation.Vertical')</a>
-                            <ul class="sub-menu" aria-expanded="true">
+                            <li class="sub-menu" aria-expanded="true">
                                 <li><a href="layouts-dark-sidebar">@lang('translation.Dark_Sidebar')</a></li>
                                 <li><a href="layouts-compact-sidebar">@lang('translation.Compact_Sidebar')</a></li>
                                 <li><a href="layouts-icon-sidebar">@lang('translation.Icon_Sidebar')</a></li>

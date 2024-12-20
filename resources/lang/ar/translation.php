@@ -193,6 +193,13 @@ return [
     'content' => 'المحتوي',
     'selectItem' => 'اختيار عنصر',
     'areYouSureDelete' => 'هل انت متاكد من حذف هذا المحتوي',
+    'contactUsMessages' => 'رسائل التواصل',
+    'noContactUsMessages' => 'لا يوجد رسائل تواصل',
+    'name' => 'الاسم',
+    'email' => 'البريد الالكتروني',
+    'phone' => 'رقم الهاتف',
+    'message' => 'الرسالة',
+    'sentAt' => 'تم الارسال في',
 
     "Layouts" => "Layouts",
     "Horizontal" => "Horizontal",
