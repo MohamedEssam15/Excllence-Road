@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Categories\CategoryController;
 use App\Http\Controllers\Courses\CoursesController;
+use App\Http\Controllers\FeatureContentController;
 use App\Http\Controllers\Packages\PackagesController;
 use App\Http\Controllers\Transactions\TransactionController;
 use App\Http\Controllers\Users\AdminController;
@@ -109,5 +110,15 @@ Route::middleware('auth:web')->group(function () {
         Route::get('teachers/{id}/all-revenue', [TransactionController::class, 'teacherAllRevenue'])->name('transactions.teacher.all.revenue');
         Route::get('courses/best-seller', [TransactionController::class, 'bestSellerCourses'])->name('transactions.bestSeller.courses');
         Route::get('packages/best-seller', [TransactionController::class, 'bestSellerPackages'])->name('transactions.bestSeller.packages');
+    });
+    Route::group(['prefix' => 'feature-content'], function () {
+        Route::get('all', [FeatureContentController::class, 'index'])->name('featureContent.all');
+        Route::get('create', [FeatureContentController::class, 'create'])->name('featureContent.create');
+        Route::post('store', [FeatureContentController::class, 'store'])->name('featureContent.store');
+        Route::get('edit/{id}', [FeatureContentController::class, 'edit'])->name('featureContent.edit');
+        Route::put('update/{id}', [FeatureContentController::class, 'update'])->name('featureContent.update');
+        Route::delete('delete', [FeatureContentController::class, 'delete'])->name('featureContent.delete');
+        Route::get('get-courses', [FeatureContentController::class, 'getCourses'])->name('featureContent.getCourses');
+        Route::get('get-packages', [FeatureContentController::class, 'getPackages'])->name('featureContent.getPackages');
     });
 });

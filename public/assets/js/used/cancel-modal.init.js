@@ -1,1 +1,84 @@
-(()=>{var e=document.documentElement.lang||"ar";function t(t){var r=t.errors||[];!function(t){var r=document.getElementById("acceptToastContainerError");"ar"==e?r.style.marginLeft="1%":r.style.marginRight="1%";var a=document.getElementById("acceptToastrError");a.querySelector(".toast-body").innerHTML=t,new bootstrap.Toast(a,{delay:3e3}).show()}(r.length>0?r.join("<br>"):t.message||"An unexpected error occurred")}$(document).ready((function(){var r=document.getElementById("cancelModal");r.addEventListener("show.bs.modal",(function(e){var t=e.relatedTarget,a=t.getAttribute("data-bs-courseid"),n=t.getAttribute("data-bs-coursename"),o=r.querySelector(".modal-title"),c=document.getElementById("cancel-course-id");o.textContent=n,c.value=a})),$("#cancelCourseButton").click((function(){var r=$("#cancelCourseForm").serialize();$.ajax({type:"POST",url:baseUrl+"/courses/cancel-course",data:r,success:function(r){200==r.status?($("#cancelModal").modal("hide"),fetchCourses(),function(){var t=document.getElementById("acceptToastContainer");"ar"==e?t.style.marginLeft="1%":t.style.marginRight="1%";var r=document.getElementById("acceptToastr");new bootstrap.Toast(r,{delay:3e3}).show()}()):t(r)},error:function(e,r,a){t(e.responseJSON||{message:"An unexpected error occurred."})}})}))}))})();
+/******/ (() => { // webpackBootstrap
+var __webpack_exports__ = {};
+/*!************************************************!*\
+  !*** ./resources/js/used/cancel-modal.init.js ***!
+  \************************************************/
+var currentLang = document.documentElement.lang || 'ar';
+function fireToastr() {
+  var toastContainer = document.getElementById('acceptToastContainer');
+  if (currentLang == 'ar') {
+    toastContainer.style.marginLeft = '1%';
+  } else {
+    toastContainer.style.marginRight = '1%';
+  }
+  var toastLiveExample3 = document.getElementById("acceptToastr");
+  var toast = new bootstrap.Toast(toastLiveExample3, {
+    delay: 3000
+  });
+  toast.show();
+}
+function handleErrorResponse(response) {
+  var errors = response.errors || [];
+  var errorMessage = errors.length > 0 ? errors.join('<br>') // Join error messages with a line break for display
+  : response.message || 'An unexpected error occurred'; // Fallback message
+
+  fireErrorToastr(errorMessage);
+}
+function fireErrorToastr(message) {
+  var toastContainer = document.getElementById('acceptToastContainerError');
+  if (currentLang == 'ar') {
+    toastContainer.style.marginLeft = '1%';
+  } else {
+    toastContainer.style.marginRight = '1%';
+  }
+  var toastLiveExample3 = document.getElementById("acceptToastrError");
+  var toastBody = toastLiveExample3.querySelector('.toast-body');
+  toastBody.innerHTML = message;
+  var toast = new bootstrap.Toast(toastLiveExample3, {
+    delay: 3000
+  });
+  toast.show();
+}
+$(document).ready(function () {
+  var cancelModal = document.getElementById('cancelModal');
+  cancelModal.addEventListener('show.bs.modal', function (event) {
+    var button = event.relatedTarget;
+    var courseId = button.getAttribute('data-bs-courseid');
+    var courseName = button.getAttribute('data-bs-coursename');
+    var modalTitle = cancelModal.querySelector('.modal-title');
+    var modalCourseId = document.getElementById('cancel-course-id');
+    modalTitle.textContent = courseName;
+    modalCourseId.value = courseId;
+  });
+
+  // Handle the "Cancel" button click
+  $('#cancelCourseButton').click(function () {
+    var form = $('#cancelCourseForm');
+    var formData = form.serialize(); // Serialize form data
+
+    $.ajax({
+      type: 'POST',
+      url: baseUrl + '/courses/cancel-course',
+      // Change this to your actual route
+      data: formData,
+      success: function success(response) {
+        if (response.status == 200) {
+          // Close the modal
+          $('#cancelModal').modal('hide');
+          fetchCourses();
+          fireToastr();
+        } else {
+          handleErrorResponse(response);
+        }
+      },
+      error: function error(xhr, status, _error) {
+        var response = xhr.responseJSON || {
+          message: 'An unexpected error occurred.'
+        };
+        handleErrorResponse(response);
+      }
+    });
+  });
+});
+/******/ })()
+;

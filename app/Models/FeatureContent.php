@@ -27,13 +27,12 @@ class FeatureContent extends Model
         }
     }
 
-    public function getCoverPhotoPath()
+    public function getCoverPath()
     {
-        return $this->cover_photo ? asset('feature_content/' . $this->id . '/cover_photo/' . $this->cover_photo) : null;
-    }
-
-    public function getCoverVideoPath()
-    {
-        return $this->cover_video ? asset('feature_content/' . $this->id . '/cover_video/' . $this->cover_video) : null;
+        if ($this->type == 'photo') {
+            return asset('feature_content/' . $this->id . '/cover_photo/' . $this->cover_photo);
+        } elseif ($this->type == 'video') {
+            return asset('feature_content/' . $this->id . '/cover_video/' . $this->cover_video);
+        }
     }
 }

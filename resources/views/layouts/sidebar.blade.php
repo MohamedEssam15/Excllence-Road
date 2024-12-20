@@ -82,12 +82,21 @@
                         <li><a href="{{ route('packages.create') }}">@lang('translation.addPackages')</a></li>
                     </ul>
                 </li>
-                <li class="menu-title">@lang('translation.categories')</li>
 
+                {{-- Categories sidebar --}}
+                <li class="menu-title">@lang('translation.categories')</li>
                 <li>
                     <a href="{{ route('categories.all') }}">
                         <i class="far fa-bookmark"></i>
                         <span>@lang('translation.categories')</span>
+                    </a>
+                </li>
+                {{-- feature content sidebar --}}
+                <li class="menu-title">@lang('translation.featureContent')</li>
+                <li>
+                    <a href="{{ route('featureContent.all') }}">
+                        <i class="fas fa-star"></i>
+                        <span>@lang('translation.featureContent')</span>
                     </a>
                 </li>
 

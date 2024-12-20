@@ -1,1 +1,27 @@
-(()=>{var e=document.getElementById("liveAlertPlaceholder"),t=document.getElementById("liveAlertBtn");t&&t.addEventListener("click",(function(){var t,l,a;t="Nice, you triggered this alert message!",l="success",(a=document.createElement("div")).innerHTML='<div class="alert alert-'+l+' alert-dismissible" role="alert">'+t+'<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>',e.append(a)}))})();
+/******/ (() => { // webpackBootstrap
+var __webpack_exports__ = {};
+/*!*******************************************!*\
+  !*** ./resources/js/pages/alerts.init.js ***!
+  \*******************************************/
+/*
+Template Name: Minible - Admin & Dashboard Template
+Author: Themesbrand
+Website: https://themesbrand.com/
+Contact: themesbrand@gmail.com
+File: Alerts init js
+*/
+// Alerts Live Demo js
+var alertPlaceholder = document.getElementById('liveAlertPlaceholder');
+var alertTrigger = document.getElementById('liveAlertBtn');
+function alert(message, type) {
+  var wrapper = document.createElement('div');
+  wrapper.innerHTML = '<div class="alert alert-' + type + ' alert-dismissible" role="alert">' + message + '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>';
+  alertPlaceholder.append(wrapper);
+}
+if (alertTrigger) {
+  alertTrigger.addEventListener('click', function () {
+    alert('Nice, you triggered this alert message!', 'success');
+  });
+}
+/******/ })()
+;

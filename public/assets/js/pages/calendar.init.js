@@ -1,1 +1,266 @@
-(()=>{function e(){document.getElementById("form-event").classList.add("view-event"),document.getElementById("event-title").classList.replace("d-block","d-none"),document.getElementById("event-category").classList.replace("d-block","d-none"),document.getElementById("btn-save-event").setAttribute("hidden",!0)}document.addEventListener("DOMContentLoaded",(function(){var t=new bootstrap.Modal(document.getElementById("event-modal"),{keyboard:!1});document.getElementById("event-modal");var n=document.getElementById("modal-title"),a=document.getElementById("form-event"),d=null,l=(document.getElementsByClassName("needs-validation"),new Date),i=l.getDate(),r=l.getMonth(),o=l.getFullYear(),s=FullCalendar.Draggable,c=document.getElementById("external-events"),m=[{title:"All Day Event",start:new Date(o,r,1)},{title:"Long Event",start:new Date(o,r,i-5),end:new Date(o,r,i-2),className:"bg-warning"},{id:999,title:"Repeating Event",start:new Date(o,r,i-3,16,0),allDay:!1,className:"bg-info"},{id:999,title:"Repeating Event",start:new Date(o,r,i+4,16,0),allDay:!1,className:"bg-primary"},{title:"Meeting",start:new Date(o,r,i,10,30),allDay:!1,className:"bg-success"},{title:"Lunch",start:new Date(o,r,i,12,0),end:new Date(o,r,i,14,0),allDay:!1,className:"bg-danger"},{title:"Birthday Party",start:new Date(o,r,i+1,19,0),end:new Date(o,r,i+1,22,30),allDay:!1,className:"bg-success"},{title:"Click for Google",start:new Date(o,r,28),end:new Date(o,r,29),url:"http://google.com/",className:"bg-dark"}];new s(c,{itemSelector:".external-event",eventData:function(e){return{id:Math.floor(11e3*Math.random()),title:e.innerText,allDay:!0,start:new Date,className:e.getAttribute("data-class")}}});var v=document.getElementById("calendar");function u(e){document.getElementById("form-event").reset(),t.show(),a.classList.remove("was-validated"),a.reset(),d=null,n.innerText="Create Event",newEventData=e}function g(){return window.innerWidth>=768&&window.innerWidth<1200?"timeGridWeek":window.innerWidth<=768?"listMonth":"dayGridMonth"}var y=new FullCalendar.Calendar(v,{timeZone:"local",editable:!0,droppable:!0,selectable:!0,navLinks:!0,initialView:g(),themeSystem:"bootstrap",headerToolbar:{left:"prev,next today",center:"title",right:"dayGridMonth,timeGridWeek,timeGridDay,listMonth"},windowResize:function(e){var t=g();y.changeView(t)},eventResize:function(e){var t=m.findIndex((function(t){return t.id==e.event.id}));m[t]&&(m[t].title=e.event.title,m[t].className=e.event.classNames[0])},eventClick:function(n){document.getElementById("edit-event-btn").removeAttribute("hidden"),document.getElementById("btn-save-event").setAttribute("hidden",!0),document.getElementById("edit-event-btn").setAttribute("data-id","edit-event"),document.getElementById("edit-event-btn").innerHTML="Edit",e(),t.show(),a.reset(),d=n.event,document.getElementById("modal-title").innerHTML="",console.log("selectedEvent",d),document.getElementById("event-title").value=d.title,document.getElementById("event-category").value=d.className,document.getElementById("btn-delete-event").removeAttribute("hidden")},dateClick:function(e){document.getElementById("edit-event-btn").setAttribute("hidden",!0),document.getElementById("btn-save-event").removeAttribute("hidden"),u(e)},events:m,eventReceive:function(e){var t={id:parseInt(e.event.id),title:e.event.title,className:e.event.classNames[0]};m.push(t)},eventDrop:function(e){var t=m.findIndex((function(t){return t.id==e.event.id}));m[t]&&(m[t].title=e.event.title,m[t].className=e.event.classNames[0])}});y.render(),a.addEventListener("submit",(function(e){e.preventDefault();var n=document.getElementById("event-title").value,a=document.getElementById("event-category").value;if(d){var l=document.getElementById("eventid").value;d.setProp("id",l),d.setProp("title",n),d.setProp("classNames",[a]);var i=m.findIndex((function(e){return e.id==d.id}));m[i]&&(m[i].title=n,m[i].className=a),y.render()}else{var r={id:(1e4*Math.random()).toFixed(0),title:n,start:new Date(document.querySelector("#calendar").value),allDay:!0,className:a};y.addEvent(r),m.push(r)}t.hide()})),document.getElementById("btn-delete-event").addEventListener("click",(function(e){if(d){for(var n=0;n<m.length;n++)m[n].id==d.id&&(m.splice(n,1),n--);d.remove(),d=null,t.hide()}})),document.getElementById("btn-new-event").addEventListener("click",(function(e){u(),document.getElementById("edit-event-btn").click()}))}))})();
+/******/ (() => { // webpackBootstrap
+var __webpack_exports__ = {};
+/*!*********************************************!*\
+  !*** ./resources/js/pages/calendar.init.js ***!
+  \*********************************************/
+/*
+Template Name: Minible - Admin & Dashboard Template
+Author: Themesbrand
+Website: https://themesbrand.com/
+Contact: themesbrand@gmail.com
+File: Calendar init js
+*/
+
+document.addEventListener("DOMContentLoaded", function () {
+  var addEvent = new bootstrap.Modal(document.getElementById('event-modal'), {
+    keyboard: false
+  });
+  document.getElementById('event-modal');
+  var modalTitle = document.getElementById('modal-title');
+  var formEvent = document.getElementById('form-event');
+  var selectedEvent = null;
+  var forms = document.getElementsByClassName('needs-validation');
+  /* initialize the calendar */
+
+  var date = new Date();
+  var d = date.getDate();
+  var m = date.getMonth();
+  var y = date.getFullYear();
+  var Draggable = FullCalendar.Draggable;
+  var externalEventContainerEl = document.getElementById('external-events');
+  var defaultEvents = [{
+    title: 'All Day Event',
+    start: new Date(y, m, 1)
+  }, {
+    title: 'Long Event',
+    start: new Date(y, m, d - 5),
+    end: new Date(y, m, d - 2),
+    className: 'bg-warning'
+  }, {
+    id: 999,
+    title: 'Repeating Event',
+    start: new Date(y, m, d - 3, 16, 0),
+    allDay: false,
+    className: 'bg-info'
+  }, {
+    id: 999,
+    title: 'Repeating Event',
+    start: new Date(y, m, d + 4, 16, 0),
+    allDay: false,
+    className: 'bg-primary'
+  }, {
+    title: 'Meeting',
+    start: new Date(y, m, d, 10, 30),
+    allDay: false,
+    className: 'bg-success'
+  }, {
+    title: 'Lunch',
+    start: new Date(y, m, d, 12, 0),
+    end: new Date(y, m, d, 14, 0),
+    allDay: false,
+    className: 'bg-danger'
+  }, {
+    title: 'Birthday Party',
+    start: new Date(y, m, d + 1, 19, 0),
+    end: new Date(y, m, d + 1, 22, 30),
+    allDay: false,
+    className: 'bg-success'
+  }, {
+    title: 'Click for Google',
+    start: new Date(y, m, 28),
+    end: new Date(y, m, 29),
+    url: 'http://google.com/',
+    className: 'bg-dark'
+  }];
+
+  // init draggable
+  new Draggable(externalEventContainerEl, {
+    itemSelector: '.external-event',
+    eventData: function eventData(eventEl) {
+      return {
+        id: Math.floor(Math.random() * 11000),
+        title: eventEl.innerText,
+        allDay: true,
+        start: new Date(),
+        className: eventEl.getAttribute('data-class')
+      };
+    }
+  });
+  var calendarEl = document.getElementById('calendar');
+  function addNewEvent(info) {
+    document.getElementById('form-event').reset();
+    addEvent.show();
+    formEvent.classList.remove("was-validated");
+    formEvent.reset();
+    selectedEvent = null;
+    modalTitle.innerText = 'Create Event';
+    newEventData = info;
+  }
+  function getInitialView() {
+    if (window.innerWidth >= 768 && window.innerWidth < 1200) {
+      return 'timeGridWeek';
+    } else if (window.innerWidth <= 768) {
+      return 'listMonth';
+    } else {
+      return 'dayGridMonth';
+    }
+  }
+  var calendar = new FullCalendar.Calendar(calendarEl, {
+    timeZone: 'local',
+    editable: true,
+    droppable: true,
+    selectable: true,
+    navLinks: true,
+    initialView: getInitialView(),
+    themeSystem: 'bootstrap',
+    headerToolbar: {
+      left: 'prev,next today',
+      center: 'title',
+      right: 'dayGridMonth,timeGridWeek,timeGridDay,listMonth'
+    },
+    windowResize: function windowResize(view) {
+      var newView = getInitialView();
+      calendar.changeView(newView);
+    },
+    eventResize: function eventResize(info) {
+      var indexOfSelectedEvent = defaultEvents.findIndex(function (x) {
+        return x.id == info.event.id;
+      });
+      if (defaultEvents[indexOfSelectedEvent]) {
+        defaultEvents[indexOfSelectedEvent].title = info.event.title;
+        defaultEvents[indexOfSelectedEvent].className = info.event.classNames[0];
+      }
+    },
+    eventClick: function eventClick(info) {
+      document.getElementById("edit-event-btn").removeAttribute("hidden");
+      document.getElementById('btn-save-event').setAttribute("hidden", true);
+      document.getElementById("edit-event-btn").setAttribute("data-id", "edit-event");
+      document.getElementById("edit-event-btn").innerHTML = "Edit";
+      eventClicked();
+      addEvent.show();
+      formEvent.reset();
+      selectedEvent = info.event;
+
+      // First Modal
+      document.getElementById("modal-title").innerHTML = "";
+
+      // Edit Modal
+      console.log("selectedEvent", selectedEvent);
+      document.getElementById("event-title").value = selectedEvent.title;
+      document.getElementById("event-category").value = selectedEvent.className;
+      document.getElementById('btn-delete-event').removeAttribute('hidden');
+    },
+    dateClick: function dateClick(info) {
+      document.getElementById("edit-event-btn").setAttribute("hidden", true);
+      document.getElementById('btn-save-event').removeAttribute("hidden");
+      addNewEvent(info);
+    },
+    events: defaultEvents,
+    eventReceive: function eventReceive(info) {
+      var newid = parseInt(info.event.id);
+      var newEvent = {
+        id: newid,
+        title: info.event.title,
+        className: info.event.classNames[0]
+      };
+      defaultEvents.push(newEvent);
+    },
+    eventDrop: function eventDrop(info) {
+      var indexOfSelectedEvent = defaultEvents.findIndex(function (x) {
+        return x.id == info.event.id;
+      });
+      if (defaultEvents[indexOfSelectedEvent]) {
+        defaultEvents[indexOfSelectedEvent].title = info.event.title;
+        defaultEvents[indexOfSelectedEvent].className = info.event.classNames[0];
+      }
+    }
+  });
+
+  // setTimeout(() => {
+  calendar.render();
+  // }, 0);
+
+  /*Add new event*/
+  // Form to add new event
+  formEvent.addEventListener('submit', function (ev) {
+    ev.preventDefault();
+    var updatedTitle = document.getElementById("event-title").value;
+    var updatedCategory = document.getElementById('event-category').value;
+    var all_day = false;
+    if (selectedEvent) {
+      var eventid = document.getElementById("eventid").value;
+      selectedEvent.setProp("id", eventid);
+      selectedEvent.setProp("title", updatedTitle);
+      selectedEvent.setProp("classNames", [updatedCategory]);
+      var indexOfSelectedEvent = defaultEvents.findIndex(function (x) {
+        return x.id == selectedEvent.id;
+      });
+      if (defaultEvents[indexOfSelectedEvent]) {
+        defaultEvents[indexOfSelectedEvent].title = updatedTitle;
+        defaultEvents[indexOfSelectedEvent].className = updatedCategory;
+      }
+      calendar.render();
+      // default
+    } else {
+      var newEvent = {
+        id: (Math.random() * 10000).toFixed(0),
+        title: updatedTitle,
+        start: new Date(document.querySelector("#calendar").value),
+        // Replace "date-picker-input" with the actual ID of your date picker input,
+        allDay: true,
+        className: updatedCategory
+      };
+      calendar.addEvent(newEvent);
+      defaultEvents.push(newEvent);
+    }
+    addEvent.hide();
+  });
+  document.getElementById("btn-delete-event").addEventListener("click", function (e) {
+    if (selectedEvent) {
+      for (var i = 0; i < defaultEvents.length; i++) {
+        if (defaultEvents[i].id == selectedEvent.id) {
+          defaultEvents.splice(i, 1);
+          i--;
+        }
+      }
+      selectedEvent.remove();
+      selectedEvent = null;
+      addEvent.hide();
+    }
+  });
+  document.getElementById("btn-new-event").addEventListener("click", function (e) {
+    addNewEvent();
+    document.getElementById('edit-event-btn').click();
+  });
+});
+function eventClicked() {
+  document.getElementById('form-event').classList.add("view-event");
+  document.getElementById("event-title").classList.replace("d-block", "d-none");
+  document.getElementById("event-category").classList.replace("d-block", "d-none");
+  document.getElementById('btn-save-event').setAttribute("hidden", true);
+}
+function editEvent(data) {
+  var data_id = data.getAttribute("data-id");
+  if (data_id == 'new-event') {
+    document.getElementById('modal-title').innerHTML = "";
+    document.getElementById('modal-title').innerHTML = "Add Event";
+    document.getElementById("btn-save-event").innerHTML = "Add Event";
+    eventTyped();
+  } else if (data_id == 'edit-event') {
+    data.innerHTML = "Cancel";
+    document.getElementById("btn-save-event").innerHTML = "Update Event";
+    data.removeAttribute("hidden");
+    eventTyped();
+  } else {
+    data.innerHTML = "Edit";
+    eventClicked();
+  }
+}
+function eventTyped() {
+  document.getElementById('form-event').classList.remove("view-event");
+  document.getElementById("event-title").classList.replace("d-none", "d-block");
+  document.getElementById("event-category").classList.replace("d-none", "d-block");
+  document.getElementById('btn-save-event').removeAttribute("hidden");
+}
+/******/ })()
+;

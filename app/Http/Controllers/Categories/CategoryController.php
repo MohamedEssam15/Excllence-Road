@@ -17,7 +17,6 @@ class CategoryController extends Controller
                     $query->where('name', 'LIKE', '%' . $term . '%');
                 });
             })->withCount('courses')->orderBy('updated_at', 'desc')->paginate(10);
-            ds($categories);
             return response()->json([
                 'table_data' => view('categories.Partial-Components.all-partial-table', compact('categories'))->render(),
                 'pagination' => $categories->links('vendor.pagination.bootstrap-5')->render()
