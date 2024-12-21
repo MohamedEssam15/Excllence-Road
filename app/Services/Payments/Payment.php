@@ -2,8 +2,11 @@
 
 namespace App\Services\Payments;
 
+use App\Enum\DiscountTypes;
 use App\Enum\PaymentStatus;
+use App\Models\Course;
 use App\Models\Order;
+use App\Models\Package;
 use App\Models\Payment as ModelsPayment;
 use App\Models\TeacherRevenues;
 use Illuminate\Support\Facades\DB;
@@ -83,6 +86,9 @@ class Payment
                 'student_id' => $user->id,
                 'is_package' => $isPackage,
                 'package_id' => $record->id,
+                'discount' => $record->discount,
+                'discount_type' => $record->discount_type,
+                'added_by' => null,
                 'course_id' => null,
                 'payment_id' => $payment->id
             ]);
@@ -94,7 +100,7 @@ class Payment
                     'from_package' => $isPackage,
                     'package_id' => $record->id
                 ]);
-                $revenue = ($course->price * ($record->teacher_commission ?? 10)) / 100;
+                $revenue = ($course->new_price ?? $course->price) * ($record->teacher_commission ?? 10) / 100;
                 TeacherRevenues::create([
                     "teacher_id" => $course->teacher_id,
                     "order_id" => $order->id,
@@ -107,6 +113,9 @@ class Payment
                 'student_id' => $user->id,
                 'is_package' => $isPackage,
                 'package_id' => null,
+                'discount' => $record->discount,
+                'discount_type' => $record->discount_type,
+                'added_by' => null,
                 'course_id' => $record->id,
                 'payment_id' => $payment->id
             ]);
@@ -117,7 +126,7 @@ class Payment
                 'from_package' => $isPackage,
                 'package_id' => null
             ]);
-            $revenue = $record->price * (($record->teacher_commission ?? 10) / 100);
+            $revenue = ($record->new_price ?? $record->price) * (($record->teacher_commission ?? 10) / 100);
             TeacherRevenues::create([
                 "teacher_id" => $record->teacher_id,
                 "order_id" => $order->id,
@@ -148,6 +157,75 @@ class Payment
         }
         if ($existingEnrollment) {
             return apiResponse('error', new stdClass(), [__('response.alreadyBuyTheCourse')], 422);
+        }
+    }
+
+    public function createFreePayment($user, $itemType, $itemId)
+    {
+        //save payment
+        $payment = ModelsPayment::create([
+            'amount' => 0,
+            'status' => PaymentStatus::Done,
+            'user_id' => $user->id,
+        ]);
+        $translations = [
+            ['locale' => 'en', 'status' => PaymentStatus::Done],
+            ['locale' => 'ar', 'status' => "مكتمله"],
+        ];
+        $payment->translations()->createMany($translations);
+        $payment->save();
+
+        if ($itemType == 'course') {
+            $record = Course::findOrFail($itemId);
+            $isPackage = false;
+        } else {
+            $record = Package::findOrFail($itemId);
+            $isPackage = true;
+        }
+        $this->handleFreeEnrollments($user, $record, $isPackage, $payment);
+    }
+    public function handleFreeEnrollments($user, $record, $isPackage, $payment)
+    {
+        if ($isPackage) {
+            $order = Order::create([
+                'order_number' => Str::upper(Str::random(3)) . str_pad(mt_rand(0, 99999), 4, '0', STR_PAD_LEFT),
+                'student_id' => $user->id,
+                'is_package' => $isPackage,
+                'package_id' => $record->id,
+                'discount' => 100,
+                'discount_type' => DiscountTypes::PERCENTAGE,
+                'added_by' => auth()->user()->id,
+                'course_id' => null,
+                'payment_id' => $payment->id
+            ]);
+            foreach ($record->courses as $course) {
+                $user->enrollments()->attach($course->id, [
+                    'payment_id' => $payment->id,
+                    'start_date' => $record->start_date,
+                    'end_date' => $record->end_date,
+                    'from_package' => $isPackage,
+                    'package_id' => $record->id
+                ]);
+            }
+        } else {
+            $order = Order::create([
+                'order_number' => Str::upper(Str::random(3)) . str_pad(mt_rand(0, 99999), 4, '0', STR_PAD_LEFT),
+                'student_id' => $user->id,
+                'is_package' => $isPackage,
+                'package_id' => null,
+                'discount' => 100,
+                'discount_type' => DiscountTypes::PERCENTAGE,
+                'added_by' => auth()->user()->id,
+                'course_id' => $record->id,
+                'payment_id' => $payment->id
+            ]);
+            $user->enrollments()->attach($record->id, [
+                'payment_id' => $payment->id,
+                'start_date' => $record->start_date,
+                'end_date' => $record->end_date,
+                'from_package' => $isPackage,
+                'package_id' => null
+            ]);
         }
     }
 }

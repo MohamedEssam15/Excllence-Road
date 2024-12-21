@@ -52,6 +52,9 @@
                                     <th scope="col">@lang('translation.paidFor')</th>
                                     <th scope="col">@lang('translation.paidForName')</th>
                                     <th scope="col">@lang('translation.paidDate')</th>
+                                    <th scope="col">@lang('translation.discount')</th>
+                                    <th scope="col">@lang('translation.discountType')</th>
+                                    <th scope="col">@lang('translation.addedBy')</th>
                                     <th scope="col">@lang('translation.status')</th>
                                 </tr>
                             </thead>

@@ -11,4 +11,6 @@ class CourseStatus
     const PENDING = 2;
 
     const PAUSED = 4;
+
+    const IN_PROGRESS = 5;
 }

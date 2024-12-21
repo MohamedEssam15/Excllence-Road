@@ -53,7 +53,6 @@
                                     <th>@lang('translation.startDate')</th>
                                     <th>@lang('translation.endDate')</th>
                                     <th>@lang('translation.isPopular')</th>
-                                    <th>@lang('translation.actions')</th>
                                 </tr>
                             </thead>
                             <tbody id="courseTableBody">
@@ -67,43 +66,6 @@
 
                 </div>
             </div>
-
-
-            {{-- <div class="modal fade" id="popularModal" tabindex="-1" aria-labelledby="popularModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="popularModalLabel"></h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <form id="popularPackageForm">
-                                @csrf
-                                <div class="mb-3">
-                                    <label for="teacherCommistion" class="col-form-label">@lang('translation.teacherCommistion')</label>
-                                    <input type="number" name="teacherCommistion" class="form-control"
-                                        id="teacherCommisionInput">
-                                </div>
-                                <div class="mb-3">
-                                    <div class="form-check form-switch form-switch-lg">
-                                        <input type="checkbox" name="addToPopularPackages" value="1"
-                                            class="form-check-input" id="addToPopularPackages">
-                                        <label class="form-check-label" for="customSwitchsizelg">@lang('translation.addToPopularPackages')</label>
-                                    </div>
-                                </div>
-                                <input type="hidden" name="packageId" class="form-control" id="package-id">
-                            </form>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary"
-                                data-bs-dismiss="modal">@lang('translation.close')</button>
-                            <button type="button" id="popularPackageButton"
-                                class="btn btn-success">@lang('translation.accept')</button>
-                        </div>
-                    </div>
-                </div>
-            </div> --}}
-
 
             {{-- toastr --}}
             <div id="toastContainer" class="position-fixed top-0 end-0 " style="z-index: 1060;margin-top: 5%;">

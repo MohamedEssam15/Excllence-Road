@@ -3,11 +3,14 @@
 namespace App\Http\Controllers\Courses;
 
 use App\Enum\CourseStatus;
+use App\Enum\DiscountTypes;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AcceptCourseRequest;
+use App\Http\Requests\AddDiscountRequest;
 use App\Models\Course;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class CoursesController extends Controller
 {
@@ -154,21 +157,6 @@ class CoursesController extends Controller
         $course->save();
         return apiResponse(__('translation.returnedToPending'));
     }
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
 
     /**
      * Display the specified resource.
@@ -181,27 +169,33 @@ class CoursesController extends Controller
         return view('courses.show-course', compact('course'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function addDiscount(AddDiscountRequest $request)
     {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
+        $course = Course::find($request->courseId);
+        $course->discount = $request->discount;
+        $course->discount_type = $request->discountType;
+        if ($request->discountType == DiscountTypes::FIXED) {
+            $course->new_price = $request->discount;
+        } else {
+            $course->new_price = $course->price - (($course->price * $request->discount) / 100);
+        }
+        $course->save();
+        return apiResponse(__('translation.discountAdded'));
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroyDiscount(Request $request)
     {
-        //
+        $this->validate($request, [
+            'courseId' => 'required|exists:courses,id',
+        ]);
+        $course = Course::find($request->courseId);
+        $course->discount = null;
+        $course->discount_type = null;
+        $course->new_price = null;
+        $course->save();
+        return apiResponse(__('translation.discountRemoved'));
     }
 }

@@ -50,6 +50,9 @@
                                     <th>@lang('translation.name')</th>
                                     <th>@lang('translation.image')</th>
                                     <th>@lang('translation.price')</th>
+                                    <th>@lang('translation.discount')</th>
+                                    <th>@lang('translation.discountType')</th>
+                                    <th>@lang('translation.newPrice')</th>
                                     <th>@lang('translation.startDate')</th>
                                     <th>@lang('translation.endDate')</th>
                                     <th>@lang('translation.isPopular')</th>
@@ -68,42 +71,70 @@
                 </div>
             </div>
 
-
-            {{-- <div class="modal fade" id="popularModal" tabindex="-1" aria-labelledby="popularModalLabel" aria-hidden="true">
+            {{-- add discount modal --}}
+            <div class="modal fade" id="addDiscountModal" tabindex="-1" aria-labelledby="addDiscountModalLabel"
+                aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="popularModalLabel"></h5>
+                            <h5 class="modal-title" id="addDiscountModalLabel"></h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <form id="popularPackageForm">
+                            <form id="addDiscountForm">
                                 @csrf
                                 <div class="mb-3">
-                                    <label for="teacherCommistion" class="col-form-label">@lang('translation.teacherCommistion')</label>
-                                    <input type="number" name="teacherCommistion" class="form-control"
-                                        id="teacherCommisionInput">
+                                    <label class="col-md-2 col-form-label">@lang('translation.discountType')</label>
+                                    <select name="discountType" class="form-select">
+                                        <option value="percentage">@lang('translation.percentage')</option>
+                                        <option value="fixed">@lang('translation.fixedPrice')</option>
+                                    </select>
                                 </div>
                                 <div class="mb-3">
-                                    <div class="form-check form-switch form-switch-lg">
-                                        <input type="checkbox" name="addToPopularPackages" value="1"
-                                            class="form-check-input" id="addToPopularPackages">
-                                        <label class="form-check-label" for="customSwitchsizelg">@lang('translation.addToPopularPackages')</label>
-                                    </div>
+                                    <label for="discount" class="col-form-label">@lang('translation.discount')</label>
+                                    <input type="number" name="discount" class="form-control" id="discountInput">
                                 </div>
-                                <input type="hidden" name="packageId" class="form-control" id="package-id">
+                                <input type="hidden" name="packageId" class="form-control" id="add-discount-package-id">
                             </form>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary"
                                 data-bs-dismiss="modal">@lang('translation.close')</button>
-                            <button type="button" id="popularPackageButton"
+                            <button type="submit" id="addDiscountButton"
                                 class="btn btn-success">@lang('translation.accept')</button>
                         </div>
                     </div>
                 </div>
-            </div> --}}
-
+            </div>
+            {{-- remove discount modal --}}
+            <div class="modal fade" id="removeDiscountModal" tabindex="-1" aria-labelledby="removeDiscountModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="modifyModalLabel"></h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="removeDiscountForm">
+                                @csrf
+                                <div class="mb-3">
+                                    <p>
+                                        @lang('translation.areYouSureRemoveDiscount')
+                                    </p>
+                                </div>
+                                <input type="hidden" name="packageId" class="form-control" id="remove-discount-package-id">
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary"
+                                data-bs-dismiss="modal">@lang('translation.close')</button>
+                            <button type="button" id="removeDiscountButton"
+                                class="btn btn-danger">@lang('translation.accept')</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             {{-- toastr --}}
             <div id="toastContainer" class="position-fixed top-0 end-0 " style="z-index: 1060;margin-top: 5%;">
@@ -124,7 +155,8 @@
             </div>
             {{-- error toastr --}}
             <div id="toastContainerError" class="position-fixed top-0 end-0 " style="z-index: 1060;margin-top: 5%;">
-                <div id="toastrError" class="toast overflow-hidden" role="alert" aria-live="assertive" aria-atomic="true">
+                <div id="toastrError" class="toast overflow-hidden" role="alert" aria-live="assertive"
+                    aria-atomic="true">
                     <div class="align-items-center text-white
                             bg-danger border-0">
                         <div class="d-flex">
@@ -143,7 +175,7 @@
 @section('script')
     <script>
         $(document).ready(function() {
-            window.fetchCourses = function(query = '', page = 1) {
+            window.fetchPackages = function(query = '', page = 1) {
                 $.ajax({
                     url: baseUrl + "/packages/active?page=" +
                         page, // Replace with your route for search
@@ -161,11 +193,11 @@
                 });
             };
 
-            fetchCourses(); // Initial call to fetch courses
+            fetchPackages(); // Initial call to fetch packages
 
             $('#search').on('keyup', function() {
                 var query = $(this).val();
-                fetchCourses(query);
+                fetchPackages(query);
             });
 
             $(document).on('click', '.pagination a', function(e) {
@@ -173,14 +205,14 @@
                 var page = $(this).attr('href').split('page=')[
                     1]; // Get the page number from the pagination link
                 var query = $('#search').val(); // Get the current search query
-                fetchCourses(query, page); // Fetch the new page with AJAX
+                fetchPackages(query, page); // Fetch the new page with AJAX
             });
         });
     </script>
     <script>
         const currentLang = document.documentElement.lang || 'ar';
 
-        function fireToastr() {
+        function fireToastr(message) {
             const toastContainer = document.getElementById('toastContainer');
             if (currentLang == 'ar') {
                 toastContainer.style.marginLeft = '1%';
@@ -188,6 +220,8 @@
                 toastContainer.style.marginRight = '1%';
             }
             const toastLiveExample3 = document.getElementById("toastr");
+            const toastBody = toastLiveExample3.querySelector('.toast-body');
+            toastBody.innerHTML = message;
             var toast = new bootstrap.Toast(toastLiveExample3, {
                 delay: 3000
             });
@@ -220,6 +254,125 @@
             toast.show();
         }
     </script>
+    <script>
+        $(document).ready(function() {
+            var addDiscountModal = document.getElementById('addDiscountModal');
+            var removeDiscountModal = document.getElementById('removeDiscountModal');
+
+
+            addDiscountModal.addEventListener('show.bs.modal', function(event) {
+                document.getElementById('addDiscountForm').reset();
+                var button = event.relatedTarget;
+                var packageId = button.getAttribute('data-bs-packageid');
+                var packageName = button.getAttribute('data-bs-packagename');
+
+                var modalTitle = addDiscountModal.querySelector('.modal-title');
+                var modalPackageId = document.getElementById('add-discount-package-id');
+
+                modalTitle.textContent = packageName;
+                modalPackageId.value = packageId;
+            });
+
+            $('#addDiscountButton').click(function(event) {
+                event.preventDefault();
+                var form = $('#addDiscountForm');
+                var formData = form.serialize(); // Serialize form data
+
+                $.ajax({
+                    type: 'POST',
+                    url: baseUrl + '/packages/add-discount', // Change this to your actual route
+                    data: formData,
+                    success: function(response) {
+                        // Assuming the server returns a JSON response
+                        if (response.status == 200) {
+                            // Close the modal
+                            $('#addDiscountModal').modal('hide');
+                            fetchPackages();
+                            fireToastr(response.message)
+                        } else {
+                            $('#addDiscountModal').modal('hide');
+                            handleErrorResponse(response)
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        const response = xhr.responseJSON || {
+                            message: 'An unexpected error occurred.'
+                        };
+                        $('#addDiscountModal').modal('hide');
+                        handleErrorResponse(response)
+                    }
+                });
+            });
+            $('#addDiscountForm').submit(function(event) {
+                event.preventDefault();
+                var formData = $(this).serialize(); // Serialize form data
+                $.ajax({
+                    type: 'POST',
+                    url: baseUrl + '/packages/add-discount', // Change this to your actual route
+                    data: formData,
+                    success: function(response) {
+                        // Assuming the server returns a JSON response
+                        if (response.status == 200) {
+                            // Close the modal
+                            $('#addDiscountModal').modal('hide');
+                            fetchPackages();
+                            fireToastr(response.message)
+                        } else {
+                            $('#addDiscountModal').modal('hide');
+                            handleErrorResponse(response)
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        const response = xhr.responseJSON || {
+                            message: 'An unexpected error occurred.'
+                        };
+                        $('#addDiscountModal').modal('hide');
+                        handleErrorResponse(response)
+                    }
+                });
+            });
+            removeDiscountModal.addEventListener('show.bs.modal', function(event) {
+                document.getElementById('removeDiscountForm').reset();
+                var button = event.relatedTarget;
+                var packageId = button.getAttribute('data-bs-packageid');
+                var packageName = button.getAttribute('data-bs-packagename');
+                var modalTitle = removeDiscountModal.querySelector('.modal-title');
+                var modalPackageId = document.getElementById('remove-discount-package-id');
+
+                modalTitle.textContent = packageName;
+                modalPackageId.value = packageId;
+            });
+            $('#removeDiscountButton').click(function(event) {
+                event.preventDefault();
+                var form = $('#removeDiscountForm');
+                var formData = form.serialize(); // Serialize form data
+
+                $.ajax({
+                    type: 'POST',
+                    url: baseUrl + '/packages/remove-discount', // Change this to your actual route
+                    data: formData,
+                    success: function(response) {
+                        if (response.status == 200) {
+                            // Close the modal
+                            $('#removeDiscountModal').modal('hide');
+                            fetchPackages();
+                            fireToastr(response.message)
+                        } else {
+                            $('#removeDiscountModal').modal('hide');
+                            handleErrorResponse(response)
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        const response = xhr.responseJSON || {
+                            message: 'An unexpected error occurred.'
+                        };
+                        $('#removeDiscountModal').modal('hide');
+                        handleErrorResponse(response)
+                    }
+                });
+            });
+        });
+    </script>
     @if ($errors->any())
         <script>
             handleErrorResponse(@json($errors->all()))
@@ -228,7 +381,7 @@
 
     @if (session('status'))
         <script>
-            fireToastr()
+            fireToastr(@json(session('status')))
         </script>
     @endif
     <script src="{{ URL::asset('assets/js/pages/bootstrap-toasts.init.js') }}"></script>

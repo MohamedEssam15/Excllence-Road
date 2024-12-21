@@ -19,10 +19,10 @@ class PaymentController extends Controller
     public function pay(PaymentRequest $request)
     {
         $user = auth('api')->user();
-        if($request->paymentFor == 'package'){
+        if ($request->paymentFor == 'package') {
             $isPackage = true;
             $record = Package::where('id', $request->paymentForId)->first();
-        }else{
+        } else {
             $isPackage = false;
             $record = Course::where('id', $request->paymentForId)->first();
         }
@@ -34,13 +34,12 @@ class PaymentController extends Controller
 
         $payInfo = [
             'name' => $record->translate(config('app.locale'))->name,
-            'price' => $record->price,
+            'price' => $record->new_price ?? $record->price,
         ];
 
-        
-        $status = $paymentServices->paymentGateway($request->cardInfo, $request->addressInfo, $payInfo);
-        $response = $paymentServices->storePaymentInfo($status,$payInfo,$user,$record,$isPackage);
-        return $response;
 
+        $status = $paymentServices->paymentGateway($request->cardInfo, $request->addressInfo, $payInfo);
+        $response = $paymentServices->storePaymentInfo($status, $payInfo, $user, $record, $isPackage);
+        return $response;
     }
 }

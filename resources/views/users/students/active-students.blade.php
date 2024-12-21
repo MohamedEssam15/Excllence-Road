@@ -90,11 +90,53 @@
                     </div>
                 </div>
             </div>
+            {{-- add free course or package modal --}}
+            <div class="modal fade" id="addFreeCourseOrPackageModal" tabindex="-1"
+                aria-labelledby="addFreeCourseOrPackageModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="addFreeCourseOrPackageModalLabel"></h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="addFreeCourseOrPackageForm">
+                                @csrf
+                                <!-- First Select Box -->
+                                <div class="mb-3">
+                                    <label for="typeSelect" class="form-label">@lang('translation.selectType')</label>
+                                    <select class="form-select" name="type" id="typeSelect" required>
+                                        <option value="">-- @lang('translation.select') --</option>
+                                        <option value="course">@lang('translation.course')</option>
+                                        <option value="package">@lang('translation.package')</option>
+                                    </select>
+                                </div>
+                                <!-- Second Select Box -->
+                                <div class="mb-3">
+                                    <label for="itemSelect" class="form-label">@lang('translation.selectItem')</label>
+                                    <select class="form-select" name="itemId" id="itemSelect" required>
+                                        <option value="">-- @lang('translation.select') --</option>
+                                    </select>
+                                </div>
+                                <input type="hidden" name="studentId" class="form-control"
+                                    id="add-free-course-or-package-student-id">
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary"
+                                data-bs-dismiss="modal">@lang('translation.close')</button>
+                            <button type="button" id="addFreeCourseOrPackageButton"
+                                class="btn btn-success">@lang('translation.accept')</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
 
             {{-- toastr --}}
             <div id="toastContainer" class="position-fixed top-0 end-0 " style="z-index: 1060;margin-top: 5%;">
-                <div id="toastr" class="toast overflow-hidden" role="alert" aria-live="assertive" aria-atomic="true">
+                <div id="toastr" class="toast overflow-hidden" role="alert" aria-live="assertive"
+                    aria-atomic="true">
                     <div class="align-items-center text-white
                             bg-success border-0">
                         <div class="d-flex">
@@ -111,7 +153,8 @@
             </div>
             {{-- error toastr --}}
             <div id="toastContainerError" class="position-fixed top-0 end-0 " style="z-index: 1060;margin-top: 5%;">
-                <div id="toastrError" class="toast overflow-hidden" role="alert" aria-live="assertive" aria-atomic="true">
+                <div id="toastrError" class="toast overflow-hidden" role="alert" aria-live="assertive"
+                    aria-atomic="true">
                     <div class="align-items-center text-white
                             bg-danger border-0">
                         <div class="d-flex">
@@ -161,6 +204,129 @@
                     1]; // Get the page number from the pagination link
                 var query = $('#search').val(); // Get the current search query
                 fetchData(query, page); // Fetch the new page with AJAX
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function() {
+            var addFreeCourseOrPackageModal = document.getElementById('addFreeCourseOrPackageModal');
+
+            addFreeCourseOrPackageModal.addEventListener('show.bs.modal', function(event) {
+                document.getElementById('addFreeCourseOrPackageForm').reset();
+                var button = event.relatedTarget;
+                var studentId = button.getAttribute('data-bs-studentid');
+                var StudentName = button.getAttribute('data-bs-studentname');
+                var modalTitle = addFreeCourseOrPackageModal.querySelector(
+                    '.modal-title');
+                var modalStudentId = document.getElementById('add-free-course-or-package-student-id');
+
+                modalTitle.textContent = "@lang('translation.addFreeCourseOrPackageTo')" + ' ' + StudentName;
+                modalStudentId.value = studentId;
+            });
+            $('#typeSelect').change(function() {
+                const selectedType = $(this).val();
+                const itemSelect = $('#itemSelect');
+
+                // Clear and disable the second select box while loading
+                itemSelect.empty().append('<option value="">-- @lang('translation.loading') --</option>').prop(
+                    'disabled', true);
+
+                // Fetch options from the endpoint based on the selected type
+                if (selectedType) {
+                    $.ajax({
+                        type: 'GET',
+                        url: baseUrl +
+                            '/users/students/get-courses-or-packages/' +
+                            selectedType, // Adjust the endpoint URL to your needs
+                        success: function(response) {
+                            if (response.status === 200) {
+                                // Populate the second select box
+                                itemSelect.empty().append(
+                                    '<option value="">-- @lang('translation.select') --</option>');
+                                response.data.forEach(item => {
+                                    itemSelect.append(
+                                        `<option value="${item.id}">${item.name}</option>`
+                                    );
+                                });
+                                itemSelect.prop('disabled', false);
+                            } else {
+                                fireErrorToastr(response.message || 'Failed to fetch items.');
+                            }
+                        },
+                        error: function() {
+                            fireErrorToastr('An error occurred while fetching items.');
+                        }
+                    });
+                } else {
+                    itemSelect.empty().append('<option value="">-- @lang('translation.select') --</option>').prop(
+                        'disabled',
+                        true);
+                }
+            });
+            $('#addFreeCourseOrPackageButton').click(function() {
+                const selectedType = $('#typeSelect').val();
+                const selectedItem = $('#itemSelect').val();
+                const studentId = $('#add-free-course-or-package-student-id').val();
+                if (!selectedType || !selectedItem || !studentId) {
+                    fireErrorToastr('@lang('translation.pleaseSelectBothFields')');
+                    return;
+                }
+                var form = $('#addFreeCourseOrPackageForm');
+                var formData = form.serialize(); // Serialize form data
+
+                $.ajax({
+                    type: 'POST',
+                    url: baseUrl +
+                        '/users/students/add-free-course-or-package', // Change this to your actual route
+                    data: formData,
+                    success: function(response) {
+                        if (response.status == 200) {
+                            // Close the modal
+                            $('#addFreeCourseOrPackageModal').modal('hide');
+                            fetchData();
+                            fireToastr(response.message)
+                        } else {
+                            handleErrorResponse(response)
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        const response = xhr.responseJSON || {
+                            message: 'An unexpected error occurred.'
+                        };
+                        handleErrorResponse(response)
+                    }
+                });
+            });
+            // Handle form submission
+            $('#addFreeCourseOrPackageForm').submit(function(event) {
+                event.preventDefault(); // Prevent default form submission
+
+                const selectedType = $('#typeSelect').val();
+                const selectedItem = $('#itemSelect').val();
+                const studentId = $('#add-free-course-or-package-student-id').val();
+                if (!selectedType || !selectedItem || !studentId) {
+                    fireErrorToastr('Please select both fields.');
+                    return;
+                }
+                var formData = $(this).serialize(); // Serialize form data
+                // Submit the selected values to another endpoint
+                $.ajax({
+                    type: 'POST',
+                    url: baseUrl +
+                        '/users/students/add-free-course-or-package', // Adjust the endpoint URL to your needs
+                    data: formData,
+                    success: function(response) {
+                        if (response.status === 200) {
+                            fireToastr(response.message)
+                            $('#selectModal').modal('hide'); // Close the modal
+                        } else {
+                            fireErrorToastr(response.message || 'Failed to submit selection.');
+                        }
+                    },
+                    error: function() {
+                        fireErrorToastr('An error occurred while submitting the selection.');
+                    }
+                });
             });
         });
     </script>

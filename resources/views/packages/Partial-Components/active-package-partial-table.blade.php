@@ -19,6 +19,18 @@
                 <img src="{{ $package->getCoverPhotoPath() }}" alt="" height="22">
             </td>
             <td data-field="@lang('translation.price')">{{ $package->price }} @lang('translation.currency')</td>
+            <td data-field="@lang('translation.discount')">{{ $package->discount ?? '-' }}</td>
+            <td data-field="@lang('translation.discountType')">
+                @if ($package->discount_type == 'percentage')
+                    @lang('translation.percentage')
+                @elseif ($package->discount_type == 'fixed')
+                    @lang('translation.fixedPrice')
+                @else
+                    -
+                @endif
+            </td>
+            <td data-field="@lang('translation.newPrice')">
+                {{ $package->new_price ? $package->new_price . ' ' . __('translation.currency') : '-' }}</td>
             <td data-field="@lang('translation.startDate')">{{ $package->start_date }}</td>
             <td data-field="@lang('translation.endDate')">
                 {{ $package->end_date }}
@@ -31,13 +43,24 @@
                 @endif
             </td>
             <td style="width: 100px">
-                @if ($package->start_date > today())
                     <a class="btn btn-outline-secondary btn-sm" title="@lang('translation.edit')"
                         href="{{ route('packages.edit', $package->id) }}">
                         <i class="fas fa-pencil-alt"></i>
                     </a>
-                @endif
 
+                    @if (is_null($package->discount))
+                        <a class="btn btn-outline-success btn-sm" title="@lang('translation.addDiscount')" data-bs-toggle="modal"
+                            data-bs-target="#addDiscountModal" data-bs-packageid="{{ $package->id }}"
+                            data-bs-packagename="{{ $package->translate(config('app.locale'))->name ?? $package->name }}">
+                            <i class="fas fa-percentage"></i>
+                        </a>
+                    @else
+                        <a class="btn btn-outline-danger btn-sm" title="@lang('translation.removeDiscount')" data-bs-toggle="modal"
+                            data-bs-target="#removeDiscountModal" data-bs-packageid="{{ $package->id }}"
+                            data-bs-packagename="{{ $package->translate(config('app.locale'))->name ?? $package->name }}">
+                            <i class="fas fa-percentage"></i>
+                        </a>
+                    @endif
             </td>
         </tr>
     @endforeach

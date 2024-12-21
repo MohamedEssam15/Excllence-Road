@@ -18,7 +18,19 @@
                 <img src="{{ $course->getCoverPhotoPath() }}" alt="" height="22">
             </td>
             <td data-field="@lang('translation.teacherName')">{{ $course->teacher->name }}</td>
-            <td data-field="@lang('translation.price')">{{ $course->price }}</td>
+            <td data-field="@lang('translation.price')">{{ $course->price . ' ' . __('translation.currency') }}</td>
+            <td data-field="@lang('translation.discount')">{{ $course->discount ?? '-' }}</td>
+            <td data-field="@lang('translation.discountType')">
+                @if ($course->discount_type == 'percentage')
+                    @lang('translation.percentage')
+                @elseif ($course->discount_type == 'fixed')
+                    @lang('translation.fixedPrice')
+                @else
+                    -
+                @endif
+            </td>
+            <td data-field="@lang('translation.newPrice')">
+                {{ $course->new_price ? $course->new_price . ' ' . __('translation.currency') : '-' }}</td>
             <td data-field="@lang('translation.teacherCommistion')">{{ $course->teacher_commision . '%' }}</td>
             <td data-field="@lang('translation.category')">
                 {{ $course->category->translate(config('app.locale'))->name }}
@@ -53,6 +65,20 @@
                     data-bs-coursename="{{ $course->translate(config('app.locale'))->name ?? $course->name }}">
                     <i class="fas fa-pencil-alt"></i>
                 </a>
+                @if (is_null($course->discount))
+                    <a class="btn btn-outline-success btn-sm" title="@lang('translation.addDiscount')" data-bs-toggle="modal"
+                        data-bs-target="#addDiscountModal" data-bs-courseid="{{ $course->id }}"
+                        data-bs-coursename="{{ $course->translate(config('app.locale'))->name ?? $course->name }}">
+                        <i class="fas fa-percentage"></i>
+                    </a>
+                @else
+                    <a class="btn btn-outline-danger btn-sm" title="@lang('translation.removeDiscount')" data-bs-toggle="modal"
+                        data-bs-target="#removeDiscountModal" data-bs-courseid="{{ $course->id }}"
+                        data-bs-coursename="{{ $course->translate(config('app.locale'))->name ?? $course->name }}">
+                        <i class="fas fa-percentage"></i>
+                    </a>
+                @endif
+
             </td>
         </tr>
     @endforeach

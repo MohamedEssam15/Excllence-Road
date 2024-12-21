@@ -8,12 +8,17 @@ use Illuminate\Database\Eloquent\Model;
 class Order extends Model
 {
     use HasFactory;
-    protected $fillable = ['order_number', 'student_id', 'is_package', 'package_id', 'course_id', 'payment_id'];
+    protected $fillable = ['order_number', 'student_id', 'is_package', 'package_id', 'course_id', 'payment_id', 'added_by', 'discount', 'discount_type'];
     protected $with = ['student', 'payment'];
 
     public function student()
     {
         return $this->belongsTo(User::class, 'student_id');
+    }
+
+    public function addedBy()
+    {
+        return $this->belongsTo(User::class, 'added_by');
     }
 
     public function product()

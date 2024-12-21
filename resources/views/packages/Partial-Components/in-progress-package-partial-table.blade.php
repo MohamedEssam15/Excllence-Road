@@ -19,6 +19,18 @@
                 <img src="{{ $package->getCoverPhotoPath() }}" alt="" height="22">
             </td>
             <td data-field="@lang('translation.price')">{{ $package->price }} @lang('translation.currency')</td>
+            <td data-field="@lang('translation.discount')">{{ $package->discount ?? '-' }}</td>
+            <td data-field="@lang('translation.discountType')">
+                @if ($package->discount_type == 'percentage')
+                    @lang('translation.percentage')
+                @elseif ($package->discount_type == 'fixed')
+                    @lang('translation.fixedPrice')
+                @else
+                    -
+                @endif
+            </td>
+            <td data-field="@lang('translation.newPrice')">
+                {{ $package->new_price ? $package->new_price . ' ' . __('translation.currency') : '-' }}</td>
             <td data-field="@lang('translation.startDate')">{{ $package->start_date }}</td>
             <td data-field="@lang('translation.endDate')">
                 {{ $package->end_date }}

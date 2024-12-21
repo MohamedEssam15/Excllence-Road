@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Packages;
 
+use App\Enum\DiscountTypes;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\AddDiscountPackageRequest;
 use App\Http\Requests\AddPackageRequest;
 use App\Models\category;
 use App\Models\Course;
@@ -23,7 +25,7 @@ class PackagesController extends Controller
                 $query->WhereHas('translations', function ($query) use ($term) {
                     $query->where('name', 'LIKE', '%' . $term . '%');
                 });
-            })->whereDate('end_date', '>=', today())->orderBy('updated_at', 'desc')->paginate(10);
+            })->whereDate('start_date', '>=', today())->orderBy('updated_at', 'desc')->paginate(10);
             return response()->json([
                 'table_data' => view('packages.Partial-Components.active-package-partial-table', compact('packages'))->render(),
                 'pagination' => $packages->links('vendor.pagination.bootstrap-5')->render()
@@ -32,6 +34,26 @@ class PackagesController extends Controller
 
 
         return view('packages.active-packages');
+    }
+
+    public function inProgressPackages(Request $request)
+    {
+        $term = $request->get('query') ?? '';
+
+        if ($request->ajax()) {
+            $packages = Package::where(function ($query) use ($term) {
+                $query->WhereHas('translations', function ($query) use ($term) {
+                    $query->where('name', 'LIKE', '%' . $term . '%');
+                });
+            })->whereDate('start_date', '<=', today())->whereDate('end_date', '>=', today())->orderBy('updated_at', 'desc')->paginate(10);
+            return response()->json([
+                'table_data' => view('packages.Partial-Components.in-progress-package-partial-table', compact('packages'))->render(),
+                'pagination' => $packages->links('vendor.pagination.bootstrap-5')->render()
+            ]);
+        }
+
+
+        return view('packages.in-progress-packages');
     }
 
     public function expiredPackages(Request $request)
@@ -152,5 +174,35 @@ class PackagesController extends Controller
             ];
         }
         return response()->json($courses);
+    }
+
+    public function addDiscount(AddDiscountPackageRequest $request)
+    {
+        $package = Package::find($request->packageId);
+        $package->discount = $request->discount;
+        $package->discount_type = $request->discountType;
+        if ($request->discountType == DiscountTypes::FIXED) {
+            $package->new_price = $request->discount;
+        } else {
+            $package->new_price = $package->price - (($package->price * $request->discount) / 100);
+        }
+        $package->save();
+        return apiResponse(__('translation.discountAdded'));
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroyDiscount(Request $request)
+    {
+        $this->validate($request, [
+            'packageId' => 'required|exists:packages,id',
+        ]);
+        $package = Package::find($request->packageId);
+        $package->discount = null;
+        $package->discount_type = null;
+        $package->new_price = null;
+        $package->save();
+        return apiResponse(__('translation.discountRemoved'));
     }
 }

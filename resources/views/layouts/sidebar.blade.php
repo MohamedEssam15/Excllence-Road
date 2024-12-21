@@ -65,6 +65,7 @@
                     <ul class="sub-menu" aria-expanded="true">
                         <li><a href="{{ route('courses.active') }}">@lang('translation.activeCourses')</a></li>
                         <li><a href="{{ route('courses.pending') }}">@lang('translation.pendingCourses')</a></li>
+                        {{-- <li><a href="{{ route('courses.in-progress') }}">@lang('translation.inProgressCourses')</a></li> --}}
                         <li><a href="{{ route('courses.expired') }}">@lang('translation.expiredCourses')</a></li>
                         <li><a href="{{ route('courses.cancelled') }}">@lang('translation.cancelledCourses')</a></li>
                     </ul>
@@ -78,6 +79,7 @@
                     </a>
                     <ul class="sub-menu" aria-expanded="true">
                         <li><a href="{{ route('packages.active') }}">@lang('translation.activePackages')</a></li>
+                        <li><a href="{{ route('packages.in-progress') }}">@lang('translation.inProgressPackages')</a></li>
                         <li><a href="{{ route('packages.expired') }}">@lang('translation.expiredPackages')</a></li>
                         <li><a href="{{ route('packages.create') }}">@lang('translation.addPackages')</a></li>
                     </ul>

@@ -2,9 +2,18 @@
 
 namespace App\Http\Controllers\Users;
 
+use App\Enum\PaymentStatus;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\CourseBasicInfoResource;
+use App\Http\Resources\PackageResource;
+use App\Models\Course;
+use App\Models\Order;
+use App\Models\Package;
+use App\Models\Payment;
 use App\Models\User;
+use App\Services\Payments\Payment as PaymentsPayment;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class StudentController extends Controller
 {
@@ -56,5 +65,27 @@ class StudentController extends Controller
         $student->is_blocked = false;
         $student->save();
         return apiResponse(__('response.updatedSuccessfully'));
+    }
+
+    public function getCoursesOrPackages(string $type)
+    {
+        if ($type == 'course') {
+            $items = Course::whereHas('status', function ($query) {
+                $query->where('name', 'active');
+            })->get();
+            $returnValues = CourseBasicInfoResource::collection($items);
+        } else {
+            $items = Package::whereDate('start_date', '>=', today())->get();
+            $returnValues = PackageResource::collection($items);
+        }
+        return apiResponse(__('response.success'), $returnValues);
+    }
+
+    public function addFreeCourseOrPackage(Request $request)
+    {
+        $user = User::findOrFail($request->studentId);
+        $paymentServices = new PaymentsPayment();
+        $paymentServices->createFreePayment($user, $request->type, $request->itemId);
+        return apiResponse(__('response.addedSuccessfully'));
     }
 }

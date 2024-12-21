@@ -56,6 +56,8 @@ Route::middleware('auth:web')->group(function () {
         Route::get('/{id}/show', [CoursesController::class, 'show'])->name('courses.info');
 
         Route::post('/accept-course', [CoursesController::class, 'acceptCourse']);
+        Route::post('/add-discount', [CoursesController::class, 'addDiscount']);
+        Route::post('/remove-discount', [CoursesController::class, 'destroyDiscount']);
         Route::post('/modify-course', [CoursesController::class, 'modifyCourse']);
         Route::post('/cancel-course', [CoursesController::class, 'cancelCourse']);
         Route::post('/return-course-to-pending', [CoursesController::class, 'returnToPending']);
@@ -63,6 +65,7 @@ Route::middleware('auth:web')->group(function () {
 
     Route::group(['prefix' => 'packages'], function () {
         Route::get('active', [PackagesController::class, 'activePackages'])->name('packages.active');
+        Route::get('in-progress', [PackagesController::class, 'inProgressPackages'])->name('packages.in-progress');
         Route::get('/expired', [PackagesController::class, 'expiredPackages'])->name('packages.expired');
         Route::get('/cancelled', [PackagesController::class, 'cancelledPackages'])->name('packages.cancelled');
         Route::get('/{package}/show', [PackagesController::class, 'show'])->name('packages.info');
@@ -75,6 +78,8 @@ Route::middleware('auth:web')->group(function () {
         Route::post('/modify-course', [PackagesController::class, 'modifyPackage']);
         Route::post('/cancel-course', [PackagesController::class, 'cancelPackage']);
         Route::post('/return-course-to-pending', [PackagesController::class, 'returnToPending']);
+        Route::post('/add-discount', [PackagesController::class, 'addDiscount']);
+        Route::post('/remove-discount', [PackagesController::class, 'destroyDiscount']);
     });
 
 
@@ -92,6 +97,8 @@ Route::middleware('auth:web')->group(function () {
             Route::post('/accept', [StudentController::class, 'accept'])->name('users.student.accept');
             Route::post('/reactive', [StudentController::class, 'reactive'])->name('users.student.reactive');
             Route::get('{id}/show', [StudentController::class, 'show'])->name('users.student.show');
+            Route::post('/add-free-course-or-package', [StudentController::class, 'addFreeCourseOrPackage'])->name('users.student.addFreeCourseOrPackage');
+            Route::get('/get-courses-or-packages/{type}', [StudentController::class, 'getCoursesOrPackages'])->name('users.student.getCoursesOrPackages');
         });
         Route::group(['prefix' => 'teachers'], function () {
             Route::get('active', [TeacherController::class, 'active'])->name('users.teacher.active');
@@ -126,7 +133,4 @@ Route::middleware('auth:web')->group(function () {
     Route::group(['prefix' => 'contact-us'], function () {
         Route::get('all', [ContactUsController::class, 'index'])->name('contactUs.all');
     });
-
-
-
 });

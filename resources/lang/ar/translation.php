@@ -200,6 +200,36 @@ return [
     'phone' => 'رقم الهاتف',
     'message' => 'الرسالة',
     'sentAt' => 'تم الارسال في',
+    'discountAdded' => 'تم اضافة الخصم بنجاح',
+    'discountRemoved' => 'تم حذف الخصم بنجاح',
+    'addDiscount' => 'اضافة خصم',
+    'removeDiscount' => 'حذف الخصم',
+    'areYouSureRemoveDiscount' => 'هل انت متاكد من حذف هذا الخصم',
+    'discountType' => 'نوع الخصم',
+    'percentage' => 'نسبه',
+    'fixedPrice' => 'سعر ثابت',
+    'discount' => 'الخصم',
+    'newPrice' => 'السعر بعد الخصم',
+    'inProgressPackages' => 'الحزم المستمرة',
+    'inProgressCourses' => 'الدورات المستمرة',
+    'inProgress' => 'مستمر',
+    'selectType' => 'اختيار نوع المحتوي',
+    'selectItem' => 'اختيار المحتوي',
+    'select' => 'اختيار',
+    'addFreeCourseOrPackage' => 'اضافة محتوي مجاني',
+    'pleaseSelectBothFields' => 'يرجى اختيار كلا الحقلين',
+    'loading' => 'جاري التحميل',
+    'select' => 'اختيار',
+    'addFreeCourseOrPackageTo' => 'اضافة محتوي مجاني ل',
+    'addedBy' => 'الخصم بواسطة',
+
+
+
+
+
+
+
+
 
     "Layouts" => "Layouts",
     "Horizontal" => "Horizontal",

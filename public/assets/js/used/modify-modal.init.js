@@ -12,7 +12,7 @@ File: Material design Init Js File
 */
 
 var currentLang = document.documentElement.lang || 'ar';
-function fireToastr() {
+function fireToastr(message) {
   var toastContainer = document.getElementById('toastContainer');
   if (currentLang == 'ar') {
     toastContainer.style.marginLeft = '1%';
@@ -20,6 +20,8 @@ function fireToastr() {
     toastContainer.style.marginRight = '1%';
   }
   var toastLiveExample3 = document.getElementById("toastr");
+  var toastBody = toastLiveExample3.querySelector('.toast-body');
+  toastBody.innerHTML = message;
   var toast = new bootstrap.Toast(toastLiveExample3, {
     delay: 3000
   });
@@ -49,6 +51,8 @@ function fireErrorToastr(message) {
 }
 $(document).ready(function () {
   var modifyModal = document.getElementById('modifyModal');
+  var addDiscountModal = document.getElementById('addDiscountModal');
+  var removeDiscountModal = document.getElementById('removeDiscountModal');
   modifyModal.addEventListener('show.bs.modal', function (event) {
     var button = event.relatedTarget;
     var courseId = button.getAttribute('data-bs-courseid');
@@ -73,8 +77,6 @@ $(document).ready(function () {
     modalCourseId.value = courseId;
     modalteacherCommission.value = teacherCommision;
   });
-
-  // Handle the "Accept" button click
   $('#modifyCourseButton').click(function () {
     var form = $('#modifyCourseForm');
     var formData = form.serialize(); // Serialize form data
@@ -98,6 +100,112 @@ $(document).ready(function () {
         var response = xhr.responseJSON || {
           message: 'An unexpected error occurred.'
         };
+        handleErrorResponse(response);
+      }
+    });
+  });
+  addDiscountModal.addEventListener('show.bs.modal', function (event) {
+    document.getElementById('addDiscountForm').reset();
+    var button = event.relatedTarget;
+    var courseId = button.getAttribute('data-bs-courseid');
+    var courseName = button.getAttribute('data-bs-coursename');
+    var modalTitle = addDiscountModal.querySelector('.modal-title');
+    var modalCourseId = document.getElementById('add-discount-course-id');
+    modalTitle.textContent = courseName;
+    modalCourseId.value = courseId;
+  });
+  $('#addDiscountButton').click(function (event) {
+    event.preventDefault();
+    var form = $('#addDiscountForm');
+    var formData = form.serialize(); // Serialize form data
+
+    $.ajax({
+      type: 'POST',
+      url: baseUrl + '/courses/add-discount',
+      // Change this to your actual route
+      data: formData,
+      success: function success(response) {
+        // Assuming the server returns a JSON response
+        if (response.status == 200) {
+          // Close the modal
+          $('#addDiscountModal').modal('hide');
+          fetchCourses();
+          fireToastr(response.message);
+        } else {
+          handleErrorResponse(response);
+        }
+      },
+      error: function error(xhr, status, _error2) {
+        var response = xhr.responseJSON || {
+          message: 'An unexpected error occurred.'
+        };
+        handleErrorResponse(response);
+      }
+    });
+  });
+  $('#addDiscountForm').submit(function (event) {
+    event.preventDefault();
+    var formData = $(this).serialize(); // Serialize form data
+    $.ajax({
+      type: 'POST',
+      url: baseUrl + '/courses/add-discount',
+      // Change this to your actual route
+      data: formData,
+      success: function success(response) {
+        // Assuming the server returns a JSON response
+        if (response.status == 200) {
+          // Close the modal
+          $('#addDiscountModal').modal('hide');
+          fetchCourses();
+          fireToastr(response.message);
+        } else {
+          handleErrorResponse(response);
+        }
+      },
+      error: function error(xhr, status, _error3) {
+        var response = xhr.responseJSON || {
+          message: 'An unexpected error occurred.'
+        };
+        handleErrorResponse(response);
+      }
+    });
+  });
+  removeDiscountModal.addEventListener('show.bs.modal', function (event) {
+    document.getElementById('removeDiscountForm').reset();
+    var button = event.relatedTarget;
+    var courseId = button.getAttribute('data-bs-courseid');
+    var courseName = button.getAttribute('data-bs-coursename');
+    var modalTitle = removeDiscountModal.querySelector('.modal-title');
+    var modalCourseId = document.getElementById('remove-discount-course-id');
+    modalTitle.textContent = courseName;
+    modalCourseId.value = courseId;
+  });
+  $('#removeDiscountButton').click(function (event) {
+    event.preventDefault();
+    var form = $('#removeDiscountForm');
+    var formData = form.serialize(); // Serialize form data
+
+    $.ajax({
+      type: 'POST',
+      url: baseUrl + '/courses/remove-discount',
+      // Change this to your actual route
+      data: formData,
+      success: function success(response) {
+        if (response.status == 200) {
+          // Close the modal
+          $('#removeDiscountModal').modal('hide');
+          fetchCourses();
+          fireToastr(response.message);
+        } else {
+          $('#removeDiscountModal').modal('hide');
+          handleErrorResponse(response);
+        }
+      },
+      error: function error(xhr, status, _error4) {
+        var response = xhr.responseJSON || {
+          message: 'An unexpected error occurred.'
+        };
+        $('#removeDiscountModal').modal('hide');
         handleErrorResponse(response);
       }
     });
