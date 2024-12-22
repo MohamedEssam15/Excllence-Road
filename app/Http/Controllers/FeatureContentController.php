@@ -42,7 +42,7 @@ class FeatureContentController extends Controller
 
     public function getPackages()
     {
-        $packages = Package::whereDate('start_date', '<=', now())->whereDate('end_date', '>=', now())->get();
+        $packages = Package::whereDate('start_date', '>=', today())->get();
         return apiResponse(__('response.dataRetrieved'),  PackageResource::collection($packages));
     }
 
