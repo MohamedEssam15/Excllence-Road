@@ -42,13 +42,12 @@ class FeatureContentController extends Controller
 
     public function getPackages()
     {
-        $packages = Package::all();
+        $packages = Package::whereDate('start_date', '<=', now())->whereDate('end_date', '>=', now())->get();
         return apiResponse(__('response.dataRetrieved'),  PackageResource::collection($packages));
     }
 
     public function store(AddFeatureContentRequest $request)
     {
-        ds($request);
         $relatedModelType = null;
         $courseId = null;
         $packageId = null;
