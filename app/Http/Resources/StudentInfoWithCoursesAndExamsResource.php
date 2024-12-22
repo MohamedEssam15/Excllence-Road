@@ -28,8 +28,13 @@ class StudentInfoWithCoursesAndExamsResource extends JsonResource
             'email' => $this->email,
             'avatar' => $this->getAvatarPath(),
             'phone' => $this->phone,
+            'role' => $this->userRole(),
             'courses' => StudentCourseResource::collection($this->enrollments),
             'exams' => StudentExamResource::collection($this->studentExams),
         ];
+    }
+    protected function userRole()
+    {
+        return is_null($this->roles()) ? null : $this->roles->implode('name', ',');
     }
 }
