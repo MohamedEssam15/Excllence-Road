@@ -18,8 +18,8 @@ class FeatureContentResource extends JsonResource
             'id' => $this->id,
             'subject' => $this->subject,
             'type' => $this->type,
-            'coverPhoto' => $this->getCoverPhotoPath(),
-            'coverVideo' => $this->getCoverVideoPath(),
+            'coverPhoto' => $this->type == 'photo' ? $this->getCoverPath() : null,
+            'coverVideo' => $this->type == 'video' ? $this->getCoverPath() : null,
             'modelableType' => $this->modelable_type,
             'modelable' => ($this->modelable_type == 'course')
                 ? new CourseBasicInfoResource($this->modelable)
