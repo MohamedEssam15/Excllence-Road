@@ -18,9 +18,13 @@ class FeatureContentController extends Controller
 {
     public function index(Request $request)
     {
-        $term = $request->get('query') ?? '';
+        $term = $request->get('query');
         if ($request->ajax()) {
-            $contents = FeatureContent::where('subject', 'LIKE', '%' . $term . '%')->orderBy('updated_at', 'desc')->get();
+            if ($term == null) {
+                $contents = FeatureContent::orderBy('updated_at', 'desc')->get();
+            } else {
+                $contents = FeatureContent::where('subject', 'LIKE', '%' . $term . '%')->orderBy('updated_at', 'desc')->get();
+            }
             return response()->json([
                 'table_data' => view('feature-content.Partial-Components.all-partial-table', compact('contents'))->render(),
             ]);
