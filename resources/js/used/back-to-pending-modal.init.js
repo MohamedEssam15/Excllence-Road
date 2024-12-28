@@ -1,5 +1,5 @@
 const currentLang = document.documentElement.lang || 'ar';
-function fireToastr() {
+function fireToastr(message = null) {
     const toastContainer = document.getElementById('toastContainer');
     if (currentLang == 'ar') {
         toastContainer.style.marginLeft = '1%';
@@ -7,6 +7,10 @@ function fireToastr() {
         toastContainer.style.marginRight = '1%';
     }
     const toastLiveExample3 = document.getElementById("toastr");
+    if (message != null) {
+        const toastBody = toastLiveExample3.querySelector('.toast-body');
+        toastBody.innerHTML = message;
+    }
     var toast = new bootstrap.Toast(toastLiveExample3, {
         delay: 3000
     });
@@ -37,6 +41,7 @@ function fireErrorToastr(message) {
 }
 $(document).ready(function () {
     var backToPendingModal = document.getElementById('backToPendingModal');
+    var deleteModal = document.getElementById('deleteModal');
 
     backToPendingModal.addEventListener('show.bs.modal', function (event) {
         var button = event.relatedTarget;
@@ -44,6 +49,16 @@ $(document).ready(function () {
         var courseName = button.getAttribute('data-bs-coursename');
         var modalTitle = backToPendingModal.querySelector('.modal-title');
         var modalCourseId = document.getElementById('course-id');
+
+        modalTitle.textContent = courseName;
+        modalCourseId.value = courseId;
+    });
+    deleteModal.addEventListener('show.bs.modal', function (event) {
+        var button = event.relatedTarget;
+        var courseId = button.getAttribute('data-bs-courseid');
+        var courseName = button.getAttribute('data-bs-coursename');
+        var modalTitle = deleteModal.querySelector('.modal-title');
+        var modalCourseId = document.getElementById('delete-course-id');
 
         modalTitle.textContent = courseName;
         modalCourseId.value = courseId;
@@ -64,6 +79,31 @@ $(document).ready(function () {
                     $('#backToPendingModal').modal('hide');
                     fetchCourses();
                     fireToastr()
+                } else {
+                    handleErrorResponse(response)
+                }
+            },
+            error: function (xhr, status, error) {
+                const response = xhr.responseJSON || { message: 'An unexpected error occurred.' };
+                handleErrorResponse(response)
+            }
+        });
+    });
+    // Handle the "Cancel" button click
+    $('#deleteButton').click(function () {
+        var form = $('#deleteForm');
+        var formData = form.serialize(); // Serialize form data
+
+        $.ajax({
+            type: 'POST',
+            url: baseUrl + '/courses/delete-course',  // Change this to your actual route
+            data: formData,
+            success: function (response) {
+                if (response.status == 200) {
+                    // Close the modal
+                    $('#deleteModal').modal('hide');
+                    fetchCourses();
+                    fireToastr(response.message)
                 } else {
                     handleErrorResponse(response)
                 }

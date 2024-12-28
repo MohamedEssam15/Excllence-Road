@@ -39,12 +39,14 @@
                 </p>
             </td>
             <td style="width: 100px">
+                @can('delete-feature-content')
+                    <a class="btn btn-outline-danger btn-sm" title="@lang('translation.delete')" data-bs-toggle="modal"
+                        data-bs-target="#deleteModal" data-bs-contentid="{{ $content->id }}"
+                        data-bs-contentname="{{ $content->subject }}">
+                        <i class="fas fa-trash-alt"></i>
+                    </a>
+                @endcan
 
-                <a class="btn btn-outline-danger btn-sm" title="@lang('translation.delete')" data-bs-toggle="modal"
-                    data-bs-target="#deleteModal" data-bs-contentid="{{ $content->id }}"
-                    data-bs-contentname="{{ $content->subject }}">
-                    <i class="fas fa-trash-alt"></i>
-                </a>
             </td>
         </tr>
     @endforeach

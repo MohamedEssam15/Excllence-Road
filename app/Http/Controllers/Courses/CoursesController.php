@@ -8,8 +8,10 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\AcceptCourseRequest;
 use App\Http\Requests\AddDiscountRequest;
 use App\Models\Course;
+use App\Services\VideoServices\VideoStorageManager;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class CoursesController extends Controller
@@ -197,5 +199,17 @@ class CoursesController extends Controller
         $course->new_price = null;
         $course->save();
         return apiResponse(__('translation.discountRemoved'));
+    }
+    public function deleteCourse(Request $request)
+    {
+        $course = Course::find($request->courseId);
+        $videoStorageManger = new VideoStorageManager();
+        foreach ($course->units as $unit) {
+            foreach ($unit->lessons as $lesson) {
+                $videoStorageManger->deleteDirectory($lesson->id);
+            }
+        }
+        $course->delete();
+        return apiResponse(__('response.deletedSuccessfully'));
     }
 }

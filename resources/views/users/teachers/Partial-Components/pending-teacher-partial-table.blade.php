@@ -13,21 +13,27 @@
             </th>
             <td>
                 <img src="{{ $teacher->getAvatarPath() }}" alt="" class="avatar-xs rounded-circle me-2">
-                <a class="btn-outline-secondary" href="{{ route('users.teacher.show', $teacher->id) }}"
-                    class="text-body">{{ $teacher->name }}</a>
+                @can('show-teacher')
+                    <a class="btn-outline-secondary" href="{{ route('users.teacher.show', $teacher->id) }}"
+                        class="text-body">{{ $teacher->name }}</a>
+                @else
+                    <a class="btn-outline-secondary" href="javascript:void(0)" class="text-body">{{ $teacher->name }}</a>
+                @endcan
             </td>
             <td>{{ $teacher->teacher_courses_count }}</td>
             <td>{{ $teacher->email }}</td>
             <td>
-                <ul class="list-inline mb-0">
-                    <li class="list-inline-item">
-                        <a class="px-2 text-success" title="@lang('translation.accept')" data-bs-toggle="modal"
-                            data-bs-target="#acceptModal" data-bs-teacherid="{{ $teacher->id }}"
-                            data-bs-teachername="{{ $teacher->name }}">
-                            <i class="far fa-check-circle font-size-18"></i>
-                        </a>
-                    </li>
-                </ul>
+                @can('accept-reject-teacher')
+                    <ul class="list-inline mb-0">
+                        <li class="list-inline-item">
+                            <a class="px-2 text-success" title="@lang('translation.accept')" data-bs-toggle="modal"
+                                data-bs-target="#acceptModal" data-bs-teacherid="{{ $teacher->id }}"
+                                data-bs-teachername="{{ $teacher->name }}">
+                                <i class="far fa-check-circle font-size-18"></i>
+                            </a>
+                        </li>
+                    </ul>
+                @endcan
             </td>
         </tr>
     @endforeach

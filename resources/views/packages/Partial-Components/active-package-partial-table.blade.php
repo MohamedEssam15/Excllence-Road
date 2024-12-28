@@ -10,10 +10,17 @@
         <tr data-id="1">
             <td data-field="#" style="width: 80px">{{ $i++ }}</td>
             <td data-field="@lang('translation.name')">
-                <a class="btn-outline-secondary" href="{{ route('packages.info', $package->id) }}"
-                    title="@lang('translation.show')">
-                    {{ $package->translate(config('app.locale'))->name }}
-                </a>
+                @can('show-package')
+                    <a class="btn-outline-secondary" href="{{ route('packages.info', $package->id) }}"
+                        title="@lang('translation.show')">
+                        {{ $package->translate(config('app.locale'))->name }}
+                    </a>
+                @else
+                    <a class="btn-outline-secondary" href="javascript:void(0)" title="@lang('translation.show')">
+                        {{ $package->translate(config('app.locale'))->name }}
+                    </a>
+                @endcan
+
             </td>
             <td data-field="@lang('translation.image')">
                 <img src="{{ $package->getCoverPhotoPath() }}" alt="" height="22">
@@ -43,11 +50,13 @@
                 @endif
             </td>
             <td style="width: 100px">
+                @can('edit-package')
                     <a class="btn btn-outline-secondary btn-sm" title="@lang('translation.edit')"
                         href="{{ route('packages.edit', $package->id) }}">
                         <i class="fas fa-pencil-alt"></i>
                     </a>
-
+                @endcan
+                @can('discount')
                     @if (is_null($package->discount))
                         <a class="btn btn-outline-success btn-sm" title="@lang('translation.addDiscount')" data-bs-toggle="modal"
                             data-bs-target="#addDiscountModal" data-bs-packageid="{{ $package->id }}"
@@ -61,6 +70,7 @@
                             <i class="fas fa-percentage"></i>
                         </a>
                     @endif
+                @endcan
             </td>
         </tr>
     @endforeach

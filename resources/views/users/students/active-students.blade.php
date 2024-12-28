@@ -62,75 +62,80 @@
                 </div>
             </div>
 
+            @can('block-unblock-student')
+                <div class="modal fade" id="blockModal" tabindex="-1" aria-labelledby="blockModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="blockModalLabel"></h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form id="blockStudentForm">
+                                    @csrf
+                                    <div class="mb-3">
+                                        <p>
+                                            @lang('translation.areYouSureBlock')
+                                        </p>
+                                    </div>
+                                    <input type="hidden" name="studentId" class="form-control" id="student-id">
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary"
+                                    data-bs-dismiss="modal">@lang('translation.close')</button>
+                                <button type="button" id="blockStudentButton"
+                                    class="btn btn-danger">@lang('translation.accept')</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @endcan
 
-            <div class="modal fade" id="blockModal" tabindex="-1" aria-labelledby="blockModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="blockModalLabel"></h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <form id="blockStudentForm">
-                                @csrf
-                                <div class="mb-3">
-                                    <p>
-                                        @lang('translation.areYouSureBlock')
-                                    </p>
-                                </div>
-                                <input type="hidden" name="studentId" class="form-control" id="student-id">
-                            </form>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary"
-                                data-bs-dismiss="modal">@lang('translation.close')</button>
-                            <button type="button" id="blockStudentButton"
-                                class="btn btn-danger">@lang('translation.accept')</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            {{-- add free course or package modal --}}
-            <div class="modal fade" id="addFreeCourseOrPackageModal" tabindex="-1"
-                aria-labelledby="addFreeCourseOrPackageModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="addFreeCourseOrPackageModalLabel"></h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <form id="addFreeCourseOrPackageForm">
-                                @csrf
-                                <!-- First Select Box -->
-                                <div class="mb-3">
-                                    <label for="typeSelect" class="form-label">@lang('translation.selectType')</label>
-                                    <select class="form-select" name="type" id="typeSelect" required>
-                                        <option value="">-- @lang('translation.select') --</option>
-                                        <option value="course">@lang('translation.course')</option>
-                                        <option value="package">@lang('translation.package')</option>
-                                    </select>
-                                </div>
-                                <!-- Second Select Box -->
-                                <div class="mb-3">
-                                    <label for="itemSelect" class="form-label">@lang('translation.selectItem')</label>
-                                    <select class="form-select" name="itemId" id="itemSelect" required>
-                                        <option value="">-- @lang('translation.select') --</option>
-                                    </select>
-                                </div>
-                                <input type="hidden" name="studentId" class="form-control"
-                                    id="add-free-course-or-package-student-id">
-                            </form>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary"
-                                data-bs-dismiss="modal">@lang('translation.close')</button>
-                            <button type="button" id="addFreeCourseOrPackageButton"
-                                class="btn btn-success">@lang('translation.accept')</button>
+            @can('add-course-to-student')
+                {{-- add free course or package modal --}}
+                <div class="modal fade" id="addFreeCourseOrPackageModal" tabindex="-1"
+                    aria-labelledby="addFreeCourseOrPackageModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="addFreeCourseOrPackageModalLabel"></h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form id="addFreeCourseOrPackageForm">
+                                    @csrf
+                                    <!-- First Select Box -->
+                                    <div class="mb-3">
+                                        <label for="typeSelect" class="form-label">@lang('translation.selectType')</label>
+                                        <select class="form-select" name="type" id="typeSelect" required>
+                                            <option value="">-- @lang('translation.select') --</option>
+                                            <option value="course">@lang('translation.course')</option>
+                                            <option value="package">@lang('translation.package')</option>
+                                        </select>
+                                    </div>
+                                    <!-- Second Select Box -->
+                                    <div class="mb-3">
+                                        <label for="itemSelect" class="form-label">@lang('translation.selectItem')</label>
+                                        <select class="form-select" name="itemId" id="itemSelect" required>
+                                            <option value="">-- @lang('translation.select') --</option>
+                                        </select>
+                                    </div>
+                                    <input type="hidden" name="studentId" class="form-control"
+                                        id="add-free-course-or-package-student-id">
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary"
+                                    data-bs-dismiss="modal">@lang('translation.close')</button>
+                                <button type="button" id="addFreeCourseOrPackageButton"
+                                    class="btn btn-success">@lang('translation.accept')</button>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            @endcan
+
 
 
             {{-- toastr --}}

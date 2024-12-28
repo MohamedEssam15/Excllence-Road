@@ -27,19 +27,22 @@
                 <ul class="list-inline mb-0">
                     <li class="list-inline-item">
                         @if (!$admin->is_blocked)
-                            <a class="px-2 text-danger" title="@lang('translation.block')" data-bs-toggle="modal"
-                                data-bs-target="#blockModal" data-bs-adminid="{{ $admin->id }}"
-                                data-bs-adminname="{{ $admin->name }}">
+                            <a class="px-2 btn btn-outline-danger btn-sm" title="@lang('translation.block')"
+                                data-bs-toggle="modal" data-bs-target="#blockModal"
+                                data-bs-adminid="{{ $admin->id }}" data-bs-adminname="{{ $admin->name }}">
                                 <i class="fas fa-lock"></i>
                             </a>
                         @else
-                            <a class="px-2 text-success" title="@lang('translation.unblock')" data-bs-toggle="modal"
-                                data-bs-target="#unblockModal" data-bs-adminid="{{ $admin->id }}"
-                                data-bs-adminname="{{ $admin->name }}">
+                            <a class="px-2 btn btn-outline-success btn-sm" title="@lang('translation.unblock')"
+                                data-bs-toggle="modal" data-bs-target="#unblockModal"
+                                data-bs-adminid="{{ $admin->id }}" data-bs-adminname="{{ $admin->name }}">
                                 <i class="fas fa-lock-open"></i>
                             </a>
                         @endif
-
+                        <a class="btn btn-outline-secondary btn-sm" title="@lang('translation.edit')"
+                            href="{{ route('users.admin.edit', $admin->id) }}">
+                            <i class="fas fa-pencil-alt"></i>
+                        </a>
                     </li>
                 </ul>
             </td>

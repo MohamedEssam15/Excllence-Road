@@ -19,16 +19,22 @@
             <td>
                 <ul class="list-inline mb-0">
                     <li class="list-inline-item">
-                        <a class="px-2 btn btn-outline-danger btn-sm " title="@lang('translation.block')" data-bs-toggle="modal"
-                            data-bs-target="#blockModal" data-bs-studentid="{{ $student->id }}"
-                            data-bs-studentname="{{ $student->name }}">
-                            <i class="fas fa-lock"></i>
-                        </a>
-                        <a class="btn btn-outline-success btn-sm" title="@lang('translation.addFreeCourseOrPackage')" data-bs-toggle="modal"
-                            data-bs-target="#addFreeCourseOrPackageModal" data-bs-studentid="{{ $student->id }}"
-                            data-bs-studentname="{{ $student->name }}">
-                            <i class="fas fa-file"></i>
-                        </a>
+                        @can('block-unblock-student')
+                            <a class="px-2 btn btn-outline-danger btn-sm " title="@lang('translation.block')" data-bs-toggle="modal"
+                                data-bs-target="#blockModal" data-bs-studentid="{{ $student->id }}"
+                                data-bs-studentname="{{ $student->name }}">
+                                <i class="fas fa-lock"></i>
+                            </a>
+                        @endcan
+
+                        @can('add-course-to-student')
+                            <a class="btn btn-outline-success btn-sm" title="@lang('translation.addFreeCourseOrPackage')" data-bs-toggle="modal"
+                                data-bs-target="#addFreeCourseOrPackageModal" data-bs-studentid="{{ $student->id }}"
+                                data-bs-studentname="{{ $student->name }}">
+                                <i class="fas fa-file"></i>
+                            </a>
+                        @endcan
+
                     </li>
                 </ul>
 

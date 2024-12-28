@@ -22,13 +22,15 @@
                     {{ $category->created_at->format('Y-m-d g:i a') }}</p>
             </td>
             <td style="width: 100px">
-                <a class="btn btn-outline-secondary btn-sm" title="@lang('translation.edit')" data-bs-toggle="modal"
-                    data-bs-target="#modifyCategoryModal" data-bs-categoryid="{{ $category->id }}"
-                    data-bs-arname="{{ $category->translate('ar')->name }}"
-                    data-bs-enname="{{ $category->translate('en')->name }}"
-                    data-bs-categoryname="{{ $category->translate()->name ?? $category->name }}">
-                    <i class="fas fa-pencil-alt"></i>
-                </a>
+                @can('edit-category')
+                    <a class="btn btn-outline-secondary btn-sm" title="@lang('translation.edit')" data-bs-toggle="modal"
+                        data-bs-target="#modifyCategoryModal" data-bs-categoryid="{{ $category->id }}"
+                        data-bs-arname="{{ $category->translate('ar')->name }}"
+                        data-bs-enname="{{ $category->translate('en')->name }}"
+                        data-bs-categoryname="{{ $category->translate()->name ?? $category->name }}">
+                        <i class="fas fa-pencil-alt"></i>
+                    </a>
+                @endcan
             </td>
         </tr>
     @endforeach

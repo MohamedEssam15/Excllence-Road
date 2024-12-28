@@ -10,9 +10,16 @@
         <tr data-id="1">
             <td data-field="#" style="width: 80px">{{ $i++ }}</td>
             <td data-field="@lang('translation.name')">
-                <a class="btn-outline-secondary" href="{{ route('courses.info', $course->id) }}" title="@lang('translation.show')">
-                    {{ $course->translate(config('app.locale'))->name ?? $course->name }}
-                </a>
+                @can('course-info')
+                    <a class="btn-outline-secondary" href="{{ route('courses.info', $course->id) }}" title="@lang('translation.show')">
+                        {{ $course->translate(config('app.locale'))->name ?? $course->name }}
+                    </a>
+                @else
+                    <a class="btn-outline-secondary" href="javascript:void(0)" title="@lang('translation.show')">
+                        {{ $course->translate(config('app.locale'))->name ?? $course->name }}
+                    </a>
+                @endcan
+
             </td>
             <td data-field="@lang('translation.image')">
                 <img src="{{ $course->getCoverPhotoPath() }}" alt="" height="22">
@@ -58,27 +65,30 @@
                 @endif
             </td>
             <td style="width: 100px">
-                <a class="btn btn-outline-secondary btn-sm" title="@lang('translation.edit')" data-bs-toggle="modal"
-                    data-bs-target="#modifyModal"
-                    data-bs-courseid="{{ $course->id }}"data-bs-teachercommision="{{ $course->teacher_commision }}"
-                    data-bs-ispopular="{{ $course->is_populer }}" data-bs-ismobileonly="{{ $course->is_mobile_only }}"
-                    data-bs-coursename="{{ $course->translate(config('app.locale'))->name ?? $course->name }}">
-                    <i class="fas fa-pencil-alt"></i>
-                </a>
-                @if (is_null($course->discount))
-                    <a class="btn btn-outline-success btn-sm" title="@lang('translation.addDiscount')" data-bs-toggle="modal"
-                        data-bs-target="#addDiscountModal" data-bs-courseid="{{ $course->id }}"
+                @can('edit-course')
+                    <a class="btn btn-outline-secondary btn-sm" title="@lang('translation.edit')" data-bs-toggle="modal"
+                        data-bs-target="#modifyModal"
+                        data-bs-courseid="{{ $course->id }}"data-bs-teachercommision="{{ $course->teacher_commision }}"
+                        data-bs-ispopular="{{ $course->is_populer }}" data-bs-ismobileonly="{{ $course->is_mobile_only }}"
                         data-bs-coursename="{{ $course->translate(config('app.locale'))->name ?? $course->name }}">
-                        <i class="fas fa-percentage"></i>
+                        <i class="fas fa-pencil-alt"></i>
                     </a>
-                @else
-                    <a class="btn btn-outline-danger btn-sm" title="@lang('translation.removeDiscount')" data-bs-toggle="modal"
-                        data-bs-target="#removeDiscountModal" data-bs-courseid="{{ $course->id }}"
-                        data-bs-coursename="{{ $course->translate(config('app.locale'))->name ?? $course->name }}">
-                        <i class="fas fa-percentage"></i>
-                    </a>
-                @endif
-
+                @endcan
+                @can('discount')
+                    @if (is_null($course->discount))
+                        <a class="btn btn-outline-success btn-sm" title="@lang('translation.addDiscount')" data-bs-toggle="modal"
+                            data-bs-target="#addDiscountModal" data-bs-courseid="{{ $course->id }}"
+                            data-bs-coursename="{{ $course->translate(config('app.locale'))->name ?? $course->name }}">
+                            <i class="fas fa-percentage"></i>
+                        </a>
+                    @else
+                        <a class="btn btn-outline-danger btn-sm" title="@lang('translation.removeDiscount')" data-bs-toggle="modal"
+                            data-bs-target="#removeDiscountModal" data-bs-courseid="{{ $course->id }}"
+                            data-bs-coursename="{{ $course->translate(config('app.locale'))->name ?? $course->name }}">
+                            <i class="fas fa-percentage"></i>
+                        </a>
+                    @endif
+                @endcan
             </td>
         </tr>
     @endforeach

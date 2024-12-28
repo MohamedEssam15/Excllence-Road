@@ -10,9 +10,15 @@
         <tr data-id="1">
             <td data-field="#" style="width: 80px">{{ $i++ }}</td>
             <td data-field="@lang('translation.name')">
-                <a class="btn-outline-secondary" href="{{ route('courses.info', $course->id) }}" title="@lang('translation.show')">
-                    {{ $course->translate(config('app.locale'))->name ?? $course->name }}
-                </a>
+                @can('course-info')
+                    <a class="btn-outline-secondary" href="{{ route('courses.info', $course->id) }}" title="@lang('translation.show')">
+                        {{ $course->translate(config('app.locale'))->name ?? $course->name }}
+                    </a>
+                @else
+                    <a class="btn-outline-secondary" href="javascript:void(0)" title="@lang('translation.show')">
+                        {{ $course->translate(config('app.locale'))->name ?? $course->name }}
+                    </a>
+                @endcan
             </td>
             <td data-field="@lang('translation.image')">
                 <img src="{{ $course->getCoverPhotoPath() }}" alt="" height="22">

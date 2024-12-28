@@ -54,6 +54,13 @@
                         <i class="fas fa-undo"></i>
                     </a>
                 @endif
+                @can('delete-course')
+                    <a class="btn btn-outline-danger btn-sm" title="@lang('translation.delete')" data-bs-toggle="modal"
+                        data-bs-target="#deleteModal" data-bs-courseid="{{ $course->id }}"
+                        data-bs-coursename="{{ $course->translate(config('app.locale'))->name ?? $course->name }}">
+                        <i class="fas fa-trash"></i>
+                    </a>
+                @endcan
             </td>
         </tr>
     @endforeach

@@ -55,129 +55,174 @@
                         <span>@lang('translation.Dashboard')</span>
                     </a>
                 </li>
-                {{-- courses sidebar --}}
-                <li class="menu-title">@lang('translation.Courses')</li>
-                <li>
-                    <a href="javascript: void(0);" class="has-arrow waves-effect">
-                        <i class="fas fa-book-open"></i>
-                        <span>@lang('translation.Courses')</span>
-                    </a>
-                    <ul class="sub-menu" aria-expanded="true">
-                        <li><a href="{{ route('courses.active') }}">@lang('translation.activeCourses')</a></li>
-                        <li><a href="{{ route('courses.pending') }}">@lang('translation.pendingCourses')</a></li>
-                        {{-- <li><a href="{{ route('courses.in-progress') }}">@lang('translation.inProgressCourses')</a></li> --}}
-                        <li><a href="{{ route('courses.expired') }}">@lang('translation.expiredCourses')</a></li>
-                        <li><a href="{{ route('courses.cancelled') }}">@lang('translation.cancelledCourses')</a></li>
-                    </ul>
-                </li>
-                {{-- Packages sidebar --}}
-                <li class="menu-title">@lang('translation.packages')</li>
-                <li>
-                    <a href="javascript: void(0);" class="has-arrow waves-effect">
-                        <i class="fas fa-box-open"></i>
-                        <span>@lang('translation.packages')</span>
-                    </a>
-                    <ul class="sub-menu" aria-expanded="true">
-                        <li><a href="{{ route('packages.active') }}">@lang('translation.activePackages')</a></li>
-                        <li><a href="{{ route('packages.in-progress') }}">@lang('translation.inProgressPackages')</a></li>
-                        <li><a href="{{ route('packages.expired') }}">@lang('translation.expiredPackages')</a></li>
-                        <li><a href="{{ route('packages.create') }}">@lang('translation.addPackages')</a></li>
-                    </ul>
-                </li>
-
-                {{-- Categories sidebar --}}
-                <li class="menu-title">@lang('translation.categories')</li>
-                <li>
-                    <a href="{{ route('categories.all') }}">
-                        <i class="far fa-bookmark"></i>
-                        <span>@lang('translation.categories')</span>
-                    </a>
-                </li>
-                {{-- feature content sidebar --}}
-                <li class="menu-title">@lang('translation.featureContent')</li>
-                <li>
-                    <a href="{{ route('featureContent.all') }}">
-                        <i class="fas fa-star"></i>
-                        <span>@lang('translation.featureContent')</span>
-                    </a>
-                </li>
-
-                {{-- Users sidebar --}}
-                <li class="menu-title">@lang('translation.users')</li>
-                <li>
-                    <a href="javascript: void(0);" class="has-arrow waves-effect">
-                        <i class="fas fa-users"></i>
-                        <span>@lang('translation.users')</span>
-                    </a>
-                    <ul class="sub-menu" aria-expanded="true">
-                        <li>
-                            <a href="javascript: void(0);" class="has-arrow"><i
-                                    class="fas fa-chalkboard-teacher"></i><span>@lang('translation.teachers')</span></a>
-                            <ul class="sub-menu" aria-expanded="true">
-                                <li><a href="{{ route('users.teacher.active') }}">@lang('translation.activeTeachers')</a></li>
-                                <li><a href="{{ route('users.teacher.pending') }}">@lang('translation.pendingTeachers')</a></li>
-                                <li><a href="{{ route('users.teacher.blocked') }}">@lang('translation.blockedTeachers')</a></li>
-                            </ul>
-                        </li>
-                        <li>
-                            <a href="javascript: void(0);" class="has-arrow"><i
-                                    class="fas fa-user-graduate"></i><span>@lang('translation.students')</span></a>
-                            <ul class="sub-menu" aria-expanded="true">
-                                <li><a href="{{ route('users.student.active') }}">@lang('translation.activeStudents')</a></li>
-                                <li><a href="{{ route('users.student.blocked') }}">@lang('translation.blockedStudents')</a></li>
-                            </ul>
-                        </li>
-                        <li>
-                            <a href="{{ route('users.admin.all') }}"><i
-                                    class="fas fa-user-cog"></i><span>@lang('translation.admins')</span></a>
-                        </li>
-                    </ul>
-                </li>
-
-                {{-- Transactions sidebar --}}
-                <li class="menu-title">@lang('translation.transaction')</li>
-                <li>
-                    <a href="javascript: void(0);" class="has-arrow waves-effect">
-                        <i class="fas fa-exchange-alt"></i>
-                        <span>@lang('translation.transaction')</span>
-                    </a>
-                    <ul class="sub-menu" aria-expanded="true">
-                        <li>
-                            <a href="{{ route('transactions.orders') }}"><i
-                                    class="fas fa-shopping-cart"></i><span>@lang('translation.orders')</span></a>
-                        </li>
-                        {{-- <li>
-                                <a href="{{ route('users.admin.all') }}"><i
-                                    class="fas fa-user-cog"></i><span>@lang('translation.payments')</span></a>
-                                </li> --}}
-                        <li>
-                            <a href="javascript: void(0);" class="has-arrow"><i
-                                    class="fas fa-user-graduate"></i><span>@lang('translation.teachers')</span></a>
-                            <ul class="sub-menu" aria-expanded="true">
-                                <li><a href="{{ route('transactions.teachers.revenue') }}">@lang('translation.currentCommission')</a></li>
-                            </ul>
-                        </li>
-                        <li>
-                            <a href="javascript: void(0);" class="has-arrow"><i
-                                    class="far fa-star"></i><span>@lang('translation.bestSeller')</span></a>
-                            <ul class="sub-menu" aria-expanded="true">
-                                <li><a href="{{ route('transactions.bestSeller.courses') }}">@lang('translation.Courses')</a>
+                @can('courses')
+                    {{-- courses sidebar --}}
+                    <li class="menu-title">@lang('translation.Courses')</li>
+                    <li>
+                        <a href="javascript: void(0);" class="has-arrow waves-effect">
+                            <i class="fas fa-book-open"></i>
+                            <span>@lang('translation.Courses')</span>
+                        </a>
+                        <ul class="sub-menu" aria-expanded="true">
+                            @can('active-courses')
+                                <li><a href="{{ route('courses.active') }}">@lang('translation.activeCourses')</a></li>
+                            @endcan
+                            @can('pending-courses')
+                                <li><a href="{{ route('courses.pending') }}">@lang('translation.pendingCourses')</a></li>
+                            @endcan
+                            {{-- <li><a href="{{ route('courses.in-progress') }}">@lang('translation.inProgressCourses')</a></li> --}}
+                            @can('expired-courses')
+                                <li><a href="{{ route('courses.expired') }}">@lang('translation.expiredCourses')</a></li>
+                            @endcan
+                            @can('rejected-courses')
+                                <li><a href="{{ route('courses.cancelled') }}">@lang('translation.cancelledCourses')</a></li>
+                            @endcan
+                        </ul>
+                    </li>
+                @endcan
+                @can('packages')
+                    {{-- Packages sidebar --}}
+                    <li class="menu-title">@lang('translation.packages')</li>
+                    <li>
+                        <a href="javascript: void(0);" class="has-arrow waves-effect">
+                            <i class="fas fa-box-open"></i>
+                            <span>@lang('translation.packages')</span>
+                        </a>
+                        <ul class="sub-menu" aria-expanded="true">
+                            @can('active-packages')
+                                <li><a href="{{ route('packages.active') }}">@lang('translation.activePackages')</a></li>
+                            @endcan
+                            @can('in-progress-packages')
+                                <li><a href="{{ route('packages.in-progress') }}">@lang('translation.inProgressPackages')</a></li>
+                            @endcan
+                            @can('expired-packages')
+                                <li><a href="{{ route('packages.expired') }}">@lang('translation.expiredPackages')</a></li>
+                            @endcan
+                            @can('add-package')
+                                <li><a href="{{ route('packages.create') }}">@lang('translation.addPackages')</a></li>
+                            @endcan
+                        </ul>
+                    </li>
+                @endcan
+                @can('categories')
+                    {{-- Categories sidebar --}}
+                    <li class="menu-title">@lang('translation.categories')</li>
+                    <li>
+                        <a href="{{ route('categories.all') }}">
+                            <i class="far fa-bookmark"></i>
+                            <span>@lang('translation.categories')</span>
+                        </a>
+                    </li>
+                @endcan
+                @can('feature-content')
+                    {{-- feature content sidebar --}}
+                    <li class="menu-title">@lang('translation.featureContent')</li>
+                    <li>
+                        <a href="{{ route('featureContent.all') }}">
+                            <i class="fas fa-star"></i>
+                            <span>@lang('translation.featureContent')</span>
+                        </a>
+                    </li>
+                @endcan
+                @can('users')
+                    {{-- Users sidebar --}}
+                    <li class="menu-title">@lang('translation.users')</li>
+                    <li>
+                        <a href="javascript: void(0);" class="has-arrow waves-effect">
+                            <i class="fas fa-users"></i>
+                            <span>@lang('translation.users')</span>
+                        </a>
+                        <ul class="sub-menu" aria-expanded="true">
+                            @can('teachers')
+                                <li>
+                                    <a href="javascript: void(0);" class="has-arrow"><i
+                                            class="fas fa-chalkboard-teacher"></i><span>@lang('translation.teachers')</span></a>
+                                    <ul class="sub-menu" aria-expanded="true">
+                                        @can('active-teachers')
+                                            <li><a href="{{ route('users.teacher.active') }}">@lang('translation.activeTeachers')</a></li>
+                                        @endcan
+                                        @can('pending-teachers')
+                                            <li><a href="{{ route('users.teacher.pending') }}">@lang('translation.pendingTeachers')</a></li>
+                                        @endcan
+                                        @can('blocked-teachers')
+                                            <li><a href="{{ route('users.teacher.blocked') }}">@lang('translation.blockedTeachers')</a></li>
+                                        @endcan
+                                    </ul>
                                 </li>
-                                <li><a href="{{ route('transactions.bestSeller.packages') }}">@lang('translation.packages')</a>
+                            @endcan
+                            @can('students')
+                                <li>
+                                    <a href="javascript: void(0);" class="has-arrow"><i
+                                            class="fas fa-user-graduate"></i><span>@lang('translation.students')</span></a>
+                                    <ul class="sub-menu" aria-expanded="true">
+                                        @can('active-students')
+                                            <li><a href="{{ route('users.student.active') }}">@lang('translation.activeStudents')</a></li>
+                                        @endcan
+                                        @can('blocked-students')
+                                            <li><a href="{{ route('users.student.blocked') }}">@lang('translation.blockedStudents')</a></li>
+                                        @endcan
+                                    </ul>
                                 </li>
-                            </ul>
-                        </li>
-                    </ul>
-                </li>
-                {{-- contact us sidebar --}}
-                <li class="menu-title">@lang('translation.contactUsMessages')</li>
-                <li>
-                    <a href="{{ route('contactUs.all') }}">
-                        <i class="fas fa-envelope"></i>
-                        <span>@lang('translation.contactUsMessages')</span>
-                    </a>
-                </li>
+                            @endcan
+                            @role('super-admin')
+                                <li>
+                                    <a href="{{ route('users.admin.all') }}"><i
+                                            class="fas fa-user-cog"></i><span>@lang('translation.admins')</span></a>
+                                </li>
+                            @endrole
+                        </ul>
+                    </li>
+                @endcan
+                @can('transactions')
+                    {{-- Transactions sidebar --}}
+                    <li class="menu-title">@lang('translation.transaction')</li>
+                    <li>
+                        <a href="javascript: void(0);" class="has-arrow waves-effect">
+                            <i class="fas fa-exchange-alt"></i>
+                            <span>@lang('translation.transaction')</span>
+                        </a>
+                        <ul class="sub-menu" aria-expanded="true">
+                            @can('orders')
+                                <li>
+                                    <a href="{{ route('transactions.orders') }}"><i
+                                            class="fas fa-shopping-cart"></i><span>@lang('translation.orders')</span></a>
+                                </li>
+                            @endcan
+                            @can('teacher-revenue')
+                                <li>
+                                    <a href="javascript: void(0);" class="has-arrow"><i
+                                            class="fas fa-user-graduate"></i><span>@lang('translation.teachers')</span></a>
+                                    <ul class="sub-menu" aria-expanded="true">
+                                        <li><a href="{{ route('transactions.teachers.revenue') }}">@lang('translation.currentCommission')</a></li>
+                                    </ul>
+                                </li>
+                            @endcan
+                            @can('top-seller')
+                                <li>
+                                    <a href="javascript: void(0);" class="has-arrow"><i
+                                            class="far fa-star"></i><span>@lang('translation.bestSeller')</span></a>
+                                    <ul class="sub-menu" aria-expanded="true">
+                                        <li><a href="{{ route('transactions.bestSeller.courses') }}">@lang('translation.Courses')</a>
+                                        </li>
+                                        <li><a href="{{ route('transactions.bestSeller.packages') }}">@lang('translation.packages')</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            @endcan
 
+                        </ul>
+                    </li>
+                @endcan
+                @can('contact-us')
+                    {{-- contact us sidebar --}}
+                    <li class="menu-title">@lang('translation.contactUsMessages')</li>
+                    <li>
+                        <a href="{{ route('contactUs.all') }}">
+                            <i class="fas fa-envelope"></i>
+                            <span>@lang('translation.contactUsMessages')</span>
+                        </a>
+                    </li>
+                @endcan
                 {{--
                 <li>
                     <a href="javascript: void(0);" class="has-arrow waves-effect">

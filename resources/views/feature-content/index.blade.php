@@ -23,11 +23,12 @@
                         </div>
                         <div class="col-md-6 d-flex justify-content-end align-items-center">
                             <!-- Button aligned to the top right -->
-                            <a class="btn btn-outline-primary waves-effect waves-light"
-                                href="{{ route('featureContent.create') }}" title="@lang('translation.add')">
-                                @lang('translation.add')
-                            </a>
-
+                            @can('add-feature-content')
+                                <a class="btn btn-outline-primary waves-effect waves-light"
+                                    href="{{ route('featureContent.create') }}" title="@lang('translation.add')">
+                                    @lang('translation.add')
+                                </a>
+                            @endcan
                         </div>
                     </div>
                     <br>
@@ -67,34 +68,37 @@
 
                 </div>
             </div>
-            {{-- delete modal --}}
-            <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="deleteModalLabel"></h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <form id="deleteFeatureContentForm">
-                                @csrf
-                                <div class="mb-3">
-                                    <p>
-                                        @lang('translation.areYouSureDelete')
-                                    </p>
-                                </div>
-                                <input type="hidden" name="contentId" class="form-control" id="content-id">
-                            </form>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary"
-                                data-bs-dismiss="modal">@lang('translation.close')</button>
-                            <button type="button" id="deleteFeatureContentButton"
-                                class="btn btn-danger">@lang('translation.accept')</button>
+            @can('delete-feature-content')
+                {{-- delete modal --}}
+                <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="deleteModalLabel"></h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form id="deleteFeatureContentForm">
+                                    @csrf
+                                    <div class="mb-3">
+                                        <p>
+                                            @lang('translation.areYouSureDelete')
+                                        </p>
+                                    </div>
+                                    <input type="hidden" name="contentId" class="form-control" id="content-id">
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary"
+                                    data-bs-dismiss="modal">@lang('translation.close')</button>
+                                <button type="button" id="deleteFeatureContentButton"
+                                    class="btn btn-danger">@lang('translation.accept')</button>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            @endcan
+
             {{-- toastr --}}
             <div id="toastContainer" class="position-fixed top-0 end-0 " style="z-index: 1060;margin-top: 5%;">
                 <div id="toastr" class="toast overflow-hidden" role="alert" aria-live="assertive" aria-atomic="true">

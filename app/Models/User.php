@@ -56,6 +56,7 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
 
     public function getAvatarPath()
     {
+        if (is_null($this->avatar)) return asset('assets/images/avatar.jpg');
         return asset('users_attachments/' . $this->id . '/avatar/' . $this->avatar);
     }
 

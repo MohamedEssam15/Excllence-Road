@@ -18,13 +18,21 @@
             <div class="card">
                 <div class="card-body">
                     <div class="row mb-2">
-                        <div class="col-md-6">
+                        <!-- Title Section -->
+                        <div class="col-md-6 d-flex flex-column justify-content-center">
                             <h4 class="card-title">@lang('translation.users')</h4>
                             <p class="card-title-desc">@lang('translation.allAdmins')</p>
                         </div>
 
-                        <div class="col-md-6">
-                            <div class="form-inline float-md-end mb-3">
+                        <!-- Button and Search Section -->
+                        <div class="col-md-6 d-flex flex-column align-items-end mb-2">
+                            <!-- Button -->
+                            <div class="mb-2">
+                                <a href="{{ route('users.admin.create') }}"
+                                    class="btn btn-outline-primary waves-effect waves-light">@lang('translation.addAdmin')</a>
+                            </div>
+                            <!-- Search -->
+                            <div class="w-60">
                                 <div class="search-box ms-2">
                                     <div class="position-relative">
                                         <input type="text" id="search" class="form-control rounded bg-light border-0"
@@ -32,11 +40,8 @@
                                         <i class="mdi mdi-magnify search-icon"></i>
                                     </div>
                                 </div>
-
                             </div>
                         </div>
-
-
                     </div>
                     <!-- end row -->
                     <div class="table-responsive mb-4">

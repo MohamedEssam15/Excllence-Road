@@ -63,35 +63,35 @@
                 </div>
             </div>
 
-
-            <div class="modal fade" id="acceptModal" tabindex="-1" aria-labelledby="acceptModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="acceptModalLabel"></h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <form id="acceptTeacherForm">
-                                @csrf
-                                <div class="mb-3">
-                                    <p>
-                                        @lang('translation.areYouSureAccept')
-                                    </p>
-                                </div>
-                                <input type="hidden" name="teacherId" class="form-control" id="teacher-id">
-                            </form>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary"
-                                data-bs-dismiss="modal">@lang('translation.close')</button>
-                            <button type="button" id="acceptTeacherButton"
-                                class="btn btn-success">@lang('translation.accept')</button>
+            @can('accept-reject-teacher')
+                <div class="modal fade" id="acceptModal" tabindex="-1" aria-labelledby="acceptModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="acceptModalLabel"></h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form id="acceptTeacherForm">
+                                    @csrf
+                                    <div class="mb-3">
+                                        <p>
+                                            @lang('translation.areYouSureAccept')
+                                        </p>
+                                    </div>
+                                    <input type="hidden" name="teacherId" class="form-control" id="teacher-id">
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary"
+                                    data-bs-dismiss="modal">@lang('translation.close')</button>
+                                <button type="button" id="acceptTeacherButton"
+                                    class="btn btn-success">@lang('translation.accept')</button>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-
+            @endcan
 
             {{-- toastr --}}
             <div id="toastContainer" class="position-fixed top-0 end-0 " style="z-index: 1060;margin-top: 5%;">

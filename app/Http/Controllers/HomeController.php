@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Session;
+use Spatie\Permission\Models\Role;
 
 class HomeController extends Controller
 {
@@ -32,7 +33,7 @@ class HomeController extends Controller
      */
     public function index(Request $request)
     {
-        // dd($request->path(), view()->exists('dashboard/' . $request->path()));
+
         if (view()->exists('dashboard/' . $request->path())) {
             return view('dashboard/' . $request->path());
         }

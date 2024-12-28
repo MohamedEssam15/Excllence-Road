@@ -20,13 +20,10 @@
                     <div class="row">
                         <div class="col-md-6">
                             <h4 class="card-title">@lang('translation.Courses')</h4>
-                            @role('admin')
-                                <p class="card-title-desc">@lang('translation.pendingCourses')</p>
-                            @endrole
+                            <p class="card-title-desc">@lang('translation.pendingCourses')</p>
                         </div>
                         <div class="col-md-6 d-flex justify-content-end align-items-center">
-                            <!-- Button aligned to the top right -->
-                            {{-- <a href="{{route('courses.add')}}" class="btn btn-outline-primary waves-effect waves-light">@lang('translation.addCourses')</a> --}}
+
                         </div>
                     </div>
                     <br>
@@ -69,76 +66,76 @@
 
                 </div>
             </div>
-
-            {{-- Accept modal --}}
-            <div class="modal fade" id="acceptModal" tabindex="-1" aria-labelledby="acceptModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="acceptModalLabel">@lang('translation.acceptionFormFor')</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <form id="acceptCourseForm">
-                                @csrf
-                                <div class="mb-3">
-                                    <label for="teacherCommistion" class="col-form-label">@lang('translation.teacherCommistion')</label>
-                                    <input type="number" name="teacherCommistion" class="form-control"
-                                        id="teacherCommistion">
-                                </div>
-                                <div class="mb-3">
-                                    <div class="form-check form-switch form-switch-lg mb-2">
-                                        <input type="checkbox" name="addToPopularCourses" value="1"
-                                            class="form-check-input" id="customSwitchsizelg" checked>
-                                        <label class="form-check-label" for="customSwitchsizelg">@lang('translation.addToPopularCourses')</label>
+            @can('accept-reject-courses')
+                {{-- Accept modal --}}
+                <div class="modal fade" id="acceptModal" tabindex="-1" aria-labelledby="acceptModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="acceptModalLabel">@lang('translation.acceptionFormFor')</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form id="acceptCourseForm">
+                                    @csrf
+                                    <div class="mb-3">
+                                        <label for="teacherCommistion" class="col-form-label">@lang('translation.teacherCommistion')</label>
+                                        <input type="number" name="teacherCommistion" class="form-control"
+                                            id="teacherCommistion">
                                     </div>
-                                    <div class="form-check form-switch form-switch-lg">
-                                        <input type="checkbox" name="isMobileOnly" value="1" class="form-check-input"
-                                            id="isMobileOnly">
-                                        <label class="form-check-label" for="isMobileOnly">@lang('translation.isMobileOnly')</label>
+                                    <div class="mb-3">
+                                        <div class="form-check form-switch form-switch-lg mb-2">
+                                            <input type="checkbox" name="addToPopularCourses" value="1"
+                                                class="form-check-input" id="customSwitchsizelg" checked>
+                                            <label class="form-check-label" for="customSwitchsizelg">@lang('translation.addToPopularCourses')</label>
+                                        </div>
+                                        <div class="form-check form-switch form-switch-lg">
+                                            <input type="checkbox" name="isMobileOnly" value="1" class="form-check-input"
+                                                id="isMobileOnly">
+                                            <label class="form-check-label" for="isMobileOnly">@lang('translation.isMobileOnly')</label>
+                                        </div>
                                     </div>
-                                </div>
-                                <input type="hidden" name="courseId" class="form-control" id="course-id">
-                            </form>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary"
-                                data-bs-dismiss="modal">@lang('translation.close')</button>
-                            <button type="button" id="acceptCourseButton"
-                                class="btn btn-success">@lang('translation.accept')</button>
+                                    <input type="hidden" name="courseId" class="form-control" id="course-id">
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary"
+                                    data-bs-dismiss="modal">@lang('translation.close')</button>
+                                <button type="button" id="acceptCourseButton"
+                                    class="btn btn-success">@lang('translation.accept')</button>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            {{-- Cancel modal --}}
-            <div class="modal fade" id="cancelModal" tabindex="-1" aria-labelledby="cancelModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="cancelModalLabel">@lang('translation.acceptionFormFor')</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <form id="cancelCourseForm">
-                                @csrf
-                                <div class="mb-3">
-                                    <p>
-                                        @lang('translation.areYouSure')
-                                    </p>
-                                </div>
-                                <input type="hidden" name="courseId" class="form-control" id="cancel-course-id">
-                            </form>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary"
-                                data-bs-dismiss="modal">@lang('translation.close')</button>
-                            <button type="button" id="cancelCourseButton"
-                                class="btn btn-danger">@lang('translation.cancel')</button>
+                {{-- Cancel modal --}}
+                <div class="modal fade" id="cancelModal" tabindex="-1" aria-labelledby="cancelModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="cancelModalLabel">@lang('translation.acceptionFormFor')</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form id="cancelCourseForm">
+                                    @csrf
+                                    <div class="mb-3">
+                                        <p>
+                                            @lang('translation.areYouSure')
+                                        </p>
+                                    </div>
+                                    <input type="hidden" name="courseId" class="form-control" id="cancel-course-id">
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary"
+                                    data-bs-dismiss="modal">@lang('translation.close')</button>
+                                <button type="button" id="cancelCourseButton"
+                                    class="btn btn-danger">@lang('translation.cancel')</button>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-
+            @endcan
 
             {{-- toastr --}}
             <div id="acceptToastContainer" class="position-fixed top-0 end-0 " style="z-index: 1060;margin-top: 5%;">

@@ -20,13 +20,10 @@
                     <div class="row">
                         <div class="col-md-6">
                             <h4 class="card-title">@lang('translation.packages')</h4>
-                            @role('admin')
-                                <p class="card-title-desc">@lang('translation.activePackages')</p>
-                            @endrole
+                            <p class="card-title-desc">@lang('translation.activePackages')</p>
                         </div>
                         <div class="col-md-6 d-flex justify-content-end align-items-center">
-                            <!-- Button aligned to the top right -->
-                            {{-- <a href="{{route('courses.add')}}" class="btn btn-outline-primary waves-effect waves-light">@lang('translation.addCourses')</a> --}}
+
                         </div>
                     </div>
                     <br>
@@ -70,72 +67,72 @@
 
                 </div>
             </div>
-
-            {{-- add discount modal --}}
-            <div class="modal fade" id="addDiscountModal" tabindex="-1" aria-labelledby="addDiscountModalLabel"
-                aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="addDiscountModalLabel"></h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <form id="addDiscountForm">
-                                @csrf
-                                <div class="mb-3">
-                                    <label class="col-md-2 col-form-label">@lang('translation.discountType')</label>
-                                    <select name="discountType" class="form-select">
-                                        <option value="percentage">@lang('translation.percentage')</option>
-                                        <option value="fixed">@lang('translation.fixedPrice')</option>
-                                    </select>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="discount" class="col-form-label">@lang('translation.discount')</label>
-                                    <input type="number" name="discount" class="form-control" id="discountInput">
-                                </div>
-                                <input type="hidden" name="packageId" class="form-control" id="add-discount-package-id">
-                            </form>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary"
-                                data-bs-dismiss="modal">@lang('translation.close')</button>
-                            <button type="submit" id="addDiscountButton"
-                                class="btn btn-success">@lang('translation.accept')</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            {{-- remove discount modal --}}
-            <div class="modal fade" id="removeDiscountModal" tabindex="-1" aria-labelledby="removeDiscountModalLabel"
-                aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="modifyModalLabel"></h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <form id="removeDiscountForm">
-                                @csrf
-                                <div class="mb-3">
-                                    <p>
-                                        @lang('translation.areYouSureRemoveDiscount')
-                                    </p>
-                                </div>
-                                <input type="hidden" name="packageId" class="form-control" id="remove-discount-package-id">
-                            </form>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary"
-                                data-bs-dismiss="modal">@lang('translation.close')</button>
-                            <button type="button" id="removeDiscountButton"
-                                class="btn btn-danger">@lang('translation.accept')</button>
+            @can('discount')
+                {{-- add discount modal --}}
+                <div class="modal fade" id="addDiscountModal" tabindex="-1" aria-labelledby="addDiscountModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="addDiscountModalLabel"></h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form id="addDiscountForm">
+                                    @csrf
+                                    <div class="mb-3">
+                                        <label class="col-md-2 col-form-label">@lang('translation.discountType')</label>
+                                        <select name="discountType" class="form-select">
+                                            <option value="percentage">@lang('translation.percentage')</option>
+                                            <option value="fixed">@lang('translation.fixedPrice')</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="discount" class="col-form-label">@lang('translation.discount')</label>
+                                        <input type="number" name="discount" class="form-control" id="discountInput">
+                                    </div>
+                                    <input type="hidden" name="packageId" class="form-control" id="add-discount-package-id">
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary"
+                                    data-bs-dismiss="modal">@lang('translation.close')</button>
+                                <button type="submit" id="addDiscountButton"
+                                    class="btn btn-success">@lang('translation.accept')</button>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-
+                {{-- remove discount modal --}}
+                <div class="modal fade" id="removeDiscountModal" tabindex="-1" aria-labelledby="removeDiscountModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="modifyModalLabel"></h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form id="removeDiscountForm">
+                                    @csrf
+                                    <div class="mb-3">
+                                        <p>
+                                            @lang('translation.areYouSureRemoveDiscount')
+                                        </p>
+                                    </div>
+                                    <input type="hidden" name="packageId" class="form-control" id="remove-discount-package-id">
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary"
+                                    data-bs-dismiss="modal">@lang('translation.close')</button>
+                                <button type="button" id="removeDiscountButton"
+                                    class="btn btn-danger">@lang('translation.accept')</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @endcan
             {{-- toastr --}}
             <div id="toastContainer" class="position-fixed top-0 end-0 " style="z-index: 1060;margin-top: 5%;">
                 <div id="toastr" class="toast overflow-hidden" role="alert" aria-live="assertive" aria-atomic="true">

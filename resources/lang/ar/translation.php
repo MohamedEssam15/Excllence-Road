@@ -108,12 +108,16 @@ return [
     'categoryName' => 'اسم التصنيف',
     'noCategories' => 'لا يوجد تصنيفات',
     'arCategoryName' => 'اسم التصنيف بالعربية',
-    'noRevenue' => 'No Revenue',
-    'noCourses' => 'No Courses',
-    'noPackages' => 'No Packages',
-    'featureContent' => 'Feature Content',
-
+    'returnBackCourse' => 'استرجاع الدورة',
+    'deleteCourse' => 'حذف الدورة',
     'noOrders' => 'لا يوجد طلبات',
+    'courseInfo' => 'تفاصيل الدورة',
+    'reactivePackage' => 'اعادة تفعيل الحزمة',
+    'deleteFeatureContent' => 'حذف محتوى الميزة',
+    'acceptRejectTeacher' => 'قبول / رفض المعلم',
+    'blockUnblockTeacher' => 'حظر / فك حظر المعلم',
+    'blockUnblockStudent' => 'حظر / فك حظر الطالب',
+    'showTeacher' => 'تفاصيل المعلم',
 
 
     //users
@@ -145,6 +149,8 @@ return [
     "noUsers" => "لم يتم العثور علي مستخدمين",
     "areYouSureBlock" => "هل انت متاكد من حظر هذا المستخدم",
     "areYouSureAccept" => "هل انت متاكد من الموافقة علي هذا المستخدم",
+    'teachersTransactions' => 'معاملات المعلمين',
+    'editAdmin' => 'تعديل المسؤول',
 
     "transaction" => "العمليات",
     "payments" => "المدفوعات",
@@ -222,8 +228,18 @@ return [
     'select' => 'اختيار',
     'addFreeCourseOrPackageTo' => 'اضافة محتوي مجاني ل',
     'addedBy' => 'الخصم بواسطة',
-
-
+    'addAdmin' => 'اضافة مسؤل',
+    'profileImage' => 'صورة الملف الشخصي',
+    'password' => 'كلمة المرور',
+    'permissions' => 'الصلاحيات',
+    'edit' => 'تعديل',
+    'delete' => 'حذف',
+    'save' => 'حفظ',
+    'cancel' => 'الغاء',
+    'editCourse' => 'تعديل الدورة',
+    'editPackage' => 'تعديل الحزمة',
+    'editContent' => 'تعديل المحتوي',
+    'AcceptReject' => 'قبول/رفض الدورة',
 
 
 
