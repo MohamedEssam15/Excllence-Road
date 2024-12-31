@@ -49,21 +49,20 @@
                                 <div class="col-md-6">
                                     <div class="mb-3">
                                         <label class="form-label" for="formrow-enName-input">@lang('translation.enName')</label>
-                                        <input type="text" name="enName" class="form-control" id="formrow-enName-input"
-                                            required>
+                                        <input type="text" name="enName" class="form-control" id="formrow-enName-input">
                                     </div>
                                 </div>
                             </div>
                             <!-- Arabic Description -->
                             <div class="mb-3">
                                 <label for="arDescription" class="form-label">@lang('translation.arDescription')</label>
-                                <textarea class="form-control" id="arDescription" name="arDescription" rows="3" required></textarea>
+                                <textarea class="form-control" id="arDescription" name="arDescription" rows="3" ></textarea>
                             </div>
 
                             <!-- English Description -->
                             <div class="mb-3">
                                 <label for="enDescription" class="form-label">@lang('translation.enDescription')</label>
-                                <textarea class="form-control" id="enDescription" name="enDescription" rows="3" required></textarea>
+                                <textarea class="form-control" id="enDescription" name="enDescription" rows="3"></textarea>
                             </div>
                             <div class="row">
                                 <div class="col-md-4">
@@ -74,11 +73,11 @@
                                 </div>
                                 <div class="col-md-4">
                                     <div class="mb-3">
-                                        <label class="form-label" for="formrow-enName-input">@lang('translation.startDate')</label>
-                                        <div class="input-group" id="datepicker2">
+                                        <label class="form-label" for="formrow-startDate-input">@lang('translation.startDate')</label>
+                                        <div class="input-group" id="datepicker1">
                                             <input type="text" name="startDate" class="form-control"
                                                 placeholder="yyyy-mm-dd" data-date-format="yyyy-mm-dd"
-                                                data-date-container='#datepicker2' data-provide="datepicker"
+                                                data-date-container='#datepicker1' data-provide="datepicker"
                                                 data-date-autoclose="true">
 
                                             <span class="input-group-text"><i class="mdi mdi-calendar"></i></span>
@@ -87,7 +86,7 @@
                                 </div>
                                 <div class="col-md-4">
                                     <div class="mb-3">
-                                        <label class="form-label" for="formrow-enName-input">@lang('translation.endDate')</label>
+                                        <label class="form-label" for="formrow-endDate-input">@lang('translation.endDate')</label>
                                         <div class="input-group" id="datepicker2">
                                             <input type="text" name="endDate" class="form-control"
                                                 placeholder="yyyy-mm-dd" data-date-format="yyyy-mm-dd"

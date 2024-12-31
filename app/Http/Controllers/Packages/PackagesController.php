@@ -87,8 +87,8 @@ class PackagesController extends Controller
         $imageType = $image->getClientOriginalExtension();
         $imageName = Str::random(10) . '.' . $imageType;
         $package = Package::create([
-            'name' => $request->enName,
-            'description' => $request->enDescription,
+            'name' => $request->enName ?? $request->arName,
+            'description' => $request->enDescription ?? $request->arDescription ?? null,
             'start_date' => $request->startDate,
             'end_date' => $request->endDate,
             'price' => $request->price,
@@ -98,10 +98,13 @@ class PackagesController extends Controller
         ]);
         $path = "/packages_attachments/{$package->id}/cover_photo/";
         $image->storeAs($path, $imageName, 'publicFolder');
-        $translations = [
-            ['locale' => 'en', 'name' => ucfirst($package->name), 'description' => $package->description],
-            ['locale' => 'ar', 'name' => $request->arName, 'description' => $request->arDescription],
-        ];
+        $translations = [];
+        if ($request->enName != null) {
+            $translations[] = ['locale' => 'en', 'name' => ucfirst($request->enName), 'description' => $request->enDescription];
+        }
+        if ($request->arName != null) {
+            $translations[] = ['locale' => 'ar', 'name' => $request->arName, 'description' => $request->arDescription];
+        }
 
         $package->courses()->sync($request->courses);
         $package->translations()->createMany($translations);
@@ -115,8 +118,8 @@ class PackagesController extends Controller
     }
     public function update(Request $request, Package $package)
     {
-        $package->name = $request->enName;
-        $package->description = $request->enDescription;
+        $package->name = $request->enName ?? $request->arName;
+        $package->description = $request->enDescription ?? $request->arDescription ?? null;
         $package->start_date = $request->startDate;
         $package->end_date = $request->endDate;
         $package->price = $request->price;
@@ -132,10 +135,14 @@ class PackagesController extends Controller
             $package->cover_photo = $imageName;
         }
         $package->save();
-        $translations = [
-            ['locale' => 'en', 'name' => ucfirst($request->enName), 'description' => $request->enDescription],
-            ['locale' => 'ar', 'name' => $request->arName, 'description' => $request->arDescription],
-        ];
+        $translations = [];
+        if ($request->enName != null) {
+            $translations[] = ['locale' => 'en', 'name' => ucfirst($request->enName), 'description' => $request->enDescription];
+        }
+        if ($request->arName != null) {
+            $translations[] = ['locale' => 'ar', 'name' => $request->arName, 'description' => $request->arDescription];
+        }
+        
         $package->courses()->sync($request->courses);
         $package->translations()->delete();
         $package->translations()->createMany($translations);

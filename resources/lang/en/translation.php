@@ -100,7 +100,7 @@ return [
     "currentImage" => "Current Cover",
     "editPackages" => "Edit Package",
     "showPackage" => "Show Packages",
-    'categories' => 'Categories',
+    'categories' => 'Categories or Topics',
     'addCategory' => 'Add Category',
     'allCategories' => 'All Categories',
     'editCategory' => 'Edit Category',

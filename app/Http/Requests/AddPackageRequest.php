@@ -21,14 +21,27 @@ class AddPackageRequest extends FormRequest
      */
     public function rules(): array
     {
+
         return [
-            'arName' => 'required|string',
-            'enName' => 'required|string',
-            'arDescription' => 'required|string',
-            'enDescription' => 'required|string',
+            'enName' => ['string', 'nullable', function ($attribute, $value, $fail) {
+                if ($value && ! request()->filled('arName')) {
+                    if (request()->filled('arDescription')) {
+                        $fail(__('response.oneLangEn'));
+                    }
+                }
+            }],
+            'arName' => ['string', 'nullable', function ($attribute, $value, $fail) {
+                if ($value && ! request()->filled('enName')) {
+                    if (request()->filled('enDescription')) {
+                        $fail(__('response.oneLangAr'));
+                    }
+                }
+            }],
+            'enDescription' => ['string', 'nullable'],
+            'arDescription' => ['string', 'nullable'],
             'price' => 'required|numeric',
             'startDate' => 'required|date',
-            'endDate' => 'required|date|after:startDate',
+            'endDate' => 'nullable|date|after:startDate',
             'addToPopularPackages' => "nullable",
             'courses' => ['required', 'array'],
             'courses.*' => ['required', 'distinct', 'exists:courses,id'],

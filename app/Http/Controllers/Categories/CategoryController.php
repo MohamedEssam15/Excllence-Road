@@ -28,16 +28,20 @@ class CategoryController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'arCategoryName' => 'required|string',
-            'enCategoryName' => 'required|string',
+            'arCategoryName' => 'nullable|string',
+            'enCategoryName' => 'nullable|string',
         ]);
         $category = category::create([
-            'name' => $request->enCategoryName,
+            'name' => $request->enCategoryName ?? $request->arCategoryName,
         ]);
-        $categoryTranslations = [
-            ['locale' => 'ar', 'name' => $request->arCategoryName],
-            ['locale' => 'en', 'name' => $request->enCategoryName],
-        ];
+        $categoryTranslations = [];
+        if ($request->enCategoryName != null) {
+            $categoryTranslations[] = ['locale' => 'en', 'name' => $request->enCategoryName];
+        }
+        if ($request->arCategoryName != null) {
+            $categoryTranslations[] = ['locale' => 'ar', 'name' => $request->arCategoryName];
+        }
+
         $category->translations()->createMany($categoryTranslations);
         return apiResponse(__('response.addedSuccessfully'));
     }

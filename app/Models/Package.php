@@ -28,6 +28,11 @@ class Package extends Model
         $locale = $locale ?: app()->getLocale();
         return $this->translations()->where('locale', $locale)->first() ?? $this;
     }
+    public function translateInCrm($locale = null)
+    {
+        $locale = $locale ?: app()->getLocale();
+        return $this->translations()->where('locale', $locale)->first();
+    }
 
     public function translations()
     {

@@ -34,7 +34,7 @@ class CourseServices
             'category_id' => $request['categoryId'],
             'level_id' => $request['levelId'],
             'start_date' => $request['startDate'],
-            'end_date' => $request['endDate'],
+            'end_date' => $request['endDate'] ?? null,
             'is_specific' => $request['isSpecific'],
             'specific_to' => $request['isSpecific'] ? ($request['enSpecificTo'] ?? $request['arSpecificTo'])  : null,
             'status_id' => 2,

@@ -13,12 +13,7 @@ class CategoryController extends Controller
 {
     public function getCategories()
     {
-        $categories = category::whereHas('courses', function ($query) {
-                $query->whereHas('status', function ($statusQuery) {
-                    $statusQuery->where('name', 'active'); // Assuming 'name' column holds 'active' status
-                })->where('start_date', '>', Carbon::today());
-            })
-            ->withCount(['courses' => function ($query) {
+        $categories = category::withCount(['courses' => function ($query) {
             $query->whereHas('status', function ($statusQuery) {
                 $statusQuery->where('name', 'active'); // Assuming 'name' column holds 'active' status
             })->where('start_date', '>', Carbon::today());
@@ -30,5 +25,4 @@ class CategoryController extends Controller
 
         return apiResponse('Data Retrieved', CategoryResource::collection($categories));
     }
-
 }
