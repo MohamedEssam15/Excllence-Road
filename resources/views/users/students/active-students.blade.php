@@ -121,6 +121,11 @@
                                             <option value="">-- @lang('translation.select') --</option>
                                         </select>
                                     </div>
+                                    <div class="mb-3">
+                                        <label for="discountPercentage" class="col-form-label">@lang('translation.discountPercentage')</label>
+                                        <input type="number" name="discountPercentage" class="form-control"
+                                            id="discountPercentage" max="100" min="0">
+                                    </div>
                                     <input type="hidden" name="studentId" class="form-control"
                                         id="add-free-course-or-package-student-id">
                                 </form>
@@ -258,7 +263,7 @@
                                 fireErrorToastr(response.message || 'Failed to fetch items.');
                             }
                         },
-                        error: function() {
+                        error: function(response) {
                             fireErrorToastr('An error occurred while fetching items.');
                         }
                     });
@@ -291,14 +296,14 @@
                             fetchData();
                             fireToastr(response.message)
                         } else {
-                            handleErrorResponse(response)
+                            handleErrorResponse(response.errors)
                         }
                     },
                     error: function(xhr, status, error) {
                         const response = xhr.responseJSON || {
                             message: 'An unexpected error occurred.'
                         };
-                        handleErrorResponse(response)
+                        handleErrorResponse(response.errors || response.message)
                     }
                 });
             });
@@ -357,7 +362,7 @@
         }
 
         function handleErrorResponse(errors) {
-            console.log(errors);
+
             const errorMessage = errors.length > 0 ?
                 errors.join('<br>') // Join error messages with a line break for display
                 :

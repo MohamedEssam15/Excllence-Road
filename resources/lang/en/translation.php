@@ -109,6 +109,7 @@ return [
     'arCategoryName' => 'Arabic Category Name',
     'enCategoryName' => 'English Category Name',
     'noRevenue' => 'No Revenue',
+    'discountPercentage' => 'Discount Percentage',
     'noCourses' => 'No Courses',
     'noPackages' => 'No Packages',
     'contentName' => 'Content Name',

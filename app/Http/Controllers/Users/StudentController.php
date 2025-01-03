@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Users;
 
 use App\Enum\PaymentStatus;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\AddFreeContentToStudentRequest;
 use App\Http\Resources\CourseBasicInfoResource;
 use App\Http\Resources\PackageResource;
 use App\Models\Course;
@@ -81,11 +82,23 @@ class StudentController extends Controller
         return apiResponse(__('response.success'), $returnValues);
     }
 
-    public function addFreeCourseOrPackage(Request $request)
+    public function addFreeCourseOrPackage(AddFreeContentToStudentRequest $request)
     {
         $user = User::findOrFail($request->studentId);
         $paymentServices = new PaymentsPayment();
-        $paymentServices->createFreePayment($user, $request->type, $request->itemId);
+        if ($request->type == 'course') {
+            $record = Course::findOrFail($request->itemId);
+            $isPackage = false;
+        } else {
+            $record = Package::findOrFail($request->itemId);
+            $isPackage = true;
+        }
+        $checkerResponse = $paymentServices->validateThePayment($user, $record, $isPackage);
+        if ($checkerResponse !== null) {
+            return $checkerResponse;
+        }
+        $paymentServices->createFreePayment($user, $record, $isPackage, $request->discountPercentage);
+
         return apiResponse(__('response.addedSuccessfully'));
     }
 }

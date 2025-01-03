@@ -160,11 +160,18 @@ class Payment
         }
     }
 
-    public function createFreePayment($user, $itemType, $itemId)
+    public function createFreePayment($user, $record, $isPackage, $discountPercentage)
     {
+        //calcaulate amount
+        if ($record->new_price == null) {
+            $amount = $record->price - (($record->price * $discountPercentage) / 100);
+        } else {
+            $amount = $record->new_price - (($record->new_price * $discountPercentage) / 100);
+        }
+
         //save payment
         $payment = ModelsPayment::create([
-            'amount' => 0,
+            'amount' => $amount,
             'status' => PaymentStatus::Done,
             'user_id' => $user->id,
         ]);
@@ -175,16 +182,9 @@ class Payment
         $payment->translations()->createMany($translations);
         $payment->save();
 
-        if ($itemType == 'course') {
-            $record = Course::findOrFail($itemId);
-            $isPackage = false;
-        } else {
-            $record = Package::findOrFail($itemId);
-            $isPackage = true;
-        }
-        $this->handleFreeEnrollments($user, $record, $isPackage, $payment);
+        $this->handleFreeEnrollments($user, $record, $isPackage, $payment, $discountPercentage);
     }
-    public function handleFreeEnrollments($user, $record, $isPackage, $payment)
+    public function handleFreeEnrollments($user, $record, $isPackage, $payment, $discountPercentage)
     {
         if ($isPackage) {
             $order = Order::create([
@@ -192,7 +192,7 @@ class Payment
                 'student_id' => $user->id,
                 'is_package' => $isPackage,
                 'package_id' => $record->id,
-                'discount' => 100,
+                'discount' => $discountPercentage,
                 'discount_type' => DiscountTypes::PERCENTAGE,
                 'added_by' => auth()->user()->id,
                 'course_id' => null,
@@ -213,7 +213,7 @@ class Payment
                 'student_id' => $user->id,
                 'is_package' => $isPackage,
                 'package_id' => null,
-                'discount' => 100,
+                'discount' => $discountPercentage,
                 'discount_type' => DiscountTypes::PERCENTAGE,
                 'added_by' => auth()->user()->id,
                 'course_id' => $record->id,

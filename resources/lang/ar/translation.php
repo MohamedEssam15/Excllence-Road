@@ -109,6 +109,7 @@ return [
     'noCategories' => 'لا يوجد تصنيفات',
     'arCategoryName' => 'اسم التصنيف بالعربية',
     'enCategoryName' => 'اسم التصنيف بالانجليزية',
+    'discountPercentage' => 'نسبة الخصم',
     'returnBackCourse' => 'استرجاع الدورة',
     'deleteCourse' => 'حذف الدورة',
     'noOrders' => 'لا يوجد طلبات',
