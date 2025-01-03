@@ -22,6 +22,8 @@ return [
     'logout'=>'تم تسجيل الخروج بنجاح',
     'logoutError'=>'برجاء تسجيل الدخول',
     'loginRoleError'=>'برجاء الدخول من لوحه التحكم الخاصه بك',
+    'enterEmail'=>'ادخل البريد الالكتروني',
+    'enterPassword'=>'ادخل كلمه السر',
 
     //login page text
     'welcomeBack' => '! اهلا بك مجددا ',

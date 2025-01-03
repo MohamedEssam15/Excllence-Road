@@ -34,7 +34,8 @@ return [
     'logout' => 'Signed out successfully',
     'logoutError' => 'Please sign in frist',
     'loginRoleError' => 'Please sign in our crm portal',
-
+    'enterEmail' => 'Enter email',
+    'enterPassword' => 'Enter Password',
     //signup page text
 
     'registerAccount' => "Register Account",

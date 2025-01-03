@@ -48,7 +48,7 @@
                                         <label class="form-label" for="email">@lang('auth.email')</label>
                                         <input type="text" class="form-control @error('email') is-invalid @enderror"
                                             name="email" value="{{ old('email') }}" id="email"
-                                            placeholder="Enter Email address">
+                                            placeholder="@lang('auth.enterEmail')">
                                         @error('email')
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $message }}</strong>
@@ -65,7 +65,7 @@
                                         </div>
                                         <label class="form-label" for="userpassword">@lang('auth.password')</label>
                                         <input type="password" class="form-control @error('password') is-invalid @enderror"
-                                             name="password" id="userpassword" placeholder="Enter password">
+                                             name="password" id="userpassword" placeholder="@lang('auth.enterPassword')">
                                         @error('password')
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $message }}</strong>
