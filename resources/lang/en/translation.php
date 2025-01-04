@@ -127,6 +127,8 @@ return [
     'assignToExistingContent' => 'Assign To Existing Content',
     'content' => 'Content',
     'selectItem' => 'Select Item',
+    'deletePackage' => 'Delete Package',
+
     //users
     "users" => "Users",
     "teachers" => "Teachers",

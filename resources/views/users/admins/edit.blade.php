@@ -239,6 +239,15 @@
                                                     for="add-package">@lang('translation.addPackages')</label>
                                             </div>
                                         </div>
+                                        <div class="col-md-3">
+                                            <div class="form-check form-switch">
+                                                <input type="checkbox" class="form-check-input" id="delete-package"
+                                                    value="delete-package" onchange="updatePermissions(this, 'packages')"
+                                                    date-category="packages">
+                                                <label class="form-check-label"
+                                                    for="delete-package">@lang('translation.deletePackage')</label>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

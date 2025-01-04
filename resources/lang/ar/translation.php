@@ -120,6 +120,7 @@ return [
     'blockUnblockTeacher' => 'حظر / فك حظر المعلم',
     'blockUnblockStudent' => 'حظر / فك حظر الطالب',
     'showTeacher' => 'تفاصيل المعلم',
+    'deletePackage' => 'حذف الحزمة',
 
 
     //users
