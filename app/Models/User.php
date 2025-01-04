@@ -53,6 +53,25 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
     {
         return $this->hasMany(UserAttchment::class, 'user_id');
     }
+    public function getAdminNotifications()
+    {
+        $user = auth()->user();
+        $query = AdminNotification::query();
+
+        if (!$user->can('accept-reject-courses')) {
+            $query->where('type', '!=', 'new-course');
+        }
+
+        if (!$user->can('accept-reject-teacher')) {
+            $query->where('type', '!=', 'new-teacher');
+        }
+
+        if (!$user->can('contact-us')) {
+            $query->where('type', '!=', 'new-contact-us-message');
+        }
+
+        return $query->latest()->take(5)->get();
+    }
 
     public function getAvatarPath()
     {

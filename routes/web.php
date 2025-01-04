@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminNotificationController;
 use App\Http\Controllers\Categories\CategoryController;
 use App\Http\Controllers\ContactUsController;
 use App\Http\Controllers\Courses\CoursesController;
@@ -136,7 +137,7 @@ Route::middleware('auth:web')->group(function () {
         Route::get('get-courses', [FeatureContentController::class, 'getCourses'])->name('featureContent.getCourses');
         Route::get('get-packages', [FeatureContentController::class, 'getPackages'])->name('featureContent.getPackages');
     });
-
+    Route::get('/notifications/{id}/redirect', [AdminNotificationController::class, 'deleteAndRedirect'])->name('notifications.deleteRedirect');
     //contact us
     Route::group(['prefix' => 'contact-us', 'middleware' => ['permission:contact-us']], function () {
         Route::get('all', [ContactUsController::class, 'index'])->name('contactUs.all');

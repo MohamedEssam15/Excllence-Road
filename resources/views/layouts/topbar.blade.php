@@ -98,12 +98,18 @@
                 </button>
             </div>
             {{-- notifications --}}
-            {{-- <div class="dropdown d-inline-block">
+            @php
+                $notifications = auth()->user()->getAdminNotifications();
+                $notificationsCount = count($notifications);
+            @endphp
+            <div class="dropdown d-inline-block">
                 <button type="button" class="btn header-item noti-icon waves-effect"
                     id="page-header-notifications-dropdown" data-bs-toggle="dropdown" aria-haspopup="true"
                     aria-expanded="false">
                     <i class="uil-bell"></i>
-                    <span class="badge bg-danger rounded-pill">3</span>
+                    @if ($notificationsCount > 0)
+                        <span class="badge bg-danger rounded-pill">{{ $notificationsCount }}</span>
+                    @endif
                 </button>
                 <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0"
                     aria-labelledby="page-header-notifications-dropdown">
@@ -112,89 +118,88 @@
                             <div class="col">
                                 <h5 class="m-0 font-size-16"> @lang('translation.Notifications') </h5>
                             </div>
-                            <div class="col-auto">
-                                <a href="#!" class="small"> @lang('translation.Mark_read')</a>
-                            </div>
                         </div>
                     </div>
                     <div data-simplebar style="max-height: 230px;">
-                        <a href="" class="text-dark notification-item">
-                            <div class="d-flex align-items-start">
-                                <div class="flex-shrink-0 me-3">
-                                    <div class="avatar-xs">
-                                        <span class="avatar-title bg-primary rounded-circle font-size-16">
-                                            <i class="uil-shopping-basket"></i>
-                                        </span>
-                                    </div>
-                                </div>
-                                <div class="flex-grow-1">
-                                    <h6 class="mt-0 mb-1">@lang('translation.order_placed')</h6>
-                                    <div class="font-size-12 text-muted">
-                                        <p class="mb-1">@lang('translation.languages_grammar')</p>
-                                        <p class="mb-0"><i class="mdi mdi-clock-outline"></i> @lang('translation.3_min_ago')</p>
-                                    </div>
-                                </div>
+                        @if ($notificationsCount == 0)
+                            <div class="text-center text-muted py-3">
+                                <p>@lang('translation.noNotifications')</p>
                             </div>
-                        </a>
-                        <a href="" class="text-dark notification-item">
-                            <div class="d-flex align-items-start">
-                                <div class="flex-shrink-0 me-3">
-                                    <img src="{{ URL::asset('/assets/images/users/avatar-3.jpg') }}"
-                                        class="rounded-circle avatar-xs" alt="user-pic">
-                                </div>
-                                <div class="flex-grow-1">
-                                    <h6 class="mt-0 mb-1">James Lemire</h6>
-                                    <div class="font-size-12 text-muted">
-                                        <p class="mb-1">@lang('translation.simplified_English')</p>
-                                        <p class="mb-0"><i class="mdi mdi-clock-outline"></i> @lang('translation.1_hours_ago')</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                        <a href="" class="text-dark notification-item">
-                            <div class="d-flex align-items-start">
-                                <div class="flex-shrink-0 me-3">
-                                    <div class="avatar-xs">
-                                        <span class="avatar-title bg-success rounded-circle font-size-16">
-                                            <i class="uil-truck"></i>
-                                        </span>
-                                    </div>
-                                </div>
-                                <div class="flex-grow-1">
-                                    <h6 class="mt-0 mb-1">@lang('translation.item_shipped')</h6>
-                                    <div class="font-size-12 text-muted">
-                                        <p class="mb-1">@lang('translation.languages_grammar')</p>
-                                        <p class="mb-0"><i class="mdi mdi-clock-outline"></i> @lang('translation.3_min_ago')</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
+                        @else
+                            @foreach ($notifications as $notification)
+                                @if ($notification->type == 'new-teacher')
+                                    <a href="{{ route('notifications.deleteRedirect', ['id' => $notification->id]) }}"
+                                        class="text-dark notification-item">
+                                        <div class="d-flex align-items-start">
+                                            <div class="flex-shrink-0 me-3">
+                                                <div class="avatar-xs">
+                                                    <span class="avatar-title bg-success rounded-circle font-size-16">
+                                                        <i class="fas fa-chalkboard-teacher"></i>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <h6 class="mt-0 mb-1">@lang('translation.newTeacherAdded')</h6>
+                                                <div class="font-size-12 text-muted">
+                                                    <p class="mb-1">@lang('translation.wantToJoin')
+                                                        {{ $notification->content->name }}</p>
+                                                    <p class="mb-0"><i class="mdi mdi-clock-outline"></i>
+                                                        {{ $notification->created_at->diffForHumans() }}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                @elseif ($notification->type == 'new-course')
+                                    <a href="{{ route('notifications.deleteRedirect', ['id' => $notification->id]) }}"
+                                        class="text-dark notification-item">
+                                        <div class="d-flex align-items-start">
+                                            <div class="flex-shrink-0 me-3">
+                                                <div class="avatar-xs">
+                                                    <span class="avatar-title bg-success rounded-circle font-size-16">
+                                                        <i class="fas fa-book"></i>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <h6 class="mt-0 mb-1">@lang('translation.newCourseAdded')</h6>
+                                                <div class="font-size-12 text-muted">
+                                                    <p class="mb-1">@lang('translation.thereIsNewCourseAdded')</p>
+                                                    <p class="mb-0"><i class="mdi mdi-clock-outline"></i>
+                                                        {{ $notification->created_at->diffForHumans() }}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                @elseif ($notification->type == 'new-contact-us-message')
+                                    <a href="{{ route('notifications.deleteRedirect', ['id' => $notification->id]) }}"
+                                        class="text-dark notification-item">
+                                        <div class="d-flex align-items-start">
+                                            <div class="flex-shrink-0 me-3">
+                                                <div class="avatar-xs">
+                                                    <span class="avatar-title bg-success rounded-circle font-size-16">
+                                                        <i class="far fa-comment-dots"></i>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <h6 class="mt-0 mb-1">@lang('translation.haveContactUsMessage')</h6>
+                                                <div class="font-size-12 text-muted">
+                                                    <p class="mb-1">@lang('translation.newMessageFrom')
+                                                        {{ $notification->content->name }}</p>
+                                                    <p class="mb-0"><i class="mdi mdi-clock-outline"></i>
+                                                        {{ $notification->created_at->diffForHumans() }}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                @endif
+                            @endforeach
+                        @endif
 
-                        <a href="" class="text-dark notification-item">
-                            <div class="d-flex align-items-start">
-                                <div class="flex-shrink-0 me-3">
-                                    <img src="{{ URL::asset('/assets/images/users/avatar-4.jpg') }}"
-                                        class="rounded-circle avatar-xs" alt="user-pic">
-                                </div>
-                                <div class="flex-grow-1">
-                                    <h6 class="mt-0 mb-1">Salena Layfield</h6>
-                                    <div class="font-size-12 text-muted">
-                                        <p class="mb-1">@lang('translation.friend_occidental')</p>
-                                        <p class="mb-0"><i class="mdi mdi-clock-outline"></i> @lang('translation.1_hours_ago')</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
                     </div>
-                    <div class="p-2 border-top">
-                        <div class="d-grid">
-                            <a class="btn btn-sm btn-link font-size-14 text-center" href="javascript:void(0)">
-                                <i class="uil-arrow-circle-right me-1"></i> @lang('translation.View_More')..
-                            </a>
-                        </div>
-                    </div>
+
                 </div>
-            </div> --}}
+            </div>
 
             <div class="dropdown d-inline-block">
                 <button type="button" class="btn header-item waves-effect" id="page-header-user-dropdown"
@@ -216,12 +221,6 @@
                     </form>
                 </div>
             </div>
-
-            {{-- <div class="dropdown d-inline-block">
-                <button type="button" class="btn header-item noti-icon right-bar-toggle waves-effect">
-                    <i class="uil-cog"></i>
-                </button>
-            </div> --}}
 
         </div>
     </div>
