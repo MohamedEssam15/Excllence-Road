@@ -69,6 +69,39 @@
 
                 </div>
             </div>
+            @can('delete-course')
+                {{-- delete course modal --}}
+                <div class="modal fade" id="deleteCourseModal" tabindex="-1" aria-labelledby="deleteCourseModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="deleteCourseModalLabel"></h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form id="deleteCourseForm">
+                                    @csrf
+                                    @method('DELETE')
+                                    <div class="mb-3">
+                                        <p>
+                                            @lang('translation.areYouSureDelete')
+                                        </p>
+                                    </div>
+                                    <input type="hidden" name="courseId" class="form-control" id="delete-course-id">
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary"
+                                    data-bs-dismiss="modal">@lang('translation.close')</button>
+                                <button type="button" id="deleteCourseButton"
+                                    class="btn btn-danger">@lang('translation.accept')</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            @endcan
             @can('edit-course')
                 {{-- modify modal --}}
                 <div class="modal fade" id="modifyModal" tabindex="-1" aria-labelledby="modifyModalLabel" aria-hidden="true">
@@ -119,7 +152,8 @@
                         <div class="modal-content">
                             <div class="modal-header">
                                 <h5 class="modal-title" id="addDiscountModalLabel"></h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
                                 <form id="addDiscountForm">

@@ -9,6 +9,8 @@ use App\Http\Controllers\Transactions\TransactionController;
 use App\Http\Controllers\Users\AdminController;
 use App\Http\Controllers\Users\StudentController;
 use App\Http\Controllers\Users\TeacherController;
+use App\Models\Course;
+use App\Models\Package;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -25,6 +27,9 @@ use Illuminate\Support\Facades\Route;
 
 require __DIR__ . '/auth.php';
 
+Route::get('/tess',function (){
+    dd([Package::find(1)->orders,Package::find(1)->haveOrders]);
+});
 
 Route::get('/', function () {
     if (Auth::guard('web')->check()) {
@@ -57,7 +62,7 @@ Route::middleware('auth:web')->group(function () {
         Route::get('/{id}/show', [CoursesController::class, 'show'])->name('courses.info')->middleware('permission:course-info');
 
         Route::post('/accept-course', [CoursesController::class, 'acceptCourse'])->middleware('permission:accept-reject-courses');
-        Route::post('/add-discount', [CoursesController::class, 'addDiscount'])->middleware('permission:active-discount');
+        Route::post('/add-discount', [CoursesController::class, 'addDiscount'])->middleware('permission:discount');
         Route::post('/remove-discount', [CoursesController::class, 'destroyDiscount'])->middleware('permission:discount');
         Route::post('/modify-course', [CoursesController::class, 'modifyCourse'])->middleware('permission:edit-course');
         Route::post('/cancel-course', [CoursesController::class, 'cancelCourse'])->middleware('permission:accept-reject-courses');
@@ -80,6 +85,7 @@ Route::middleware('auth:web')->group(function () {
         Route::post('/return-course-to-pending', [PackagesController::class, 'returnToPending']);
         Route::post('/add-discount', [PackagesController::class, 'addDiscount'])->middleware('permission:discount');
         Route::post('/remove-discount', [PackagesController::class, 'destroyDiscount'])->middleware('permission:discount');
+        Route::delete('/delete-package', [PackagesController::class, 'deletePackage'])->middleware('permission:delete-package');
     });
 
 

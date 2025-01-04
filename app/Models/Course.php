@@ -31,6 +31,10 @@ class Course extends Model
         return $this->belongsTo(CourseLevel::class);
     }
 
+    public function getHaveOrdersAttribute(){
+        return $this->orders()->exists();
+    }
+
 
 
     public function category(): BelongsTo

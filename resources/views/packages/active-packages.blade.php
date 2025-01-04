@@ -133,9 +133,43 @@
                     </div>
                 </div>
             @endcan
+            @can('delete-package')
+                {{-- delete package modal --}}
+                <div class="modal fade" id="deletePackageModal" tabindex="-1" aria-labelledby="deletePackageModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="deletePackageModalLabel"></h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form id="deletePackageForm">
+                                    @csrf
+                                    @method('DELETE')
+                                    <div class="mb-3">
+                                        <p>
+                                            @lang('translation.areYouSureDelete')
+                                        </p>
+                                    </div>
+                                    <input type="hidden" name="packageId" class="form-control" id="delete-package-id">
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary"
+                                    data-bs-dismiss="modal">@lang('translation.close')</button>
+                                <button type="button" id="deletePackageButton"
+                                    class="btn btn-danger">@lang('translation.accept')</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @endcan
             {{-- toastr --}}
             <div id="toastContainer" class="position-fixed top-0 end-0 " style="z-index: 1060;margin-top: 5%;">
-                <div id="toastr" class="toast overflow-hidden" role="alert" aria-live="assertive" aria-atomic="true">
+                <div id="toastr" class="toast overflow-hidden" role="alert" aria-live="assertive"
+                    aria-atomic="true">
                     <div class="align-items-center text-white
                             bg-success border-0">
                         <div class="d-flex">
@@ -255,8 +289,48 @@
         $(document).ready(function() {
             var addDiscountModal = document.getElementById('addDiscountModal');
             var removeDiscountModal = document.getElementById('removeDiscountModal');
+            var deletePackageModal = document.getElementById('deletePackageModal');
 
+            deletePackageModal.addEventListener('show.bs.modal', function(event) {
+                document.getElementById('deletePackageForm').reset();
+                var button = event.relatedTarget;
+                var packageId = button.getAttribute('data-bs-packageid');
+                var packageName = button.getAttribute('data-bs-packagename');
+                var modalTitle = deletePackageModal.querySelector('.modal-title');
+                var modalPackageId = document.getElementById('delete-package-id');
 
+                modalTitle.textContent = packageName;
+                modalPackageId.value = packageId;
+            });
+            $('#deletePackageButton').click(function(event) {
+                event.preventDefault();
+                var form = $('#deletePackageForm');
+                var formData = form.serialize(); // Serialize form data
+
+                $.ajax({
+                    type: 'POST',
+                    url: baseUrl + '/packages/delete-package', // Change this to your actual route
+                    data: formData,
+                    success: function(response) {
+                        if (response.status == 200) {
+                            // Close the modal
+                            $('#deletePackageModal').modal('hide');
+                            fetchPackages();
+                            fireToastr(response.message)
+                        } else {
+                            $('#deletePackageModal').modal('hide');
+                            handleErrorResponse(response)
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        const response = xhr.responseJSON || {
+                            message: 'An unexpected error occurred.'
+                        };
+                        $('#deletePackageModal').modal('hide');
+                        handleErrorResponse(response)
+                    }
+                });
+            });
             addDiscountModal.addEventListener('show.bs.modal', function(event) {
                 document.getElementById('addDiscountForm').reset();
                 var button = event.relatedTarget;

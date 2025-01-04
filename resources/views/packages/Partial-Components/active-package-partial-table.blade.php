@@ -71,6 +71,15 @@
                         </a>
                     @endif
                 @endcan
+                @if (!$package->haveOrders)
+                    @can('delete-package')
+                    <a class="btn btn-outline-danger btn-sm" title="@lang('translation.delete')" data-bs-toggle="modal"
+                            data-bs-target="#deletePackageModal" data-bs-packageid="{{ $package->id }}"
+                            data-bs-packagename="{{ $package->translate(config('app.locale'))->name ?? $package->name }}">
+                            <i class="fas fa-trash"></i>
+                    </a>
+                    @endcan
+                @endif
             </td>
         </tr>
     @endforeach

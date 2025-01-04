@@ -89,6 +89,15 @@
                         </a>
                     @endif
                 @endcan
+                @if (!$course->haveOrders)
+                    @can('delete-course')
+                        <a class="btn btn-outline-danger btn-sm" title="@lang('translation.deleteCourse')" data-bs-toggle="modal"
+                            data-bs-target="#deleteCourseModal" data-bs-courseid="{{ $course->id }}"
+                            data-bs-coursename="{{ $course->translate(config('app.locale'))->name ?? $course->name }}">
+                            <i class="fas fa-trash"></i>
+                        </a>
+                    @endcan
+                @endif
             </td>
         </tr>
     @endforeach

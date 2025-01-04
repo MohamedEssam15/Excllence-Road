@@ -10,12 +10,15 @@ use Illuminate\Database\Eloquent\Relations\MorphToMany;
 class Package extends Model
 {
     use HasFactory;
-    protected $fillable = ['name', 'description', 'price', 'cover_photo', 'start_date', 'end_date', 'is_popular', 'discount', 'discount_type'];
+    protected $fillable = ['name', 'description', 'price', 'cover_photo', 'start_date', 'end_date', 'is_popular', 'discount', 'discount_type', 'new_price'];
     protected $with = ['translations'];
 
     public function courses(): BelongsToMany
     {
         return $this->belongsToMany(Course::class, 'courses_packages', 'package_id', 'course_id');
+    }
+    public function getHaveOrdersAttribute(){
+        return $this->orders()->exists();
     }
 
     public function orders()

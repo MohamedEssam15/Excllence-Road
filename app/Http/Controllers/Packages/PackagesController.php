@@ -142,7 +142,7 @@ class PackagesController extends Controller
         if ($request->arName != null) {
             $translations[] = ['locale' => 'ar', 'name' => $request->arName, 'description' => $request->arDescription];
         }
-        
+
         $package->courses()->sync($request->courses);
         $package->translations()->delete();
         $package->translations()->createMany($translations);
@@ -211,5 +211,18 @@ class PackagesController extends Controller
         $package->new_price = null;
         $package->save();
         return apiResponse(__('translation.discountRemoved'));
+    }
+
+    public function deletePackage(Request $request)
+    {
+        $this->validate($request, [
+            'packageId' => 'required|exists:packages,id',
+        ]);
+        $package = Package::find($request->packageId);
+        if($package->haveOrders){
+            return apiResponse(__('response.packageHaveOrders'), new \stdClass(), [__('response.packageHaveOrders')]);
+        }
+        $package->delete();
+        return apiResponse(__('response.packageDeleted'));
     }
 }

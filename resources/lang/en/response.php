@@ -50,4 +50,6 @@ return [
     'pending' => 'Pending',
     'notTakenYet' => 'Not taken yet',
     'messageSent' => 'Message sent successfully',
+    'packageHaveOrders' => 'You can not delete this package because it has orders',
+    'packageDeleted' => 'Package deleted successfully',
 ];
