@@ -138,7 +138,12 @@ class CourseController extends Controller
     public function lessonInfo(Lesson $lesson)
     {
         $user = auth()->user();
-        if (! $user->enrollments()->where('course_id', $lesson->unit->course->id)->exists() && $user->id != $lesson->unit->course->teacher_id) {
+        $course = $lesson->unit->course;
+        if (! $user->enrollments()->where(function ($q) use ($course) {
+            $q->where('courses_users.course_id', $course->id)->where(function ($q) {
+                $q->where('courses_users.end_date', '>', Carbon::today())->orWhereNull('courses_users.end_date');
+            });
+        })->exists() && $user->id != $course->teacher_id) {
             return apiResponse(__('response.notAuthorized'), new stdClass(), [__('response.notAuthorized')], 401);
         }
 
@@ -157,7 +162,9 @@ class CourseController extends Controller
     public function getCourseStudents($id)
     {
         $enrolledStudents = User::role('student')->whereHas('enrollments', function ($query) use ($id) {
-            $query->where('courses_users.course_id', $id)->where('courses_users.end_date', '>', Carbon::today());
+            $query->where('courses_users.course_id', $id)->where(function ($q) {
+                $q->where('courses_users.end_date', '>', Carbon::today())->orWhereNull('courses_users.end_date');
+            });
         })->get();
 
         return apiResponse(__('response.dataRetrieved'), TeacherInfoResource::collection($enrolledStudents));
@@ -165,7 +172,10 @@ class CourseController extends Controller
     public function getStudentCourses()
     {
         $authUser = auth()->user();
-        $courses = $authUser->enrollments()->wherePivot('end_date', '>', Carbon::today())->paginate(request()->perPage ?? 10);
+        $courses = $authUser->enrollments()->where(function ($query) {
+            $query->whereNull('courses_users.end_date') // Use actual table.column name
+                ->orWhere('courses_users.end_date', '>', Carbon::today()); // Use actual table.column name
+        })->paginate(request()->perPage ?? 10);
         return apiResponse(__('response.dataRetrieved'), new PaginatedCollection($courses, StudentCoursesResource::class));
     }
 }

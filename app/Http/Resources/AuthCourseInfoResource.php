@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\App;
@@ -37,12 +38,20 @@ class AuthCourseInfoResource extends JsonResource
             'discountType' => $this->discount_type,
             'startDate' => $this->start_date,
             'endDate' => $this->end_date,
-            'isJoined' => $this->enrollments()->where('user_id', auth()->user()->id ?? null)->exists(),
+            'isJoined' => $this->checkJoined(),
             'isSpecific' => $this->is_specific,
             'specificTo' => $this->translate($this->locale)->specific_to ?? $this->specific_to,
             'rating' => $this->average_rating,
             'reviews' => ReviewResource::collection($this->reviews),
             'exams' => ExamInfoResource::collection($this->exams),
         ];
+    }
+    private function checkJoined()
+    {
+        return $this->enrollments()->where('user_id', auth()->user()->id ?? null)->where(function ($q) {
+            $q->where(function ($q) {
+                $q->where('courses_users.end_date', '>', Carbon::today())->orWhereNull('courses_users.end_date');
+            });
+        })->exists();
     }
 }
