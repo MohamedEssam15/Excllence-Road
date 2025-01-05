@@ -157,7 +157,7 @@ class CourseServices
         $course->category_id = $request['categoryId'];
         $course->level_id = $request['levelId'];
         $course->start_date = $request['startDate'];
-        $course->end_date = $request['endDate'];
+        $course->end_date = $request['endDate'] ?? null;
         $course->is_specific = $request['isSpecific'];
         $course->specific_to = $request['isSpecific'] ? $request['enSpecificTo'] ?? $request['arSpecificTo'] : null;
         $course->save();

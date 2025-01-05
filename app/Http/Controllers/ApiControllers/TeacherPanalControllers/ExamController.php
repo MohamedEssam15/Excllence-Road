@@ -87,7 +87,7 @@ class ExamController extends Controller
     public function updateExam(UpdateExamRequest $request, Exam $exam)
     {
         $teacherExamServices = new TeacherExamsServices();
-        $exam = $teacherExamServices->updateExam($exam, $request->type, $request->name, $request->description, $request->examTime, $request->isUnitExam, $request->units, $request->examFile);
+        $exam = $teacherExamServices->updateExam($exam, $request->type, $request->name, $request->description, $request->examTime,$request->examDegree, $request->isUnitExam, $request->units, $request->examFile);
         return apiResponse(__('response.updatedSuccessfully'), new TeacherExamResource($exam));
     }
     public function deleteExam(Exam $exam)

@@ -48,7 +48,7 @@ class UpdateCourseRequest extends FormRequest
             'categoryId' => ['required', 'exists:categories,id'],
             'levelId' => ['required', 'exists:course_levels,id'],
             'startDate' => ['date', 'required', 'after:' . now()->format('Y-m-d')],
-            'endDate' => ['date', 'required', 'after:startDate'],
+            'endDate' => ['date', 'nullable', 'after:startDate'],
             'enSpecificTo' => ['string', 'nullable'],
             'arSpecificTo' => ['string', 'nullable'],
             'coverPhoto' => ['nullable', 'image', 'mimes:jpg,jpeg,png', 'max:10240'],
