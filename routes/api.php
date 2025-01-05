@@ -14,6 +14,7 @@ use App\Http\Controllers\ApiControllers\TeacherPanalControllers\ExamController;
 use App\Http\Controllers\ApiControllers\TeacherPanalControllers\LessonsController;
 use App\Http\Controllers\ApiControllers\TeacherPanalControllers\UnitController;
 use App\Http\Controllers\ApiControllers\StudentController;
+use App\Http\Controllers\ApiControllers\UtilitiesController;
 use App\Http\Controllers\ContactUsController;
 use App\Http\Controllers\FeatureContentController;
 
@@ -150,3 +151,4 @@ Route::group(['middleware' => 'auth:api', 'prefix' => 'reviews'], function () {
 Route::post('contact-us', [ContactUsController::class, 'store']);
 Route::post('add-feature-content', [FeatureContentController::class, 'store']);
 Route::get('feature-content', [FeatureContentController::class, 'getFeatureContent']);
+Route::get('configurations', [UtilitiesController::class, 'configuration']);
