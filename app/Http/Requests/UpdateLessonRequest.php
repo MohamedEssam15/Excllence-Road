@@ -45,7 +45,7 @@ class UpdateLessonRequest extends FormRequest
             'enDescription' => ['string', 'nullable'],
             'arDescription' => ['string', 'nullable'],
             'order' => ['required', 'integer', Rule::unique('lessons')->where(function ($query) {
-                return $query->where('unit_id', $this->input('unitId'));
+                return $query->where('unit_id', $this->route('lesson')->unit_id);
             })->ignore($this->route('lesson')->id)],
             'type' => ['nullable', 'string', 'in:video,meeting'],
             'meetingLink' => ['required_if:type,meeting', 'url'],
