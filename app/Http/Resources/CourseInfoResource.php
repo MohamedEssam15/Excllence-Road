@@ -25,8 +25,8 @@ class CourseInfoResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'name' => $this->translate($this->locale)->name,
-            'description' => $this->translate($this->locale)->description,
+            'name' => $this->translate($this->locale)?->name ?? $this->name,
+            'description' => $this->translate($this->locale)?->description ?? $this->description,
             'coverPhoto' => $this->getCoverPhotoPath(),
             'teacher' => new TeacherInfoResource($this->teacher),
             'isJoined' => $this->checkJoined(),
@@ -40,7 +40,7 @@ class CourseInfoResource extends JsonResource
             'startDate' => $this->start_date,
             'endDate' => $this->end_date,
             'isSpecific' => $this->is_specific,
-            'specificTo' => $this->translate($this->locale)->specific_to,
+            'specificTo' => $this->translate($this->locale)?->specific_to ?? $this->specific_to,
             'isMobileOnly' => $this->is_mobile_only,
             'rating' => $this->average_rating,
             'reviews' => ReviewResource::collection($this->reviews),

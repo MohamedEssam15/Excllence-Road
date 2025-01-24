@@ -25,8 +25,8 @@ class PackageResource extends JsonResource
     {
         return [
             'id' => $this->package->id,
-            'name' => $this->package->translate($this->locale)->name,
-            'description' => $this->package->translate($this->locale)->description,
+            'name' => $this->package->translate($this->locale)?->name ?? $this->package->name,
+            'description' => $this->package->translate($this->locale)?->description ?? $this->package->description,
             'isJoined' => $this->userEnrollments()->where('user_id', auth()->user()->id ?? null)->exists(),
             'coverPhoto' => $this->package->getCoverPhotoPath(),
             'price' => $this->package->new_price ?? $this->package->price,
