@@ -25,7 +25,7 @@ class PopularCourseResource extends JsonResource
     {
         return [
             'id' => $this->course->id,
-            'name' => $this->course->translate($this->locale)->name,
+            'name' => $this->course->translate($this->locale)?->name ?? $this->course->name,
             'description' => $this->course->translate($this->locale)->description,
             'coverPhoto' => $this->course->getCoverPhotoPath(),
             'teacher' => new TeacherInfoResource($this->course->teacher),
