@@ -26,7 +26,7 @@ class PopularCourseResource extends JsonResource
         return [
             'id' => $this->course->id,
             'name' => $this->course->translate($this->locale)?->name ?? $this->course->name,
-            'description' => $this->course->translate($this->locale)->description,
+            'description' => $this->course->translate($this->locale)?->description ?? $this->course->description,
             'coverPhoto' => $this->course->getCoverPhotoPath(),
             'teacher' => new TeacherInfoResource($this->course->teacher),
             'category' => new CategoryInfoResource($this->course->category),
@@ -36,7 +36,7 @@ class PopularCourseResource extends JsonResource
             'endDate' => $this->course->end_date,
             'isJoined' => $this->enrollments()->where('user_id', auth()->user()->id ?? null)->exists(),
             'isSpecific' => $this->course->is_specific,
-            'specificTo' => $this->course->translate($this->locale)->specific_to,
+            'specificTo' => $this->course->translate($this->locale)?->specific_to ?? $this->course->specific_to,
             'rating' => $this->average_rating,
         ];
     }
