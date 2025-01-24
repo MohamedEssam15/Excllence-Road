@@ -17,6 +17,12 @@ class LessonServices
         'meeting-meeting' => 'handleMeetingMeeting',
         'video-meeting' => 'handleVideoMeeting',
         'video-video' => 'handleVideoVideo',
+
+        'video_link-video' => 'handleVideoLinkVideo',
+        'video_link-meeting' => 'handleVideoLinkMeeting',
+        'video-video_link' => 'handleVideoVideoLink',
+        'meeting-video_link' => 'handleMeetingVideoLink',
+        'video_link-video_link' => 'handleVideoLinkVideoLink',
     ];
 
     public function saveLesson($type, $enName, $arName, $enDescription, $arDescription, $unitId, $order, $meetingLink = null, $meetingDate = null, $video = null, $attachments = null)
@@ -25,7 +31,9 @@ class LessonServices
         $description = $enDescription ?? $arDescription ?? null;
         if ($type == 'meeting') {
             $lesson = $this->saveMeetingLesson($name, $description, $unitId, $order, $meetingLink, $meetingDate);
-        } else {
+        } elseif ($type == 'video_link') {
+            $lesson = $this->saveVideoLinkLesson($name, $description, $unitId, $order, $video);
+        }else{
             $lesson = $this->saveVideoLesson($name, $description, $unitId, $order, $video);
         }
         $lessonTranslations = [];
@@ -57,6 +65,19 @@ class LessonServices
             'type' => 'meeting',
             'video_link' => $meetingLink,
             'meeting_date' => $meetingDate,
+        ]);
+
+        return $lesson;
+    }
+    protected function saveVideoLinkLesson($name, $description, $unitId, $order, $videoLink)
+    {
+        $lesson = ModelsLesson::create([
+            'name' => $name,
+            'unit_id' => $unitId,
+            'description' => $description,
+            'order' => $order,
+            'type' => 'video_link',
+            'video_link' => $videoLink,
         ]);
 
         return $lesson;
@@ -114,8 +135,9 @@ class LessonServices
     }
 
     //working on updating
-    public function updateLesson($lesson, $enName, $arName, $enDescription, $arDescription, $order, $type = null, $video = null, $meetingLink = null, $meetingDate = null)
+    public function updateLesson($lesson, $enName, $arName, $enDescription, $arDescription, $order, $type = null, $video = null, $link = null, $meetingDate = null)
     {
+
         if ($type != null) {
             $newType = $type;
             $oldType = $lesson->type;
@@ -127,12 +149,13 @@ class LessonServices
             }
 
             $handlerMethod = $this->updateLessonHandlers[$key];
-            $this->$handlerMethod($lesson, $meetingLink, $video);
+            $this->$handlerMethod($lesson, $link, $video);
         }
+
         $lesson->name = $enName ?? $arName;
         $lesson->description = $enDescription ?? $arDescription;
         $lesson->order = $order;
-        $lesson->meeting_date = $meetingDate ?? $lesson->meeting_date;
+        $lesson->meeting_date = $meetingDate;
         $lesson->save();
         $lessonTranslations = [];
         if ($enName != null) {
@@ -161,7 +184,20 @@ class LessonServices
         $lesson->delete();
     }
 
-    private function handleMeetingVideo($lesson, $meetingLink = null, $video = null)
+    private function handleMeetingVideo($lesson, $link = null, $video = null)
+    {
+        $fileExtension = $video->getClientOriginalExtension();
+        $fileName = Str::random(10) . '.' . $fileExtension;
+        $lesson->type = 'video';
+        $lesson->video_link = $fileName;
+
+        $videoStorageManger = new VideoStorageManager();
+        $path = '/lessons/lessons_videos/' . $lesson->id;
+
+        $videoStorageManger->upload($video, $path, $fileName);
+        return $lesson;
+    }
+    private function handleVideoLinkVideo($lesson, $link = null, $video = null)
     {
         $fileExtension = $video->getClientOriginalExtension();
         $fileName = Str::random(10) . '.' . $fileExtension;
@@ -175,21 +211,44 @@ class LessonServices
         return $lesson;
     }
 
-    private function handleMeetingMeeting($lesson, $meetingLink = null, $video = null)
+    private function handleVideoLinkMeeting($lesson, $link = null, $video = null)
     {
-        $lesson->video_link = $meetingLink;
+        $lesson->type = 'meeting';
+        $lesson->video_link = $link;
+    }
+    private function handleMeetingVideoLink($lesson, $link = null, $video = null)
+    {
+        $lesson->type = 'video_link';
+        $lesson->video_link = $link;
+    }
+    private function handleVideoLinkVideoLink($lesson, $link = null, $video = null)
+    {
+        $lesson->video_link = $link;
     }
 
-    private function handleVideoMeeting($lesson, $meetingLink = null, $video = null)
+    private function handleMeetingMeeting($lesson, $link = null, $video = null)
     {
-        $lesson->video_link = $meetingLink;
+        $lesson->video_link = $link;
+    }
+
+    private function handleVideoMeeting($lesson, $link = null, $video = null)
+    {
+        $lesson->video_link = $link;
         $lesson->type = 'meeting';
 
         $videoManger = new VideoStorageManager();
         $videoManger->deleteDirectory($lesson->id);
     }
+    private function handleVideoVideoLink($lesson, $link = null, $video = null)
+    {
+        $lesson->video_link = $link;
+        $lesson->type = 'video_link';
 
-    private function handleVideoVideo($lesson, $meetingLink = null, $video = null)
+        $videoManger = new VideoStorageManager();
+        $videoManger->deleteDirectory($lesson->id);
+    }
+
+    private function handleVideoVideo($lesson, $link = null, $video = null)
     {
         //delete the directory of lesson video
         $videoManger = new VideoStorageManager();

@@ -30,6 +30,7 @@ class TeacherLessonInfoResource extends JsonResource
             'enDescription' => $this->translate('en')?->description,
             'arDescription' => $this->translate('ar')?->description,
             'type' => $this->type,
+            'order' => $this->order,
             'meetingDate' => $this->meeting_date?->format('Y-m-d g:i A'),
             'lesson' => $this->type == 'meeting' ? $this->video_link : $this->getVideoLink(),
             'attachments' => LessonAttachmentsResource::collection($this->attachments)

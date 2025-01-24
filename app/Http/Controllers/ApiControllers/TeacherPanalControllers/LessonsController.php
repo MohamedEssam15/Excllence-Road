@@ -26,8 +26,14 @@ class LessonsController extends Controller
     }
 
     public function updateLesson(UpdateLessonRequest $request,Lesson $lesson){
+        if($request->type == 'meeting'){
+            $link = $request->meetingLink;
+        }else{
+            $link = $request->videoLink;
+        }
+
         $lessonService = new LessonServices();
-        $updatedLesson = $lessonService->updateLesson($lesson,$request->enName,$request->arName,$request->enDescription,$request->arDescription,$request->order,$request->type,$request->video,$request->meetingLink,$request->meetingDate);
+        $updatedLesson = $lessonService->updateLesson($lesson,$request->enName,$request->arName,$request->enDescription,$request->arDescription,$request->order,$request->type,$request->video,$link,$request->meetingDate);
         if(is_null($lesson)){
             return apiResponse(__('response.invalidTypeSelected'), new stdClass(),[__('response.invalidTypeSelected')],422);
         }

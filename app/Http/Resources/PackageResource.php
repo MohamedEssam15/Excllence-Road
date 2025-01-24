@@ -29,7 +29,10 @@ class PackageResource extends JsonResource
             'description' => $this->package->translate($this->locale)->description,
             'isJoined' => $this->userEnrollments()->where('user_id', auth()->user()->id ?? null)->exists(),
             'coverPhoto' => $this->package->getCoverPhotoPath(),
-            'price' => $this->package->price,
+            'price' => $this->package->new_price ?? $this->package->price,
+            'oldPrice' => $this->package->price,
+            'discount' => $this->discount,
+            'discountType' => $this->discount_type,
             'startDate' => $this->package->start_date,
             'endDate' => $this->package->end_date,
         ];

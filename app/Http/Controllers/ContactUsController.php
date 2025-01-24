@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AdminNotification;
 use App\Models\ContactUsMessage;
 use Illuminate\Http\Request;
 
@@ -35,6 +36,11 @@ class ContactUsController extends Controller
             'message' => 'required|string|max:255',
         ]);
         $contact = ContactUsMessage::create($request->all());
+        AdminNotification::create([
+            'type' => 'new-contact-us-message',
+            'content_id' => $contact->id
+
+        ]);
         return apiResponse(__('response.addedSuccessfully'));
     }
 }

@@ -127,6 +127,8 @@ return [
     'assignToExistingContent' => 'Assign To Existing Content',
     'content' => 'Content',
     'selectItem' => 'Select Item',
+    'deletePackage' => 'Delete Package',
+
     //users
     "users" => "Users",
     "teachers" => "Teachers",
@@ -236,6 +238,26 @@ return [
     "revenue" => "Revunue",
 
     "verfyEmail" => "Verify Your Email Address",
+    "Email" => "Email",
+    "Profile" => "Profile",
+    "Notifications" => "Notifications",
+    "Search" => "Search",
+    "Login" => "Login",
+    "Register" => "Register",
+    "Recover_Password" => "Recover Password",
+    'noNotifications' => 'No Notifications',
+    'newMessageFrom' => 'New Message From',
+    'haveContactUsMessage' => 'Have Contact Us Message',
+    'newCourseAdded' => 'New Course Added',
+    'thereIsNewCourseAdded' => 'There Is New Course Added',
+    'newTeacherAdded' => 'New Teacher Added',
+    'thereIsNewTeacher' => 'There Is New Teacher',
+    'wantToJoin' => 'Want To Join',
+
+
+
+
+
     "Layouts" => "Layouts",
     "Horizontal" => "Horizontal",
     "Dark_Sidebar" => "Dark Sidebar",
@@ -256,7 +278,6 @@ return [
     "Checkout" => "Checkout",
     "Shops" => "Shops",
     "Add_Product" => "Add Product",
-    "Email" => "Email",
     "Inbox" => "Inbox",
     "Read_Email" => "Read Email",
     "Invoices" => "Invoices",
@@ -265,12 +286,8 @@ return [
     "Contacts" => "Contacts",
     "User_Grid" => "User Grid",
     "User_List" => "User List",
-    "Profile" => "Profile",
     "Pages" => "Pages",
     "Authentication" => "Authentication",
-    "Login" => "Login",
-    "Register" => "Register",
-    "Recover_Password" => "Recover Password",
     "Lock_Screen" => "Lock Screen",
     "Utility" => "Utility",
     "Starter_Page" => "Starter Page",
@@ -302,7 +319,6 @@ return [
     "General" => "General",
     "Colors" => "Colors",
     "Rating" => "Rating",
-    "Notifications" => "Notifications",
     "Forms" => "Forms",
     "Basic_Elements" => "Basic Elements",
     "Validation" => "Validation",
@@ -339,8 +355,6 @@ return [
     "Level_1.2" => "Level 1.2",
     "Level_2.1" => "Level 2.1",
     "Level_2.2" => "Level 2.2",
-    "Search" => "Search",
-    "Notifications" => "Notifications",
     "Mark_read" => "Mark all as read",
     "order_placed" => "Your order is placed",
     "languages_grammar" => "If several languages coalesce the grammar",

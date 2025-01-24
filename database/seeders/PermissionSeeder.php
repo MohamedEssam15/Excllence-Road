@@ -33,6 +33,7 @@ class PermissionSeeder extends Seeder
             'show-package',
             'expired-packages',
             'in-progress-packages',
+            'delete-package',
 
             'categories',
             'add-category',

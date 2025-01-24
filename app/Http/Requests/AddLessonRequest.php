@@ -47,9 +47,10 @@ class AddLessonRequest extends FormRequest
             'order' => ['required', 'integer', Rule::unique('lessons')->where(function ($query) {
                 return $query->where('unit_id', $this->input('unitId'));
             })],
-            'type' => ['required', 'string', 'in:video,meeting'],
+            'type' => ['required', 'string', 'in:video,meeting,video_link'],
             'meetingLink' => ['required_if:type,meeting', 'url'],
             'meetingDate' => ['required_if:type,meeting', 'date_format:Y-m-d H:i', 'after_or_equal:' . $unit?->course->start_date, 'before:' . $unit?->course->end_date],
+            'videoLink' => ['required_if:type,video_link', 'url'],
             'video' => ['required_if:type,video', 'file', 'max:419304'],
             'attachments' => ['nullable', 'array'],
             'attachments.*' => 'required|file|max:1048576',
