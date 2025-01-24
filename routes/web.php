@@ -72,7 +72,7 @@ Route::middleware('auth:web')->group(function () {
 
     Route::group(['prefix' => 'packages'], function () {
         Route::get('active', [PackagesController::class, 'activePackages'])->name('packages.active')->middleware('permission:active-packages');
-        Route::get('in-progress', [PackagesController::class, 'inProgressPackages'])->name('packages.in-progress')->middleware('permission:inprogress-packages');
+        Route::get('in-progress', [PackagesController::class, 'inProgressPackages'])->name('packages.in-progress');
         Route::get('/expired', [PackagesController::class, 'expiredPackages'])->name('packages.expired')->middleware('permission:expired-packages');
         Route::get('/{package}/show', [PackagesController::class, 'show'])->name('packages.info')->middleware('permission:show-package');
         Route::get('/{package}/edit', [PackagesController::class, 'edit'])->name('packages.edit')->middleware('permission:edit-package');
