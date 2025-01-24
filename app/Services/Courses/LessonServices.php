@@ -25,14 +25,14 @@ class LessonServices
         'video_link-video_link' => 'handleVideoLinkVideoLink',
     ];
 
-    public function saveLesson($type, $enName, $arName, $enDescription, $arDescription, $unitId, $order, $meetingLink = null, $meetingDate = null, $video = null, $attachments = null)
+    public function saveLesson($type, $enName, $arName, $enDescription, $arDescription, $unitId, $order, $meetingLink = null, $meetingDate = null, $video = null,$videoLink = null, $attachments = null)
     {
         $name =  $enName ?? $arName;
         $description = $enDescription ?? $arDescription ?? null;
         if ($type == 'meeting') {
             $lesson = $this->saveMeetingLesson($name, $description, $unitId, $order, $meetingLink, $meetingDate);
         } elseif ($type == 'video_link') {
-            $lesson = $this->saveVideoLinkLesson($name, $description, $unitId, $order, $video);
+            $lesson = $this->saveVideoLinkLesson($name, $description, $unitId, $order, $videoLink);
         }else{
             $lesson = $this->saveVideoLesson($name, $description, $unitId, $order, $video);
         }
