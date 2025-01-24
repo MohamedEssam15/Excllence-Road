@@ -42,11 +42,11 @@ class Lesson extends Model
 
     public function getVideoLink()
     {
-        if ($this->type == 'meeting') {
-            return $this->video_link;
-        } else {
+        if ($this->type == 'video') {
             $videoService = new VideoStorageManager();
             return $videoService->retrieveVideo($this->video_link, $this->id);
+        } else {
+            return $this->video_link;
         }
     }
 }

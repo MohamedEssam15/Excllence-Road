@@ -47,8 +47,9 @@ class UpdateLessonRequest extends FormRequest
             'order' => ['required', 'integer', Rule::unique('lessons')->where(function ($query) {
                 return $query->where('unit_id', $this->route('lesson')->unit_id);
             })->ignore($this->route('lesson')->id)],
-            'type' => ['nullable', 'string', 'in:video,meeting'],
+            'type' => ['nullable', 'string', 'in:video,meeting,video_link'],
             'meetingLink' => ['required_if:type,meeting', 'url'],
+            'videoLink' => ['required_if:type,video_link', 'url'],
             'meetingDate' => ['required_if:type,meeting', 'date_format:Y-m-d H:i', 'after_or_equal:' . $course?->start_date, 'before:' . $course?->end_date],
             'video' => ['required_if:type,video', 'file', 'max:4194304'],
         ];
