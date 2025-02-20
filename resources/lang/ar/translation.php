@@ -77,6 +77,13 @@ return [
     'thereIsNewCourseAdded' => 'هناك دورة جديدة تمت اضافتها',
     'newTeacherAdded' => 'معلم جديد قام بالتسجيل',
     'wantToJoin' => ' يرغب ف الانضمام',
+    'ManagePopularCourses' => 'ادارة الدورات المشهورة',
+    'noPopularCourses' => 'لا يوجد دورات مشهورة',
+    'popularCourses' => 'الدورات المشهورة',
+    'popularOrderUpdated' => 'تم تعديل ترتيب الدورة',
+    'courseOrder' => 'ترتيب الدورة',
+
+
     //packages
     "packages" => "الحزم",
     "activePackages" => "الحزم النشطه",

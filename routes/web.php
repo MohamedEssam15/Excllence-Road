@@ -56,6 +56,7 @@ Route::middleware('auth:web')->group(function () {
 
     Route::group(['prefix' => 'courses'], function () {
         Route::get('active', [CoursesController::class, 'activeCourses'])->name('courses.active')->middleware('permission:active-courses');
+        Route::get('popular', [CoursesController::class, 'popularCourses'])->name('courses.popular')->middleware('permission:active-courses');
         Route::get('pending', [CoursesController::class, 'pendingCourses'])->name('courses.pending')->middleware('permission:pending-courses');
         Route::get('/expired', [CoursesController::class, 'expiredCourses'])->name('courses.expired')->middleware('permission:expired-courses');
         Route::get('/cancelled', [CoursesController::class, 'cancelledCourses'])->name('courses.cancelled')->middleware('permission:rejected-courses');
@@ -66,6 +67,7 @@ Route::middleware('auth:web')->group(function () {
         Route::post('/add-discount', [CoursesController::class, 'addDiscount'])->middleware('permission:discount');
         Route::post('/remove-discount', [CoursesController::class, 'destroyDiscount'])->middleware('permission:discount');
         Route::post('/modify-course', [CoursesController::class, 'modifyCourse'])->middleware('permission:edit-course');
+        Route::post('/order-update', [CoursesController::class, 'updatePopularOrder'])->middleware('permission:edit-course');
         Route::post('/cancel-course', [CoursesController::class, 'cancelCourse'])->middleware('permission:accept-reject-courses');
         Route::post('/return-course-to-pending', [CoursesController::class, 'returnToPending'])->middleware('permission:return-course');
     });

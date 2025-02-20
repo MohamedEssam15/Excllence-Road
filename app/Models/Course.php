@@ -13,7 +13,7 @@ class Course extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['description', 'name', 'teacher_commision', 'teacher_id', 'category_id', 'start_date', 'end_date', 'is_specific', 'specific_to', 'status_id', 'price', 'level_id', 'cover_photo_name', 'rating', 'course_trailer', 'discount', 'discount_type', 'new_price'];
+    protected $fillable = ['description', 'name', 'teacher_commision', 'teacher_id', 'category_id', 'start_date', 'end_date', 'is_specific', 'specific_to', 'status_id', 'price', 'level_id', 'cover_photo_name', 'rating', 'course_trailer', 'discount', 'discount_type', 'new_price','popular_order'];
     protected $with = ['translations', 'level', 'status', 'category', 'teacher'];
 
 

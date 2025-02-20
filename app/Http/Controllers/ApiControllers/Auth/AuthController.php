@@ -78,12 +78,18 @@ class AuthController extends Controller
 
     public function register(RegisterUserRequest $request)
     {
+        $hasImage = $request->photo == null;
+        if(!$hasImage){
+            $image_parts = explode(";base64,", $request->photo);
+            $image_type_aux = explode("image/", $image_parts[0]);
+            $image_type = $image_type_aux[1];
+            $image = base64_decode($image_parts[1]);
+            $imageName = Str::random(10) . '.' . $image_type;
 
-        $image_parts = explode(";base64,", $request->photo);
-        $image_type_aux = explode("image/", $image_parts[0]);
-        $image_type = $image_type_aux[1];
-        $image = base64_decode($image_parts[1]);
-        $imageName = Str::random(10) . '.' . $image_type;
+        }else{
+            $imageName = null;
+        }
+
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
@@ -92,8 +98,10 @@ class AuthController extends Controller
             'is_active' => true
         ]);
         $user->assignRole('student');
-        $path = 'users_attachments/' . $user->id . '/avatar/' . $imageName;
-        Storage::disk('publicFolder')->put($path, $image);
+        if(!$hasImage){
+            $path = 'users_attachments/' . $user->id . '/avatar/' . $imageName;
+            Storage::disk('publicFolder')->put($path, $image);
+        }
         $isMobileRequest = $request->header('X-Requested-From') === 'mobile';
         if ($isMobileRequest) {
             $platform = 'mobile';

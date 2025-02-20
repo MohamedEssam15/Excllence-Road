@@ -1,6 +1,6 @@
 @extends('layouts.master')
 @section('title')
-    @lang('translation.activeCourses')
+    @lang('translation.ManagePopularCourses')
 @endsection
 
 @section('content')
@@ -9,7 +9,7 @@
             @lang('translation.Courses')
         @endslot
         @slot('title')
-            @lang('translation.activeCourses')
+            @lang('translation.ManagePopularCourses')
         @endslot
     @endcomponent
 
@@ -20,14 +20,10 @@
                     <div class="row">
                         <div class="col-md-6 mt-2">
                             <h4 class="card-title">@lang('translation.Courses')</h4>
-                            <p class="card-title-desc">@lang('translation.activeCourses')</p>
+                            <p class="card-title-desc">@lang('translation.popularCourses')</p>
                         </div>
                         <div class="col-md-6 d-flex justify-content-end align-items-center">
                             <!-- Button -->
-                            <div class="mb-2">
-                                <a href="{{ route('courses.popular') }}"
-                                    class="btn btn-outline-primary waves-effect waves-light">@lang('translation.ManagePopularCourses')</a>
-                            </div>
                         </div>
                     </div>
                     <br>
@@ -105,7 +101,6 @@
                         </div>
                     </div>
                 </div>
-
             @endcan
             @can('edit-course')
                 {{-- modify modal --}}
@@ -120,21 +115,9 @@
                                 <form id="modifyCourseForm">
                                     @csrf
                                     <div class="mb-3">
-                                        <label for="teacherCommistion" class="col-form-label">@lang('translation.teacherCommistion')</label>
-                                        <input type="number" name="teacherCommistion" class="form-control"
-                                            id="teacherCommisionInput">
-                                    </div>
-                                    <div class="mb-3">
-                                        <div class="form-check form-switch form-switch-lg mb-2">
-                                            <input type="checkbox" name="addToPopularCourses" value="1"
-                                                class="form-check-input" id="addToPopularCourses">
-                                            <label class="form-check-label" for="addToPopularCourses">@lang('translation.addToPopularCourses')</label>
-                                        </div>
-                                        <div class="form-check form-switch form-switch-lg">
-                                            <input type="checkbox" name="isMobileOnly" value="1" class="form-check-input"
-                                                id="isMobileOnly">
-                                            <label class="form-check-label" for="isMobileOnly">@lang('translation.isMobileOnly')</label>
-                                        </div>
+                                        <label for="teacherCommistion" class="col-form-label">@lang('translation.courseOrder')</label>
+                                        <input type="number" name="popularOrder" class="form-control"
+                                            id="teacherPopularOrderInput">
                                     </div>
                                     <input type="hidden" name="courseId" class="form-control" id="course-id">
                                 </form>
@@ -149,80 +132,10 @@
                     </div>
                 </div>
             @endcan
-            @can('discount')
-                {{-- add discount modal --}}
-                <div class="modal fade" id="addDiscountModal" tabindex="-1" aria-labelledby="addDiscountModalLabel"
-                    aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="addDiscountModalLabel"></h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                    aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                <form id="addDiscountForm">
-                                    @csrf
-                                    <div class="mb-3">
-                                        <label class="col-md-2 col-form-label">@lang('translation.discountType')</label>
-                                        <select name="discountType" class="form-select">
-                                            <option value="percentage">@lang('translation.percentage')</option>
-                                            <option value="fixed">@lang('translation.fixedPrice')</option>
-                                        </select>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="discount" class="col-form-label">@lang('translation.discount')</label>
-                                        <input type="number" name="discount" class="form-control" id="discountInput">
-                                    </div>
-                                    <input type="hidden" name="courseId" class="form-control" id="add-discount-course-id">
-                                </form>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary"
-                                    data-bs-dismiss="modal">@lang('translation.close')</button>
-                                <button type="submit" id="addDiscountButton"
-                                    class="btn btn-success">@lang('translation.accept')</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                {{-- remove discount modal --}}
-                <div class="modal fade" id="removeDiscountModal" tabindex="-1" aria-labelledby="removeDiscountModalLabel"
-                    aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="modifyModalLabel"></h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                    aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                <form id="removeDiscountForm">
-                                    @csrf
-                                    <div class="mb-3">
-                                        <p>
-                                            @lang('translation.areYouSureRemoveDiscount')
-                                        </p>
-                                    </div>
-                                    <input type="hidden" name="courseId" class="form-control"
-                                        id="remove-discount-course-id">
-                                </form>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary"
-                                    data-bs-dismiss="modal">@lang('translation.close')</button>
-                                <button type="button" id="removeDiscountButton"
-                                    class="btn btn-danger">@lang('translation.accept')</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            @endcan
 
             {{-- toastr --}}
             <div id="toastContainer" class="position-fixed top-0 end-0 " style="z-index: 1060;margin-top: 5%;">
-                <div id="toastr" class="toast overflow-hidden" role="alert" aria-live="assertive"
-                    aria-atomic="true">
+                <div id="toastr" class="toast overflow-hidden" role="alert" aria-live="assertive" aria-atomic="true">
                     <div class="align-items-center text-white
                             bg-success border-0">
                         <div class="d-flex">
@@ -259,7 +172,7 @@
         $(document).ready(function() {
             window.fetchCourses = function(query = '', page = 1) {
                 $.ajax({
-                    url: baseUrl + "/courses/active?page=" +
+                    url: baseUrl + "/courses/popular?page=" +
                         page, // Replace with your route for search
                     method: 'GET',
                     data: {
@@ -291,7 +204,96 @@
             });
         });
     </script>
-    <script src="{{ URL::asset('assets/js/used/modify-modal.init.js') }}"></script>
-    <!-- Varying Modal Content js -->
+    <script>
+        var modifyModal = document.getElementById('modifyModal');
+
+        modifyModal.addEventListener('show.bs.modal', function(event) {
+            var button = event.relatedTarget;
+            var courseId = button.getAttribute('data-bs-courseid');
+            var courseName = button.getAttribute('data-bs-coursename');
+            var popularOrder = button.getAttribute('data-bs-popularorder');
+
+            var modalTitle = modifyModal.querySelector('.modal-title');
+            var modalCourseId = document.getElementById('course-id');
+            var modalPopularOrder = document.getElementById('teacherPopularOrderInput');
+
+            modalTitle.textContent = courseName;
+            modalCourseId.value = courseId;
+            modalPopularOrder.value = popularOrder;
+        });
+
+        $('#modifyCourseButton').click(function() {
+            var form = $('#modifyCourseForm');
+            var formData = form.serialize(); // Serialize form data
+            $.ajax({
+                type: 'POST',
+                url: baseUrl + '/courses/order-update', // Change this to your actual route
+                data: formData,
+                success: function(response) {
+                    // Assuming the server returns a JSON response
+                    if (response.status == 200) {
+                        // Close the modal
+                        $('#modifyModal').modal('hide');
+                        fetchCourses();
+                        fireToastr(response.message)
+                    } else {
+                        handleErrorResponse(response)
+                    }
+                },
+                error: function(xhr, status, error) {
+                    const response = xhr.responseJSON || {
+                        message: 'An unexpected error occurred.'
+                    };
+                    handleErrorResponse(response)
+                }
+            });
+        });
+    </script>
+    <script>
+        const currentLang = document.documentElement.lang || 'ar';
+
+        function fireToastr(message) {
+            const toastContainer = document.getElementById('toastContainer');
+            if (currentLang == 'ar') {
+                toastContainer.style.marginLeft = '1%';
+            } else {
+                toastContainer.style.marginRight = '1%';
+            }
+            const toastLiveExample3 = document.getElementById("toastr");
+            const toastBody = toastLiveExample3.querySelector('.toast-body');
+            toastBody.innerHTML = message;
+            var toast = new bootstrap.Toast(toastLiveExample3, {
+                delay: 3000
+            });
+            toast.show();
+        }
+
+        function handleErrorResponse(response) {
+            const errors = response.errors || [];
+            const errorMessage = errors.length > 0 ?
+                errors.join('<br>') // Join error messages with a line break for display
+                :
+                response.message || 'An unexpected error occurred'; // Fallback message
+
+            fireErrorToastr(errorMessage);
+        }
+
+        function fireErrorToastr(message) {
+            const toastContainer = document.getElementById('toastContainerError');
+            if (currentLang == 'ar') {
+                toastContainer.style.marginLeft = '1%';
+            } else {
+                toastContainer.style.marginRight = '1%';
+            }
+            const toastLiveExample3 = document.getElementById("toastrError");
+            const toastBody = toastLiveExample3.querySelector('.toast-body');
+            toastBody.innerHTML = message;
+            var toast = new bootstrap.Toast(toastLiveExample3, {
+                delay: 3000
+            });
+            toast.show();
+        }
+    </script>
     <script src="{{ URL::asset('assets/js/pages/bootstrap-toasts.init.js') }}"></script>
+    <!-- Varying Modal Content js -->
 @endsection

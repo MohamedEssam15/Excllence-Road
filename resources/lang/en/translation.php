@@ -253,7 +253,11 @@ return [
     'newTeacherAdded' => 'New Teacher Added',
     'thereIsNewTeacher' => 'There Is New Teacher',
     'wantToJoin' => 'Want To Join',
-
+    'ManagePopularCourses' => 'Manage Popular Courses',
+    'noPopularCourses' => 'No Popular Courses',
+    'popularCourses' => 'Popular Courses',
+    'popularOrderUpdated' => 'Popular Order Updated',
+    'courseOrder' => 'Course Order',
 
 
 

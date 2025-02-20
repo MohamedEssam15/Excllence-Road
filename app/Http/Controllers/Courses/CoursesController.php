@@ -121,6 +121,12 @@ class CoursesController extends Controller
         $course->status_id = CourseStatus::ACTIVE;
         if (isset($request->addToPopularCourses)) {
             $course->is_populer = true;
+            $lastPopularCourse = Course::whereHas('status', function ($query) {
+                $query->where('name', 'active');
+            })->where('is_populer', true)->whereNotNull('popular_order')->orderBy('popular_order', 'desc')->first();
+            if ($lastPopularCourse != null) {
+                $course->popular_order = $lastPopularCourse->popular_order + 1;
+            }
         }
         if (isset($request->isMobileOnly)) {
             $course->is_mobile_only = true;
@@ -134,8 +140,15 @@ class CoursesController extends Controller
         $course->teacher_commision = $request->teacherCommistion;
         if ($request->addToPopularCourses != null) {
             $course->is_populer = true;
+            $lastPopularCourse = Course::whereHas('status', function ($query) {
+                $query->where('name', 'active');
+            })->where('is_populer', true)->whereNotNull('popular_order')->orderBy('popular_order', 'desc')->first();
+            if ($lastPopularCourse != null) {
+                $course->popular_order = $lastPopularCourse->popular_order + 1;
+            }
         } else {
             $course->is_populer = false;
+            $course->popular_order = null;
         }
         if (isset($request->isMobileOnly)) {
             $course->is_mobile_only = true;
@@ -143,7 +156,7 @@ class CoursesController extends Controller
             $course->is_mobile_only = false;
         }
         $course->save();
-        return apiResponse(__('translation.courseAccepted'));
+        return apiResponse(__('translation.courseModified'));
     }
     public function cancelCourse(Request $request)
     {
@@ -211,5 +224,44 @@ class CoursesController extends Controller
         }
         $course->delete();
         return apiResponse(__('response.deletedSuccessfully'));
+    }
+
+    public function popularCourses(Request $request)
+    {
+        $term = $request->get('query') ?? '';
+        if ($request->ajax()) {
+            $courses = Course::whereHas('status', function ($query) {
+                $query->where('name', 'active');
+            })->where(function ($query) use ($term) {
+                $query->WhereHas('translations', function ($query) use ($term) {
+                    $query->where('name', 'LIKE', '%' . $term . '%');
+                });
+                // Second condition for category name (with OR condition)
+                $query->orWhereHas('category.translations', function ($query) use ($term) {
+                    $query->where('name', 'LIKE', '%' . $term . '%');
+                });
+            })->where('is_populer', true)->whereNotNull('popular_order')->orderBy('popular_order', 'asc')->paginate(10);
+
+            return response()->json([
+                'table_data' => view('courses.Partial-Components.popular-courses-partial-table', compact('courses'))->render(),
+                'pagination' => $courses->links('vendor.pagination.bootstrap-5')->render()
+            ]);
+        }
+
+        return view('courses.popular-courses');
+    }
+    public function updatePopularOrder(Request $request)
+    {
+        $course = Course::find($request->courseId);
+        $oldCourse = Course::whereHas('status', function ($query) {
+            $query->where('name', 'active');
+        })->where('popular_order', $request->popularOrder)->first();
+        if($oldCourse != null){
+            $oldCourseOrder = $course->popular_order;
+            $oldCourse->popular_order = $oldCourseOrder;
+        }
+        $course->popular_order = $request->popularOrder;
+        $course->save();
+        return apiResponse(__('translation.popularOrderUpdated'));
     }
 }

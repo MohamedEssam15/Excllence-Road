@@ -32,8 +32,7 @@ class CourseController extends Controller
             })
             ->whereHas('teacher', function ($query) {
                 $query->whereNull('deleted_at');
-            })
-            ->where('start_date', '>=', Carbon::today())->get();
+            })->orderBy('popular_order', 'asc')->get();
 
         if (!isset($courses[0])) {
             return apiResponse(__('response.noCourses'), new stdClass(), [__('response.noCourses')]);

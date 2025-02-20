@@ -93,7 +93,7 @@ $(document).ready(function () {
                     // Close the modal
                     $('#modifyModal').modal('hide');
                     fetchCourses();
-                    fireToastr()
+                    fireToastr(response.message)
                 } else {
                     handleErrorResponse(response)
                 }
