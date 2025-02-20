@@ -301,7 +301,7 @@ class AuthController extends Controller
             $fileExtension = $file->getClientOriginalExtension();
             $fileName = Str::random(10) . '.' . $fileExtension;
         } else {
-            return apiResponse(__('response.fileDamaged'), new stdClass(), [__('response.fileDamaged')]);
+            $fileName = null;
         }
         $user = User::create([
             'name' => $request->name,
