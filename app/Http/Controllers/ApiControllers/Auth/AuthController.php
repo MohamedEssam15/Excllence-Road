@@ -296,7 +296,7 @@ class AuthController extends Controller
 
     public function teacherRegister(RegisterTeacherRequest $request)
     {
-        if ($request->file('photo')->isValid()) {
+        if ($request->photo != null && $request->file('photo')->isValid()) {
             $file = $request->file('photo');
             $fileExtension = $file->getClientOriginalExtension();
             $fileName = Str::random(10) . '.' . $fileExtension;
@@ -311,8 +311,10 @@ class AuthController extends Controller
             'is_active' => false
         ]);
         $user->assignRole('teacher');
-        $path = 'users_attachments/' . $user->id . '/avatar/';
-        $file->storeAs($path, $fileName, 'publicFolder');
+        if($fileName != null){
+            $path = 'users_attachments/' . $user->id . '/avatar/';
+            $file->storeAs($path, $fileName, 'publicFolder');
+        }
         //saving certificates
         if (isset($request->certificates)) {
             foreach ($request->certificates as $certificate) {
