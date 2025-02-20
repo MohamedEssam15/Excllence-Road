@@ -16,7 +16,7 @@ class CategoryController extends Controller
         $categories = category::withCount(['courses' => function ($query) {
             $query->whereHas('status', function ($statusQuery) {
                 $statusQuery->where('name', 'active'); // Assuming 'name' column holds 'active' status
-            })->where('start_date', '>', Carbon::today());
+            });
         }])->get();
 
         if (!isset($categories[0])) {
