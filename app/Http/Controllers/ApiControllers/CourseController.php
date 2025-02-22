@@ -91,8 +91,7 @@ class CourseController extends Controller
         })
             ->whereHas('teacher', function ($query) {
                 $query->whereNull('deleted_at');
-            })
-            ->where('start_date', '>=', Carbon::today());
+            });
         $coursesQuery->orderBy('price', $request->priceOrder ?? 'asc');
         $courses = $coursesQuery->paginate(request()->perPage);
 
