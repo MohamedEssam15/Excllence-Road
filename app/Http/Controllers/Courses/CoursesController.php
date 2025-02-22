@@ -262,6 +262,7 @@ class CoursesController extends Controller
         }
         $course->popular_order = $request->popularOrder;
         $course->save();
+        $oldCourse->save();
         return apiResponse(__('translation.popularOrderUpdated'));
     }
 }
