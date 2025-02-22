@@ -240,11 +240,11 @@ class CoursesController extends Controller
                 $query->orWhereHas('category.translations', function ($query) use ($term) {
                     $query->where('name', 'LIKE', '%' . $term . '%');
                 });
-            })->where('is_populer', true)->whereNotNull('popular_order')->orderBy('popular_order', 'asc')->paginate(10);
+            })->where('is_populer', true)->whereNotNull('popular_order')->orderBy('popular_order', 'asc')->get();
 
             return response()->json([
                 'table_data' => view('courses.Partial-Components.popular-courses-partial-table', compact('courses'))->render(),
-                'pagination' => $courses->links('vendor.pagination.bootstrap-5')->render()
+                // 'pagination' => $courses->links('vendor.pagination.bootstrap-5')->render()
             ]);
         }
 

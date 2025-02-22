@@ -63,9 +63,7 @@
                             </tbody>
                         </table>
                         <br>
-                        <div class="d-flex justify-content-center" id="paginationLinks">
-                            {{-- {{ $courses->links('vendor.pagination.bootstrap-5') }} --}}
-                        </div>
+
                     </div>
 
                 </div>
